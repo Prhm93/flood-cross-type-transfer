@@ -8,3 +8,4 @@ __pycache__/
 *.pckl
 *.zip
 .DS_Store
+raw_datasets.zip*
