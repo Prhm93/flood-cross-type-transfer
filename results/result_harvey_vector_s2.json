@@ -1,0 +1,29 @@
+{
+  "tag": "harvey_vector_s2",
+  "train_on": "harvey",
+  "variant": "vector",
+  "seed": 2,
+  "epochs": 60,
+  "best_epoch": 53,
+  "model_params": 42371,
+  "home_scores": {
+    "csi_final": 0.5125835009108904,
+    "csi_mean": 0.32114040841210995,
+    "arrival_mae_s": 46843.70754062394,
+    "mass_error": 13.815927120314413,
+    "n_samples": 19
+  },
+  "away_scores": {
+    "csi_final": 0.06914647595669847,
+    "csi_mean": 0.053050162663895645,
+    "arrival_mae_s": 42191.21483520568,
+    "mass_error": 0.04257852286646044,
+    "n_samples": 19
+  },
+  "transfer_gap": {
+    "home": 0.5125835009108904,
+    "away": 0.06914647595669847,
+    "drop": 0.44343702495419196,
+    "retained_pct": 13.489797434724528
+  }
+}

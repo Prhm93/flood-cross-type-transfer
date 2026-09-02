@@ -1,0 +1,10 @@
+data/
+venv/
+__pycache__/
+*.pyc
+*.pt
+*.pth
+*.npz
+*.pckl
+*.zip
+.DS_Store

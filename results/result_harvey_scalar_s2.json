@@ -1,0 +1,29 @@
+{
+  "tag": "harvey_scalar_s2",
+  "train_on": "harvey",
+  "variant": "scalar",
+  "seed": 2,
+  "epochs": 60,
+  "best_epoch": 53,
+  "model_params": 42307,
+  "home_scores": {
+    "csi_final": 0.4838949136394124,
+    "csi_mean": 0.31616587240035576,
+    "arrival_mae_s": 48179.25053502695,
+    "mass_error": 11.254999286460254,
+    "n_samples": 19
+  },
+  "away_scores": {
+    "csi_final": 0.10613876571262668,
+    "csi_mean": 0.07465290594176244,
+    "arrival_mae_s": 48445.1092220835,
+    "mass_error": -0.5955491977815965,
+    "n_samples": 19
+  },
+  "transfer_gap": {
+    "home": 0.4838949136394124,
+    "away": 0.10613876571262668,
+    "drop": 0.3777561479267857,
+    "retained_pct": 21.934259427186063
+  }
+}

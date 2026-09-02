@@ -1,0 +1,29 @@
+{
+  "tag": "breach_scalar_s1",
+  "train_on": "breach",
+  "variant": "scalar",
+  "seed": 1,
+  "epochs": 60,
+  "best_epoch": 43,
+  "model_params": 42307,
+  "home_scores": {
+    "csi_final": 0.16595014121481186,
+    "csi_mean": 0.0969630193060593,
+    "arrival_mae_s": 49109.01778244346,
+    "mass_error": 0.6114865559321708,
+    "n_samples": 19
+  },
+  "away_scores": {
+    "csi_final": 0.3600023331199957,
+    "csi_mean": 0.27144019642429834,
+    "arrival_mae_s": 52313.87762973081,
+    "mass_error": 30.066296892741146,
+    "n_samples": 19
+  },
+  "transfer_gap": {
+    "home": 0.16595014121481186,
+    "away": 0.3600023331199957,
+    "drop": -0.19405219190518383,
+    "retained_pct": 216.93403240554983
+  }
+}
