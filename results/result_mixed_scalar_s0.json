@@ -1,0 +1,23 @@
+{
+  "tag": "mixed_scalar_s0",
+  "train_on": "mixed",
+  "variant": "scalar",
+  "seed": 0,
+  "epochs": 60,
+  "best_epoch": 43,
+  "model_params": 42307,
+  "breach_scores": {
+    "csi_final": 0.17613757174485267,
+    "csi_mean": 0.0880935857023405,
+    "arrival_mae_s": 49917.607228225286,
+    "mass_error": -0.2609563858293244,
+    "n_samples": 19
+  },
+  "harvey_scores": {
+    "csi_final": 0.536584559948542,
+    "csi_mean": 0.32955520206704847,
+    "arrival_mae_s": 50094.54547530795,
+    "mass_error": 8.722829687918292,
+    "n_samples": 19
+  }
+}

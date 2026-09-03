@@ -1,0 +1,23 @@
+{
+  "tag": "mixed_vector_s0",
+  "train_on": "mixed",
+  "variant": "vector",
+  "seed": 0,
+  "epochs": 60,
+  "best_epoch": 43,
+  "model_params": 42371,
+  "breach_scores": {
+    "csi_final": 0.1405718746363841,
+    "csi_mean": 0.09545960599943537,
+    "arrival_mae_s": 48091.239802052565,
+    "mass_error": -0.25659068715626754,
+    "n_samples": 19
+  },
+  "harvey_scores": {
+    "csi_final": 0.4555396858445387,
+    "csi_mean": 0.29104357897027344,
+    "arrival_mae_s": 50127.328767981664,
+    "mass_error": 7.073979754954346,
+    "n_samples": 19
+  }
+}

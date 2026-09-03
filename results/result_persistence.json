@@ -1,0 +1,16 @@
+{
+  "breach_persistence": {
+    "csi_final": 7.693425996999985e-05,
+    "csi_mean": 0.002846027350706098,
+    "arrival_mae_s": 0.0,
+    "mass_error": -0.9999444475201201,
+    "n_samples": 19
+  },
+  "harvey_persistence": {
+    "csi_final": 0.05289825981395156,
+    "csi_mean": 0.09454361046303925,
+    "arrival_mae_s": 0.0,
+    "mass_error": -0.9631797805142902,
+    "n_samples": 19
+  }
+}

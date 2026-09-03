@@ -1,0 +1,30 @@
+{
+  "tag": "finetune_harveytobreach_n10_vector_s0",
+  "base": "harvey",
+  "target": "breach",
+  "ft_samples": 10,
+  "variant": "vector",
+  "seed": 0,
+  "before_ft_target": {
+    "csi_final": 0.15083320068539377,
+    "csi_mean": 0.09987387537342385,
+    "arrival_mae_s": 43265.999295714886,
+    "mass_error": -0.4960400765896294,
+    "n_samples": 19
+  },
+  "after_ft_target": {
+    "csi_final": 0.16700286639419196,
+    "csi_mean": 0.1036999781265315,
+    "arrival_mae_s": 43532.87775598645,
+    "mass_error": 0.17716614356849106,
+    "n_samples": 19
+  },
+  "after_ft_base": {
+    "csi_final": 0.5664222219057337,
+    "csi_mean": 0.3451023607755073,
+    "arrival_mae_s": 55739.02618084031,
+    "mass_error": 62.956702452976494,
+    "n_samples": 19
+  },
+  "improvement_csi": 0.016169665708798187
+}
