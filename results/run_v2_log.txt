@@ -1,0 +1,425 @@
+############################################################
+#  STEP 0 — SMOKE TEST
+############################################################
+============================================================
+  SMOKE TEST
+============================================================
+  OK    imports
+  OK    metrics maths + adaptive threshold
+  OK    model forward + backward (both variants)
+  OK    experiment_lib train/eval/threshold-scoring/ablation
+  OK    synthetic solver: stability, mass, mechanism difference
+  OK    controlled experiment end-to-end (tiny)
+  OK    real datasets present on disk
+  OK    checkpoints for experiment 1 present
+
+============================================================
+  8 passed, 0 failed
+============================================================
+  All good — safe to launch the full run.
+
+############################################################
+#  STEP 1 — BUILD DATA CACHE (once, saves hours later)
+############################################################
+Building data cache (this takes a few minutes, ONCE) ...
+  Loaded 60 breach samples. Typical: 4096 nodes, 97 steps.
+  Loaded 20 breach samples. Typical: 4096 nodes, 97 steps.
+  Loaded 19 breach samples. Typical: 4096 nodes, 97 steps.
+Loading Harvey data from data/harvey/train.npz ...
+  Loaded 1063 Harvey samples. Typical: 1519 nodes, 132 steps.
+Loading Harvey data from data/harvey/val.npz ...
+  Loaded 228 Harvey samples. Typical: 78 nodes, 132 steps.
+Loading Harvey data from data/harvey/test.npz ...
+  Loaded 228 Harvey samples. Typical: 1519 nodes, 132 steps.
+Scaler fitted on all samples:
+  depth: min=0.0000  max=4.0757  range=4.0757
+  vx   : min=-1.0000  max=1.1943  range=2.1943
+  vy   : min=-1.0673  max=1.5681  range=2.6354
+  rain : min=0.0000  max=1.0410  range=1.0410
+  elev : min=-0.1643  max=1.0000  range=1.1643
+Cache built in 125s -> data/cache_normalised.pkl (5.33 GB)
+
+############################################################
+#  EXPERIMENT 1 — CSI THRESHOLD SENSITIVITY (no training)
+#  Answers: is the CSI paradox real or a threshold artefact?
+############################################################
+/root/projects/floodtransfer/src/metrics.py:156: RuntimeWarning: Mean of empty slice
+  "csi_mean": float(np.nanmean(per_step)),
+/root/projects/floodtransfer/src/experiment_lib.py:290: RuntimeWarning: Mean of empty slice
+  'arrival_mae_s': float(np.nanmean([s['arrival_mae_s'] for s in scores])),
+Device: cuda
+Loaded cache: breach 60 train / 19 test, harvey 1063 train / 228 test
+
+==================================================================
+  EXPERIMENT 1 — CSI THRESHOLD SENSITIVITY
+==================================================================
+
+  Model trained on breach:
+    VOLUME RATIO (threshold-free): home 2.29x  away 131.02x   (1.0 = perfect)
+       threshold   home CSI   away CSI  verdict
+           0.1%     0.1702     0.7908  AWAY>HOME (paradox)
+           0.5%     0.1672     0.6205  AWAY>HOME (paradox)
+           1.0%     0.1649     0.5611  AWAY>HOME (paradox)
+           2.0%     0.1611     0.4999  AWAY>HOME (paradox)
+           5.0%     0.1625     0.4174  AWAY>HOME (paradox)
+          10.0%     0.1900     0.3264  AWAY>HOME (paradox)
+    fixed 0.01      0.1583     0.0936  
+    fixed 0.05      0.1945     0.0175  
+
+  Model trained on harvey:
+    VOLUME RATIO (threshold-free): home 12.48x  away 0.33x   (1.0 = perfect)
+       threshold   home CSI   away CSI  verdict
+           0.1%     0.6798     0.2021  
+           0.5%     0.5409     0.1949  
+           1.0%     0.4886     0.1853  
+           2.0%     0.4342     0.1623  
+           5.0%     0.3559     0.0682  
+          10.0%     0.2689     0.0159  
+    fixed 0.01      0.0766     0.1605  AWAY>HOME (paradox)
+    fixed 0.05      0.0087     0.0000  
+
+  READ THIS: if 'paradox' appears at most thresholds for the
+  breach-trained model, the CSI failure is NOT a threshold artefact.
+  The volume ratio confirms it without any threshold at all.
+  saved results/result_exp1_threshold_sweep.json
+
+==================================================================
+  SUITE COMPLETE
+==================================================================
+
+############################################################
+#  EXPERIMENT 3 — CONTROLLED CROSS-MECHANISM TRANSFER
+#  Answers: does transfer still fail when terrain, solver,
+#  grid and sample count are IDENTICAL and only the water
+#  source changes? This kills the confounding objection.
+############################################################
+==================================================================
+  EXPERIMENT 3 — CONTROLLED CROSS-MECHANISM TRANSFER
+  Same terrain, same solver, same grid, same everything.
+  ONLY the water source differs.
+==================================================================
+  grid 48x48, 40 train + 12 test sims per mechanism, device cuda
+
+  Generating POINT-SOURCE floods (breach-like)...
+    point: 10/40 sims  (last sim final wet fraction 0.084, max depth 0.87 m)
+    point: 20/40 sims  (last sim final wet fraction 0.085, max depth 0.57 m)
+    point: 30/40 sims  (last sim final wet fraction 0.049, max depth 0.91 m)
+    point: 40/40 sims  (last sim final wet fraction 0.037, max depth 1.04 m)
+    point: 10/12 sims  (last sim final wet fraction 0.047, max depth 0.51 m)
+
+  Generating DISTRIBUTED floods (rainfall-like), SAME terrain seeds...
+    distributed: 10/40 sims  (last sim final wet fraction 0.131, max depth 0.20 m)
+    distributed: 20/40 sims  (last sim final wet fraction 0.125, max depth 0.15 m)
+    distributed: 30/40 sims  (last sim final wet fraction 0.052, max depth 0.11 m)
+    distributed: 40/40 sims  (last sim final wet fraction 0.039, max depth 0.12 m)
+    distributed: 10/12 sims  (last sim final wet fraction 0.001, max depth 0.06 m)
+
+  Generation took 31s
+
+  --- train on point, seed 0 ---
+    epoch   0  loss=0.005186  lr=1.0e-03
+    epoch  15  loss=0.000016  lr=1.0e-03
+    epoch  30  loss=0.000015  lr=5.0e-04
+    epoch  45  loss=0.000012  lr=2.5e-04
+    epoch  59  loss=0.000013  lr=6.3e-05
+    best epoch 56 (loss 0.000012)
+    HOME (point      ) CSI 0.0794  vol ratio 1.09
+    AWAY (distributed) CSI 1.0000  vol ratio 182.84
+    retained 1259.6%
+
+  --- train on point, seed 1 ---
+    epoch   0  loss=0.003924  lr=1.0e-03
+    epoch  15  loss=0.000017  lr=5.0e-04
+    epoch  30  loss=0.000015  lr=1.3e-04
+    epoch  45  loss=0.000015  lr=3.1e-05
+    epoch  59  loss=0.000015  lr=7.8e-06
+    best epoch 46 (loss 0.000013)
+    HOME (point      ) CSI 0.0608  vol ratio 1.76
+    AWAY (distributed) CSI 0.5597  vol ratio 37.57
+    retained 920.2%
+
+  --- train on point, seed 2 ---
+    epoch   0  loss=0.003568  lr=1.0e-03
+    epoch  15  loss=0.000018  lr=1.0e-03
+    epoch  30  loss=0.000017  lr=5.0e-04
+    epoch  45  loss=0.000015  lr=2.5e-04
+    epoch  59  loss=0.000015  lr=1.3e-04
+    best epoch 49 (loss 0.000014)
+    HOME (point      ) CSI 0.0560  vol ratio 0.90
+    AWAY (distributed) CSI 0.0002  vol ratio 0.00
+    retained 0.3%
+
+  --- train on distributed, seed 0 ---
+    epoch   0  loss=0.003591  lr=1.0e-03
+    epoch  15  loss=0.000004  lr=5.0e-04
+    epoch  30  loss=0.000000  lr=2.5e-04
+    epoch  45  loss=0.000000  lr=2.5e-04
+    epoch  59  loss=0.000000  lr=6.3e-05
+    best epoch 58 (loss 0.000000)
+    HOME (distributed) CSI 0.7518  vol ratio 0.72
+    AWAY (point      ) CSI 0.0639  vol ratio 4.20
+    retained 8.5%
+
+  --- train on distributed, seed 1 ---
+    epoch   0  loss=0.004132  lr=1.0e-03
+    epoch  15  loss=0.000001  lr=5.0e-04
+    epoch  30  loss=0.000001  lr=2.5e-04
+    epoch  45  loss=0.000001  lr=2.5e-04
+    epoch  59  loss=0.000001  lr=6.3e-05
+    best epoch 58 (loss 0.000001)
+    HOME (distributed) CSI 0.5659  vol ratio 0.66
+    AWAY (point      ) CSI 0.0562  vol ratio 10.82
+    retained 9.9%
+
+  --- train on distributed, seed 2 ---
+    epoch   0  loss=0.003974  lr=1.0e-03
+    epoch  15  loss=0.000050  lr=1.0e-03
+    epoch  30  loss=0.000001  lr=2.5e-04
+    epoch  45  loss=0.000001  lr=2.5e-04
+    epoch  59  loss=0.000000  lr=6.3e-05
+    best epoch 58 (loss 0.000000)
+    HOME (distributed) CSI 0.3111  vol ratio 0.33
+    AWAY (point      ) CSI 0.0525  vol ratio 18.01
+    retained 16.9%
+
+==================================================================
+  CONTROLLED EXPERIMENT SUMMARY
+==================================================================
+  trained on point       : home CSI 0.0654  away CSI 0.5200  retained 726.7%
+  trained on distributed : home CSI 0.5429  away CSI 0.0575  retained 11.8%
+
+  INTERPRETATION: terrain, grid, solver, resolution and sample
+  count are IDENTICAL across the two mechanisms. Any transfer gap
+  here is attributable to the flood-driving mechanism alone.
+
+  Saved results/result_exp3_controlled.json
+
+############################################################
+#  EXPERIMENT 2 — RAINFALL ABLATION
+#  Answers: does transfer still fail with NO rainfall channel
+#  in either dataset? Rules out 'you removed an input'.
+############################################################
+Device: cuda
+Loaded cache: breach 60 train / 19 test, harvey 1063 train / 228 test
+
+==================================================================
+  EXPERIMENT 2 — RAINFALL ABLATION (no rain in either dataset)
+==================================================================
+
+  --- no-rain, train on breach, seed 0 ---
+    epoch   0  loss=0.003352  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 56 (loss 0.000004)
+    home CSI 0.1705 (vol 1.76x)  away CSI 0.5504 (vol 90.73x)  retained 322.8%
+
+  --- no-rain, train on breach, seed 1 ---
+    epoch   0  loss=0.003172  lr=1.0e-03
+    epoch  20  loss=0.000005  lr=5.0e-04
+    epoch  40  loss=0.000004  lr=6.3e-05
+    epoch  59  loss=0.000004  lr=7.8e-06
+    best epoch 46 (loss 0.000003)
+    home CSI 0.1892 (vol 0.83x)  away CSI 0.5097 (vol 74.91x)  retained 269.4%
+
+  --- no-rain, train on breach, seed 2 ---
+    epoch   0  loss=0.002093  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 50 (loss 0.000003)
+    home CSI 0.1882 (vol 1.06x)  away CSI 0.4860 (vol 85.60x)  retained 258.2%
+
+  --- no-rain, train on harvey, seed 0 ---
+    epoch   0  loss=0.009225  lr=1.0e-03
+    epoch  20  loss=0.007363  lr=2.5e-04
+    epoch  40  loss=0.007637  lr=3.1e-05
+    epoch  59  loss=0.008111  lr=3.9e-06
+    best epoch 39 (loss 0.007108)
+    home CSI 0.4824 (vol 11.10x)  away CSI 0.2116 (vol 0.08x)  retained 43.9%
+
+  --- no-rain, train on harvey, seed 1 ---
+    epoch   0  loss=0.009065  lr=1.0e-03
+    epoch  20  loss=0.007893  lr=5.0e-04
+    epoch  40  loss=0.008043  lr=6.3e-05
+    epoch  59  loss=0.007976  lr=7.8e-06
+    best epoch 38 (loss 0.007155)
+    home CSI 0.5453 (vol 17.06x)  away CSI 0.2061 (vol 1.08x)  retained 37.8%
+
+  --- no-rain, train on harvey, seed 2 ---
+    epoch   0  loss=0.009731  lr=1.0e-03
+    epoch  20  loss=0.008168  lr=2.5e-04
+    epoch  40  loss=0.007575  lr=1.6e-05
+    epoch  59  loss=0.007767  lr=2.0e-06
+    best epoch 9 (loss 0.007232)
+    home CSI 0.4801 (vol 27.46x)  away CSI 0.1623 (vol 6.89x)  retained 33.8%
+
+  READ THIS: compare 'retained %' here with the WITH-rainfall runs.
+  If transfer still fails without rainfall, the failure is about the
+  flood mechanism, not about one missing input channel.
+  saved results/result_exp2_rainfall_ablation.json
+
+==================================================================
+  SUITE COMPLETE
+==================================================================
+
+############################################################
+#  EXPERIMENT 5 — STRONGER ARCHITECTURE
+#  Answers: does the failure survive a bigger model?
+#  Rules out 'your model was too weak'.
+############################################################
+Device: cuda
+Loaded cache: breach 60 train / 19 test, harvey 1063 train / 228 test
+
+==================================================================
+  EXPERIMENT 5 — STRONGER ARCHITECTURE
+==================================================================
+
+  --- small (42,371 params), train breach, seed 0 ---
+    epoch   0  loss=0.003352  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 56 (loss 0.000004)
+    home CSI 0.1704  away CSI 0.5601  retained 328.7%
+
+  --- small (42,371 params), train breach, seed 1 ---
+    epoch   0  loss=0.003172  lr=1.0e-03
+    epoch  20  loss=0.000005  lr=5.0e-04
+    epoch  40  loss=0.000004  lr=6.3e-05
+    epoch  59  loss=0.000004  lr=7.8e-06
+    best epoch 46 (loss 0.000003)
+    home CSI 0.1942  away CSI 0.5415  retained 278.8%
+
+  --- small (42,371 params), train harvey, seed 0 ---
+    epoch   0  loss=0.009223  lr=1.0e-03
+    epoch  20  loss=0.006787  lr=5.0e-04
+    epoch  40  loss=0.006873  lr=1.3e-04
+    epoch  59  loss=0.007232  lr=1.6e-05
+    best epoch 39 (loss 0.006435)
+    home CSI 0.5589  away CSI 0.2209  retained 39.5%
+
+  --- small (42,371 params), train harvey, seed 1 ---
+    epoch   0  loss=0.009060  lr=1.0e-03
+    epoch  20  loss=0.007206  lr=5.0e-04
+    epoch  40  loss=0.007275  lr=1.3e-04
+    epoch  59  loss=0.007223  lr=1.6e-05
+    best epoch 38 (loss 0.006529)
+    home CSI 0.4879  away CSI 0.2282  retained 46.8%
+
+  --- large (491,843 params), train breach, seed 0 ---
+    epoch   0  loss=0.011705  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=7.8e-06
+    best epoch 29 (loss 0.000004)
+    home CSI 0.2324  away CSI 0.5650  retained 243.1%
+
+  --- large (491,843 params), train breach, seed 1 ---
+    epoch   0  loss=0.007668  lr=1.0e-03
+    epoch  20  loss=0.000005  lr=2.5e-04
+    epoch  40  loss=0.000004  lr=1.6e-05
+    epoch  59  loss=0.000004  lr=3.9e-06
+    best epoch 46 (loss 0.000003)
+    home CSI 0.2024  away CSI 0.5611  retained 277.2%
+
+  --- large (491,843 params), train harvey, seed 0 ---
+    epoch   0  loss=0.013042  lr=1.0e-03
+    epoch  20  loss=0.006556  lr=5.0e-04
+    epoch  40  loss=0.006548  lr=1.3e-04
+    epoch  59  loss=0.006794  lr=1.6e-05
+    best epoch 39 (loss 0.006141)
+    home CSI 0.5271  away CSI 0.1587  retained 30.1%
+
+  --- large (491,843 params), train harvey, seed 1 ---
+    epoch   0  loss=0.010632  lr=1.0e-03
+    epoch  20  loss=0.007015  lr=5.0e-04
+    epoch  40  loss=0.006968  lr=2.5e-04
+    epoch  59  loss=0.006710  lr=3.1e-05
+    best epoch 52 (loss 0.006190)
+    home CSI 0.4748  away CSI 0.1360  retained 28.6%
+
+  READ THIS: if the large model shows a similar retained %, the
+  transfer failure is not a capacity problem.
+  saved results/result_exp5_stronger_model.json
+
+==================================================================
+  SUITE COMPLETE
+==================================================================
+
+############################################################
+#  EXPERIMENT 4 — FINE-TUNING CURVE (independent events)
+#  Answers: how many independent target events are needed,
+#  and does pre-training beat training from scratch?
+############################################################
+Device: cuda
+Loaded cache: breach 60 train / 19 test, harvey 1063 train / 228 test
+
+==================================================================
+  EXPERIMENT 4 — FINE-TUNING CURVE (independent events)
+==================================================================
+
+  --- seed 0: pre-train on harvey ---
+    epoch   0  loss=0.009234  lr=1.0e-03
+    epoch  20  loss=0.006770  lr=5.0e-04
+    epoch  40  loss=0.006857  lr=1.3e-04
+    epoch  59  loss=0.007211  lr=1.6e-05
+    best epoch 39 (loss 0.006417)
+    zero-shot on breach: CSI 0.1363
+    n=  1 events   fine-tuned CSI 0.1644   from-scratch CSI 0.2262
+    n=  2 events   fine-tuned CSI 0.2176   from-scratch CSI 0.1660
+    n=  5 events   fine-tuned CSI 0.1674   from-scratch CSI 0.1723
+    n= 10 events   fine-tuned CSI 0.1304   from-scratch CSI 0.1696
+    n= 20 events   fine-tuned CSI 0.1926   from-scratch CSI 0.2298
+    n= 40 events   fine-tuned CSI 0.1648   from-scratch CSI 0.2236
+
+  --- seed 1: pre-train on harvey ---
+    epoch   0  loss=0.009060  lr=1.0e-03
+    epoch  20  loss=0.007203  lr=5.0e-04
+    epoch  40  loss=0.007277  lr=1.3e-04
+    epoch  59  loss=0.007218  lr=1.6e-05
+    best epoch 38 (loss 0.006527)
+    zero-shot on breach: CSI 0.1139
+    n=  1 events   fine-tuned CSI 0.1646   from-scratch CSI 0.1314
+    n=  2 events   fine-tuned CSI 0.1605   from-scratch CSI 0.0981
+    n=  5 events   fine-tuned CSI 0.1734   from-scratch CSI 0.1766
+    n= 10 events   fine-tuned CSI 0.2182   from-scratch CSI 0.1624
+    n= 20 events   fine-tuned CSI 0.1618   from-scratch CSI 0.1982
+    n= 40 events   fine-tuned CSI 0.2113   from-scratch CSI 0.1860
+
+  --- seed 2: pre-train on harvey ---
+    epoch   0  loss=0.009771  lr=1.0e-03
+    epoch  20  loss=0.007663  lr=2.5e-04
+    epoch  40  loss=0.006981  lr=1.6e-05
+    epoch  59  loss=0.007157  lr=7.8e-06
+    best epoch 58 (loss 0.006751)
+    zero-shot on breach: CSI 0.0092
+    n=  1 events   fine-tuned CSI 0.1618   from-scratch CSI 0.1409
+    n=  2 events   fine-tuned CSI 0.2225   from-scratch CSI 0.1805
+    n=  5 events   fine-tuned CSI 0.1764   from-scratch CSI 0.1370
+    n= 10 events   fine-tuned CSI 0.2152   from-scratch CSI 0.1636
+    n= 20 events   fine-tuned CSI 0.1644   from-scratch CSI 0.1464
+    n= 40 events   fine-tuned CSI 0.0024   from-scratch CSI 0.1738
+
+  READ THIS: the fine-tune curve vs the scratch curve answers
+  'how much target data do you actually need, and does pre-training
+  on another flood type help at all?'
+  saved results/result_exp4_finetune_curve.json
+
+==================================================================
+  SUITE COMPLETE
+==================================================================
+
+############################################################
+#  ALL EXPERIMENTS COMPLETE
+#  Total time: 193 minutes
+############################################################
+-rw-r--r-- 1 root root  2991 Sep  9 13:09 results/result_exp1_threshold_sweep.json
+-rw-r--r-- 1 root root  3898 Sep  9 14:07 results/result_exp2_rainfall_ablation.json
+-rw-r--r-- 1 root root  4642 Sep  9 13:23 results/result_exp3_controlled.json
+-rw-r--r-- 1 root root 13656 Sep  9 16:20 results/result_exp4_finetune_curve.json
+-rw-r--r-- 1 root root  5537 Sep  9 15:28 results/result_exp5_stronger_model.json
+-rw-r--r-- 1 root root   387 Sep  2 22:05 results/result_persistence.json
+
+Full log saved if you used 'tee'. Send me the log and I will
+write the results section and the revised paper.
