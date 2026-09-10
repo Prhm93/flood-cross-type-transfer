@@ -1,0 +1,397 @@
+############################################################
+#  SMOKE TEST (quick versions of all three)
+############################################################
+Device: cuda
+
+==================================================================
+  Model trained on BREACH
+==================================================================
+
+  Metric                 HOME (breach)      AWAY (harvey)      Verdict
+  ----------------------------------------------------------------------
+  CSI (flood map)        0.1649             0.5611             AWAY LOOKS BETTER
+  Volume ratio (1=perfect) 2.29               131.02             AWAY IS WRONG
+  Arrival MAE (hours)    12.54              15.44              AWAY IS WRONG
+
+  THREE-WAY CHECK: CSI says away is better = True. Physical metrics say away is worse = True.
+  >>> CONFIRMED: CSI disagrees with BOTH physical checks. This is the strongest form of the paradox.
+
+==================================================================
+  Model trained on HARVEY
+==================================================================
+
+  Metric                 HOME (harvey)      AWAY (breach)      Verdict
+  ----------------------------------------------------------------------
+  CSI (flood map)        0.4886             0.1853             away worse, as expected
+  Volume ratio (1=perfect) 12.48              0.33               comparable
+  Arrival MAE (hours)    14.24              13.80              comparable
+
+  THREE-WAY CHECK: CSI says away is better = False. Physical metrics say away is worse = False.
+
+Saved results/result_exp1b_arrival_time.json
+Device: cuda
+Loaded 8 existing exp5 results, adding seeds [2]
+
+  --- small (42,371 params), train breach, seed 2 ---
+    epoch   0  loss=0.024270  lr=1.0e-03
+    epoch   1  loss=0.002718  lr=1.0e-03
+    best epoch 1 (loss 0.002718)
+    home CSI 0.0745  away CSI 0.3266  retained 438.5%
+
+  --- small (42,371 params), train harvey, seed 2 ---
+    epoch   0  loss=0.037412  lr=1.0e-03
+    epoch   1  loss=0.012837  lr=1.0e-03
+    best epoch 1 (loss 0.012837)
+    home CSI 0.3608  away CSI 0.0336  retained 9.3%
+
+  --- large (491,843 params), train breach, seed 2 ---
+    epoch   0  loss=0.084380  lr=1.0e-03
+    epoch   1  loss=0.012228  lr=1.0e-03
+    best epoch 1 (loss 0.012228)
+    home CSI 0.0336  away CSI 0.3608  retained 1073.4%
+
+  --- large (491,843 params), train harvey, seed 2 ---
+    epoch   0  loss=0.089237  lr=1.0e-03
+    epoch   1  loss=0.015237  lr=1.0e-03
+    best epoch 1 (loss 0.015237)
+    home CSI 0.3411  away CSI 0.0441  retained 12.9%
+
+  Merged file now has 12 total runs -> results/result_exp5_stronger_model.json
+
+==================================================================
+  UPDATED SUMMARY WITH ALL SEEDS
+==================================================================
+  small  train=breach   n_seeds=3  retained mean=348.7%  median=328.7%  std=66.7
+  small  train=harvey   n_seeds=3  retained mean=31.9%  median=39.5%  std=16.2
+  large  train=breach   n_seeds=3  retained mean=531.2%  median=277.2%  std=383.6
+  large  train=harvey   n_seeds=3  retained mean=23.9%  median=28.6%  std=7.8
+==================================================================
+  EXPERIMENT 3 v2 — CONTROLLED, LARGER, 5 SEEDS
+  Fixes the point->distributed instability from v1
+==================================================================
+  grid 24x24, 4 train + 3 test sims per mechanism, 3 epochs, seeds [0]
+
+  Generating POINT-SOURCE floods...
+
+  Generating DISTRIBUTED floods, SAME terrain seeds...
+
+  Generation took 0s
+
+  --- train on point, seed 0 ---
+    epoch   0  loss=0.042776  lr=1.0e-03
+    epoch   1  loss=0.003860  lr=1.0e-03
+    epoch   2  loss=0.001291  lr=1.0e-03
+    best epoch 2 (loss 0.001291)
+    HOME (point      ) CSI 0.0506  vol 90.49x
+    AWAY (distributed) CSI 0.9988  vol 181.62x
+    retained 1974.5%
+
+  --- train on distributed, seed 0 ---
+    epoch   0  loss=0.022658  lr=1.0e-03
+    epoch   1  loss=0.004529  lr=1.0e-03
+    epoch   2  loss=0.002331  lr=1.0e-03
+    best epoch 2 (loss 0.002331)
+    HOME (distributed) CSI 0.2888  vol 1.98x
+    AWAY (point      ) CSI 0.0000  vol 0.11x
+    retained 0.0%
+
+==================================================================
+  SUMMARY (median and IQR are more robust than mean to one bad seed)
+==================================================================
+
+  trained on point:
+    home CSI   median 0.0506  IQR [0.0506, 0.0506]  mean 0.0506
+    away CSI   median 0.9988  IQR [0.9988, 0.9988]  mean 0.9988
+    retained % median 1974.5  IQR [1974.5, 1974.5]  mean 1974.5
+
+  trained on distributed:
+    home CSI   median 0.2888  IQR [0.2888, 0.2888]  mean 0.2888
+    away CSI   median 0.0000  IQR [0.0000, 0.0000]  mean 0.0000
+    retained % median 0.0  IQR [0.0, 0.0]  mean 0.0
+
+  Saved results/result_exp3_v2_stronger.json
+
+  Smoke test done. Starting the real runs in 10s — Ctrl+C to stop.
+
+############################################################
+#  EXPERIMENT 1b — ARRIVAL TIME (the three-way check)
+############################################################
+Device: cuda
+
+==================================================================
+  Model trained on BREACH
+==================================================================
+
+  Metric                 HOME (breach)      AWAY (harvey)      Verdict
+  ----------------------------------------------------------------------
+  CSI (flood map)        0.1649             0.5611             AWAY LOOKS BETTER
+  Volume ratio (1=perfect) 2.29               131.02             AWAY IS WRONG
+  Arrival MAE (hours)    12.54              15.44              AWAY IS WRONG
+
+  THREE-WAY CHECK: CSI says away is better = True. Physical metrics say away is worse = True.
+  >>> CONFIRMED: CSI disagrees with BOTH physical checks. This is the strongest form of the paradox.
+
+==================================================================
+  Model trained on HARVEY
+==================================================================
+
+  Metric                 HOME (harvey)      AWAY (breach)      Verdict
+  ----------------------------------------------------------------------
+  CSI (flood map)        0.4886             0.1853             away worse, as expected
+  Volume ratio (1=perfect) 12.48              0.33               comparable
+  Arrival MAE (hours)    14.24              13.80              comparable
+
+  THREE-WAY CHECK: CSI says away is better = False. Physical metrics say away is worse = False.
+
+Saved results/result_exp1b_arrival_time.json
+
+############################################################
+#  EXPERIMENT 5 — MORE SEEDS (architecture robustness)
+############################################################
+Device: cuda
+Loaded 12 existing exp5 results, adding seeds [2, 3, 4]
+  [skip] small breach seed 2 already present
+
+  --- small (42,371 params), train breach, seed 3 ---
+    epoch   0  loss=0.002301  lr=1.0e-03
+    epoch  20  loss=0.000005  lr=5.0e-04
+    epoch  40  loss=0.000004  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 46 (loss 0.000004)
+    home CSI 0.1665  away CSI 0.4633  retained 278.3%
+
+  --- small (42,371 params), train breach, seed 4 ---
+    epoch   0  loss=0.003150  lr=1.0e-03
+    epoch  20  loss=0.000005  lr=5.0e-04
+    epoch  40  loss=0.000004  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 40 (loss 0.000004)
+    home CSI 0.1680  away CSI 0.5657  retained 336.7%
+  [skip] small harvey seed 2 already present
+
+  --- small (42,371 params), train harvey, seed 3 ---
+    epoch   0  loss=0.009629  lr=1.0e-03
+    epoch  20  loss=0.007083  lr=1.0e-03
+    epoch  40  loss=0.007114  lr=2.5e-04
+    epoch  59  loss=0.006712  lr=3.1e-05
+    best epoch 27 (loss 0.006492)
+    home CSI 0.3086  away CSI 0.1459  retained 47.3%
+
+  --- small (42,371 params), train harvey, seed 4 ---
+    epoch   0  loss=0.009811  lr=1.0e-03
+    epoch  20  loss=0.007132  lr=2.5e-04
+    epoch  40  loss=0.007243  lr=3.1e-05
+    epoch  59  loss=0.006762  lr=3.9e-06
+    best epoch 19 (loss 0.006519)
+    home CSI 0.4250  away CSI 0.1763  retained 41.5%
+  [skip] large breach seed 2 already present
+
+  --- large (491,843 params), train breach, seed 3 ---
+    epoch   0  loss=0.009862  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000004  lr=6.3e-05
+    epoch  59  loss=0.000004  lr=7.8e-06
+    best epoch 46 (loss 0.000004)
+    home CSI 0.1782  away CSI 0.5613  retained 315.0%
+
+  --- large (491,843 params), train breach, seed 4 ---
+    epoch   0  loss=0.012293  lr=1.0e-03
+    epoch  20  loss=0.000005  lr=2.5e-04
+    epoch  40  loss=0.000004  lr=3.1e-05
+    epoch  59  loss=0.000004  lr=3.9e-06
+    best epoch 24 (loss 0.000004)
+    home CSI 0.1654  away CSI 0.5576  retained 337.0%
+  [skip] large harvey seed 2 already present
+
+  --- large (491,843 params), train harvey, seed 3 ---
+    epoch   0  loss=0.012026  lr=1.0e-03
+    epoch  20  loss=0.006913  lr=1.0e-03
+    epoch  40  loss=0.006799  lr=2.5e-04
+    epoch  59  loss=0.006309  lr=6.3e-05
+    best epoch 56 (loss 0.006223)
+    home CSI 0.5034  away CSI 0.0346  retained 6.9%
+
+  --- large (491,843 params), train harvey, seed 4 ---
+    epoch   0  loss=0.013031  lr=1.0e-03
+    epoch  20  loss=0.006976  lr=5.0e-04
+    epoch  40  loss=0.006849  lr=6.3e-05
+    epoch  59  loss=0.006353  lr=7.8e-06
+    best epoch 19 (loss 0.006345)
+    home CSI 0.5634  away CSI 0.1644  retained 29.2%
+
+  Merged file now has 20 total runs -> results/result_exp5_stronger_model.json
+
+==================================================================
+  UPDATED SUMMARY WITH ALL SEEDS
+==================================================================
+  small  train=breach   n_seeds=5  retained mean=332.2%  median=328.7%  std=58.4
+  small  train=harvey   n_seeds=5  retained mean=36.9%  median=41.5%  std=14.1
+  large  train=breach   n_seeds=5  retained mean=449.1%  median=315.0%  std=313.8
+  large  train=harvey   n_seeds=5  retained mean=21.5%  median=28.6%  std=9.7
+
+############################################################
+#  EXPERIMENT 3 v2 — CONTROLLED, LARGER, 5 SEEDS
+#  Fixes the unstable point->distributed direction
+############################################################
+==================================================================
+  EXPERIMENT 3 v2 — CONTROLLED, LARGER, 5 SEEDS
+  Fixes the point->distributed instability from v1
+==================================================================
+  grid 48x48, 60 train + 15 test sims per mechanism, 100 epochs, seeds [0, 1, 2, 3, 4]
+
+  Generating POINT-SOURCE floods...
+    point: 10/60 sims  (last sim final wet fraction 0.100, max depth 0.90 m)
+    point: 20/60 sims  (last sim final wet fraction 0.129, max depth 0.63 m)
+    point: 30/60 sims  (last sim final wet fraction 0.074, max depth 1.05 m)
+    point: 40/60 sims  (last sim final wet fraction 0.055, max depth 1.11 m)
+    point: 50/60 sims  (last sim final wet fraction 0.047, max depth 0.89 m)
+    point: 60/60 sims  (last sim final wet fraction 0.084, max depth 0.95 m)
+    point: 10/15 sims  (last sim final wet fraction 0.065, max depth 0.52 m)
+
+  Generating DISTRIBUTED floods, SAME terrain seeds...
+    distributed: 10/60 sims  (last sim final wet fraction 0.203, max depth 0.34 m)
+    distributed: 20/60 sims  (last sim final wet fraction 0.207, max depth 0.27 m)
+    distributed: 30/60 sims  (last sim final wet fraction 0.138, max depth 0.23 m)
+    distributed: 40/60 sims  (last sim final wet fraction 0.106, max depth 0.23 m)
+    distributed: 50/60 sims  (last sim final wet fraction 0.100, max depth 0.19 m)
+    distributed: 60/60 sims  (last sim final wet fraction 0.188, max depth 0.31 m)
+    distributed: 10/15 sims  (last sim final wet fraction 0.060, max depth 0.16 m)
+
+  Generation took 67s
+
+  --- train on point, seed 0 ---
+    epoch   0  loss=0.003222  lr=1.0e-03
+    epoch  25  loss=0.000014  lr=1.0e-03
+    epoch  50  loss=0.000011  lr=1.3e-04
+    epoch  75  loss=0.000011  lr=1.6e-05
+    epoch  99  loss=0.000011  lr=2.0e-06
+    best epoch 93 (loss 0.000010)
+    HOME (point      ) CSI 0.0981  vol 2.69x
+    AWAY (distributed) CSI 1.0000  vol 83.21x
+    retained 1019.4%
+
+  --- train on point, seed 1 ---
+    epoch   0  loss=0.002621  lr=1.0e-03
+    epoch  25  loss=0.000014  lr=5.0e-04
+    epoch  50  loss=0.000012  lr=1.3e-04
+    epoch  75  loss=0.000011  lr=1.6e-05
+    epoch  99  loss=0.000012  lr=2.0e-06
+    best epoch 82 (loss 0.000011)
+    HOME (point      ) CSI 0.1037  vol 4.18x
+    AWAY (distributed) CSI 1.0000  vol 127.31x
+    retained 964.6%
+
+  --- train on point, seed 2 ---
+    epoch   0  loss=0.002454  lr=1.0e-03
+    epoch  25  loss=0.000016  lr=2.5e-04
+    epoch  50  loss=0.000015  lr=3.1e-05
+    epoch  75  loss=0.000014  lr=2.0e-06
+    epoch  99  loss=0.000016  lr=1.2e-07
+    best epoch 81 (loss 0.000014)
+    HOME (point      ) CSI 0.0962  vol 1.51x
+    AWAY (distributed) CSI 0.0001  vol 0.02x
+    retained 0.1%
+
+  --- train on point, seed 3 ---
+    epoch   0  loss=0.002345  lr=1.0e-03
+    epoch  25  loss=0.000013  lr=5.0e-04
+    epoch  50  loss=0.000011  lr=1.3e-04
+    epoch  75  loss=0.000012  lr=1.6e-05
+    epoch  99  loss=0.000010  lr=2.0e-06
+    best epoch 83 (loss 0.000010)
+    HOME (point      ) CSI 0.0961  vol 1.94x
+    AWAY (distributed) CSI 0.2244  vol 0.16x
+    retained 233.6%
+
+  --- train on point, seed 4 ---
+    epoch   0  loss=0.002770  lr=1.0e-03
+    epoch  25  loss=0.000014  lr=5.0e-04
+    epoch  50  loss=0.000011  lr=1.3e-04
+    epoch  75  loss=0.000011  lr=1.6e-05
+    epoch  99  loss=0.000011  lr=9.8e-07
+    best epoch 80 (loss 0.000010)
+    HOME (point      ) CSI 0.0899  vol 2.25x
+    AWAY (distributed) CSI 0.9945  vol 54.41x
+    retained 1106.2%
+
+  --- train on distributed, seed 0 ---
+    epoch   0  loss=0.002109  lr=1.0e-03
+    epoch  25  loss=0.000001  lr=5.0e-04
+    epoch  50  loss=0.000000  lr=1.3e-04
+    epoch  75  loss=0.000000  lr=3.1e-05
+    epoch  99  loss=0.000000  lr=7.8e-06
+    best epoch 97 (loss 0.000000)
+    HOME (distributed) CSI 0.6293  vol 0.66x
+    AWAY (point      ) CSI 0.0863  vol 7.62x
+    retained 13.7%
+
+  --- train on distributed, seed 1 ---
+    epoch   0  loss=0.002831  lr=1.0e-03
+    epoch  25  loss=0.000001  lr=5.0e-04
+    epoch  50  loss=0.000000  lr=6.3e-05
+    epoch  75  loss=0.000000  lr=1.6e-05
+    epoch  99  loss=0.000000  lr=7.8e-06
+    best epoch 94 (loss 0.000000)
+    HOME (distributed) CSI 0.5176  vol 0.50x
+    AWAY (point      ) CSI 0.0121  vol 0.02x
+    retained 2.3%
+
+  --- train on distributed, seed 2 ---
+    epoch   0  loss=0.002674  lr=1.0e-03
+    epoch  25  loss=0.000001  lr=5.0e-04
+    epoch  50  loss=0.000000  lr=1.3e-04
+    epoch  75  loss=0.000000  lr=3.1e-05
+    epoch  99  loss=0.000000  lr=7.8e-06
+    best epoch 97 (loss 0.000000)
+    HOME (distributed) CSI 0.3802  vol 0.47x
+    AWAY (point      ) CSI 0.0856  vol 14.22x
+    retained 22.5%
+
+  --- train on distributed, seed 3 ---
+    epoch   0  loss=0.002028  lr=1.0e-03
+    epoch  25  loss=0.000001  lr=5.0e-04
+    epoch  50  loss=0.000001  lr=1.3e-04
+    epoch  75  loss=0.000000  lr=1.6e-05
+    epoch  99  loss=0.000000  lr=3.9e-06
+    best epoch 99 (loss 0.000000)
+    HOME (distributed) CSI 0.5230  vol 0.64x
+    AWAY (point      ) CSI 0.0853  vol 14.01x
+    retained 16.3%
+
+  --- train on distributed, seed 4 ---
+    epoch   0  loss=0.004213  lr=1.0e-03
+    epoch  25  loss=0.000001  lr=5.0e-04
+    epoch  50  loss=0.000000  lr=6.3e-05
+    epoch  75  loss=0.000000  lr=1.6e-05
+    epoch  99  loss=0.000000  lr=3.9e-06
+    best epoch 91 (loss 0.000000)
+    HOME (distributed) CSI 0.8540  vol 1.04x
+    AWAY (point      ) CSI 0.1413  vol 3.07x
+    retained 16.5%
+
+==================================================================
+  SUMMARY (median and IQR are more robust than mean to one bad seed)
+==================================================================
+
+  trained on point:
+    home CSI   median 0.0962  IQR [0.0961, 0.0981]  mean 0.0968
+    away CSI   median 0.9945  IQR [0.2244, 1.0000]  mean 0.6438
+    retained % median 964.6  IQR [233.6, 1019.4]  mean 664.8
+
+  trained on distributed:
+    home CSI   median 0.5230  IQR [0.5176, 0.6293]  mean 0.5808
+    away CSI   median 0.0856  IQR [0.0853, 0.0863]  mean 0.0821
+    retained % median 16.3  IQR [13.7, 16.5]  mean 14.3
+
+  Saved results/result_exp3_v2_stronger.json
+
+############################################################
+#  ALL FOLLOW-UP EXPERIMENTS COMPLETE
+#  Total time: 139 minutes
+############################################################
+-rw-r--r-- 1 root root  1590 Sep  9 23:21 results/result_exp1b_arrival_time.json
+-rw-r--r-- 1 root root  7799 Sep 10 01:40 results/result_exp3_v2_stronger.json
+-rw-r--r-- 1 root root 13844 Sep 10 00:42 results/result_exp5_stronger_model.json
+
+Send me the log (results/run_v3_log.txt) and I will write the
+final revised results section.

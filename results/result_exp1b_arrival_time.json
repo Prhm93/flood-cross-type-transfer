@@ -1,0 +1,52 @@
+{
+  "breach": {
+    "home": {
+      "csi_final": 0.16493250452698932,
+      "csi_mean": 0.09832284066953349,
+      "arrival_mae_s": 45153.365192660785,
+      "mass_error": 1.2856587231951409,
+      "csi_final_std": 0.07549049449978121,
+      "n": 19
+    },
+    "away": {
+      "csi_final": 0.5610972122306153,
+      "csi_mean": 0.34023983258681423,
+      "arrival_mae_s": 55568.777038032014,
+      "mass_error": 130.01984793953753,
+      "csi_final_std": 0.2310383022869671,
+      "n": 19
+    },
+    "home_volume_ratio": 2.285658723195141,
+    "away_volume_ratio": 131.01984793953753,
+    "home_arrival_hours": 12.542601442405774,
+    "away_arrival_hours": 15.435771399453337,
+    "csi_says_away_better": true,
+    "physics_says_away_worse": true,
+    "three_way_paradox_confirmed": true
+  },
+  "harvey": {
+    "home": {
+      "csi_final": 0.4886291846123556,
+      "csi_mean": 0.29629909195610393,
+      "arrival_mae_s": 51257.326323818714,
+      "mass_error": 11.481718984301573,
+      "csi_final_std": 0.19952081985339037,
+      "n": 19
+    },
+    "away": {
+      "csi_final": 0.18530392840693255,
+      "csi_mean": 0.1135434283403055,
+      "arrival_mae_s": 49672.000141693476,
+      "mass_error": -0.6698255585066276,
+      "csi_final_std": 0.060957014851612354,
+      "n": 19
+    },
+    "home_volume_ratio": 12.481718984301573,
+    "away_volume_ratio": 0.3301744414933725,
+    "home_arrival_hours": 14.238146201060754,
+    "away_arrival_hours": 13.797777817137076,
+    "csi_says_away_better": false,
+    "physics_says_away_worse": false,
+    "three_way_paradox_confirmed": false
+  }
+}
