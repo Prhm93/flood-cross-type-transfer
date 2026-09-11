@@ -328,3 +328,36 @@ def build_model(variant='vector', hidden=64, layers=3, device='cpu'):
 
 def get_device():
     return torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+def score_per_event(rollouts):
+    """
+    Score each rollout ONE AT A TIME instead of averaging them.
+
+    Why: the scatter plot needs one point per flood event. An average
+    hides the case we care about - a single event with good CSI and a
+    badly wrong water volume at the same time.
+
+    Returns a list of dicts, one per event.
+    """
+    out = []
+    for i, (pred, true) in enumerate(rollouts):
+        # the scorer wants a 3-D array, so add a middle axis of size 1
+        p3 = pred[:, np.newaxis, :]
+        t3 = true[:, np.newaxis, :]
+        s = score(p3, t3, dt_seconds=3600.0, threshold=None)
+
+        # total water, float64 so rounding does not eat the signal
+        vt = float(np.sum(true, dtype=np.float64))
+        vp = float(np.sum(pred, dtype=np.float64))
+        vr = vp / vt if vt > 0 else np.nan
+
+        out.append({
+            'event_index': i,
+            'csi_final': s['csi_final'],
+            'csi_mean': s['csi_mean'],
+            'arrival_mae_s': s['arrival_mae_s'],
+            'volume_ratio': vr,
+            'true_volume': vt,
+            'pred_volume': vp,
+        })
+    return out

@@ -1,0 +1,277 @@
+
+############################################################
+#  STEP 0 - SPLIT AUDIT (train/test leakage check)
+############################################################
+==================================================================
+  SPLIT AUDIT - checking for train/test leakage
+==================================================================
+
+  BREACH - simulation ID ranges:
+    train: 1-60 (60 sims)
+    val:   61-80 (20 sims)
+    test:  501-519 (19 sims)
+    PASS: train, val and test use entirely disjoint simulation IDs - no event-level leakage possible.
+
+  HARVEY - content fingerprint check:
+Loading Harvey data from data/harvey/train.npz ...
+  Loaded 1063 Harvey samples. Typical: 1519 nodes, 132 steps.
+Loading Harvey data from data/harvey/val.npz ...
+  Loaded 228 Harvey samples. Typical: 78 nodes, 132 steps.
+Loading Harvey data from data/harvey/test.npz ...
+  Loaded 228 Harvey samples. Typical: 1519 nodes, 132 steps.
+    train: 1063 samples, 1063 unique fingerprints
+    val:   228 samples, 228 unique fingerprints
+    test:  228 samples, 228 unique fingerprints
+    PASS: no identical depth-field content across train/val/test.
+
+==================================================================
+  AUDIT COMPLETE
+==================================================================
+  This checks EVENT-level independence, which is the unit that
+  matters for a generalisation claim. It cannot rule out subtler
+  leakage, such as shared boundary conditions between adjacent
+  Harvey graph chunks - say so in the paper.
+--- OK: STEP 0 - SPLIT AUDIT (train/test leakage check)
+
+############################################################
+#  EXP 6 - PER-EVENT METRIC DISAGREEMENT (scatter data)
+############################################################
+
+==================================================================
+  Model trained on BREACH
+==================================================================
+
+  HOME (breach), n=19 events:
+    CSI:          median 0.1342  range [0.0805, 0.3380]
+    volume ratio: median 2.30x  range [1.92x, 2.55x]
+    Spearman(CSI, |log volume error|): 0.351  (some relationship)
+    Events with above-median CSI but volume ratio >5x or <0.2x: 0/19
+
+  AWAY (harvey), n=19 events:
+    CSI:          median 0.6045  range [0.2107, 0.8973]
+    volume ratio: median 135.49x  range [56.23x, 260.99x]
+    Spearman(CSI, |log volume error|): -0.454  (some relationship)
+    Events with above-median CSI but volume ratio >5x or <0.2x: 9/19
+    Worst example: event 7, CSI=0.656, true_vol=14.71, pred_vol=3085.23, ratio=209.81x
+
+==================================================================
+  Model trained on HARVEY
+==================================================================
+
+  HOME (harvey), n=19 events:
+    CSI:          median 0.5237  range [0.2107, 0.8454]
+    volume ratio: median 10.30x  range [2.58x, 26.69x]
+    Spearman(CSI, |log volume error|): -0.389  (some relationship)
+    Events with above-median CSI but volume ratio >5x or <0.2x: 8/19
+    Worst example: event 7, CSI=0.624, true_vol=14.71, pred_vol=328.06, ratio=22.31x
+
+  AWAY (breach), n=19 events:
+    CSI:          median 0.1829  range [0.0891, 0.2986]
+    volume ratio: median 0.33x  range [0.24x, 0.40x]
+    Spearman(CSI, |log volume error|): -0.354  (some relationship)
+    Events with above-median CSI but volume ratio >5x or <0.2x: 0/19
+
+Saved results/result_exp6_metric_disagreement.json
+Per-event CSI and volume_ratio pairs - what the scatter plot needs
+(CSI on x, volume ratio on y, one dot per flood event).
+--- OK: EXP 6 - PER-EVENT METRIC DISAGREEMENT (scatter data)
+
+############################################################
+#  EXP 7 - BALANCED / WEIGHTED MIXED TRAINING
+############################################################
+Device: cuda
+breach train: 60, harvey train: 1063
+auto loss-weight for breach (to offset the size imbalance): 17.7x
+
+  --- regime=breach_only, seed=0 ---
+    epoch   0  loss=0.003856
+    epoch  20  loss=0.000004
+    epoch  40  loss=0.000004
+    epoch  59  loss=0.000004
+    breach test CSI 0.1713  harvey test CSI 0.5457
+
+  --- regime=breach_only, seed=1 ---
+    epoch   0  loss=0.003197
+    epoch  20  loss=0.000004
+    epoch  40  loss=0.000004
+    epoch  59  loss=0.000004
+    breach test CSI 0.1825  harvey test CSI 0.4862
+
+  --- regime=breach_only, seed=2 ---
+    epoch   0  loss=0.002138
+    epoch  20  loss=0.000005
+    epoch  40  loss=0.000004
+    epoch  59  loss=0.000005
+    breach test CSI 0.1799  harvey test CSI 0.4174
+
+  --- regime=harvey_only, seed=0 ---
+    epoch   0  loss=0.009047
+    epoch  20  loss=0.007271
+    epoch  40  loss=0.007108
+    epoch  59  loss=0.007358
+    breach test CSI 0.0083  harvey test CSI 0.5590
+
+  --- regime=harvey_only, seed=1 ---
+    epoch   0  loss=0.009178
+    epoch  20  loss=0.007052
+    epoch  40  loss=0.007017
+    epoch  59  loss=0.007045
+    breach test CSI 0.1493  harvey test CSI 0.4265
+
+  --- regime=harvey_only, seed=2 ---
+    epoch   0  loss=0.009451
+    epoch  20  loss=0.007532
+    epoch  40  loss=0.006895
+    epoch  59  loss=0.007031
+    breach test CSI 0.1545  harvey test CSI 0.5381
+
+  --- regime=naive_mixed, seed=0 ---
+    epoch   0  loss=0.008663
+    epoch  20  loss=0.006790
+    epoch  40  loss=0.006687
+    epoch  59  loss=0.006719
+    breach test CSI 0.1587  harvey test CSI 0.5430
+
+  --- regime=naive_mixed, seed=1 ---
+    epoch   0  loss=0.009199
+    epoch  20  loss=0.007227
+    epoch  40  loss=0.006892
+    epoch  59  loss=0.006300
+    breach test CSI 0.1134  harvey test CSI 0.4979
+
+  --- regime=naive_mixed, seed=2 ---
+    epoch   0  loss=0.008879
+    epoch  20  loss=0.007422
+    epoch  40  loss=0.006388
+    epoch  59  loss=0.006769
+    breach test CSI 0.0990  harvey test CSI 0.4805
+
+  --- regime=balanced_mixed, seed=0 ---
+    epoch   0  loss=0.006665
+    epoch  20  loss=0.004608
+    epoch  40  loss=0.004367
+    epoch  59  loss=0.004624
+    breach test CSI 0.0387  harvey test CSI 0.5374
+
+  --- regime=balanced_mixed, seed=1 ---
+    epoch   0  loss=0.006798
+    epoch  20  loss=0.004582
+    epoch  40  loss=0.004373
+    epoch  59  loss=0.004432
+    breach test CSI 0.1785  harvey test CSI 0.5695
+
+  --- regime=balanced_mixed, seed=2 ---
+    epoch   0  loss=0.006663
+    epoch  20  loss=0.005275
+    epoch  40  loss=0.004018
+    epoch  59  loss=0.004336
+    breach test CSI 0.0902  harvey test CSI 0.5328
+
+  --- regime=weighted_mixed, seed=0 ---
+    epoch   0  loss=0.009946
+    epoch  20  loss=0.006899
+    epoch  40  loss=0.006756
+    epoch  59  loss=0.006797
+    breach test CSI 0.0190  harvey test CSI 0.5204
+
+  --- regime=weighted_mixed, seed=1 ---
+    epoch   0  loss=0.011284
+    epoch  20  loss=0.007211
+    epoch  40  loss=0.006950
+    epoch  59  loss=0.006412
+    breach test CSI 0.1389  harvey test CSI 0.5303
+
+  --- regime=weighted_mixed, seed=2 ---
+    epoch   0  loss=0.010117
+    epoch  20  loss=0.007495
+    epoch  40  loss=0.006372
+    epoch  59  loss=0.006649
+    breach test CSI 0.2183  harvey test CSI 0.5086
+
+======================================================================
+  REGIME COMPARISON MATRIX (median CSI across seeds)
+======================================================================
+  Regime                Breach test    Harvey test
+  breach_only                0.1799         0.4862
+  harvey_only                0.1493         0.5381
+  naive_mixed                0.1134         0.4979
+  balanced_mixed             0.0902         0.5374
+  weighted_mixed             0.1389         0.5204
+
+  READ THIS: does BALANCED or WEIGHTED mixing rescue breach
+  performance compared with NAIVE mixing, while keeping Harvey
+  performance reasonable? If yes, the earlier pooling failure was
+  about imbalance, not about the two mechanisms being incompatible.
+
+  Saved results/result_exp7_balanced_mixed.json
+--- OK: EXP 7 - BALANCED / WEIGHTED MIXED TRAINING
+
+############################################################
+#  EXP 8 - MECHANISM-AWARE MODEL (CSI + volume)
+############################################################
+Device: cuda
+
+  --- no_tag, seed 0 ---
+    epoch   0  loss=0.006665
+    epoch  20  loss=0.004613
+    epoch  40  loss=0.004360
+    epoch  59  loss=0.004613
+    breach CSI 0.1551 vol 0.65x   harvey CSI 0.4948 vol 13.78x
+
+  --- no_tag, seed 1 ---
+    epoch   0  loss=0.006798
+    epoch  20  loss=0.004576
+    epoch  40  loss=0.004364
+    epoch  59  loss=0.004422
+    breach CSI 0.1648 vol 1.16x   harvey CSI 0.5702 vol 71.05x
+
+  --- no_tag, seed 2 ---
+    epoch   0  loss=0.006663
+    epoch  20  loss=0.005252
+    epoch  40  loss=0.004012
+    epoch  59  loss=0.004336
+    breach CSI 0.1682 vol 2.00x   harvey CSI 0.5046 vol 31.55x
+
+  --- with_tag, seed 0 ---
+    epoch   0  loss=0.007906
+    epoch  20  loss=0.004709
+    epoch  40  loss=0.004437
+    epoch  59  loss=0.004680
+    breach CSI 0.1795 vol 0.87x   harvey CSI 0.5600 vol 29.63x
+
+  --- with_tag, seed 1 ---
+    epoch   0  loss=0.008131
+    epoch  20  loss=0.004699
+    epoch  40  loss=0.004450
+    epoch  59  loss=0.004501
+    breach CSI 0.1765 vol 1.09x   harvey CSI 0.2903 vol 2.60x
+
+  --- with_tag, seed 2 ---
+    epoch   0  loss=0.006992
+    epoch  20  loss=0.005169
+    epoch  40  loss=0.003996
+    epoch  59  loss=0.004308
+    breach CSI 0.2270 vol 0.55x   harvey CSI 0.3969 vol 1.35x
+
+==========================================================================
+  MECHANISM-TAG COMPARISON (median across seeds)
+==========================================================================
+  NO tag (implicit)     breach CSI 0.1648 vol 1.16x   harvey CSI 0.5046 vol 31.55x
+  WITH mechanism tag    breach CSI 0.1795 vol 0.87x   harvey CSI 0.3969 vol 2.60x
+
+  READ THIS: the tag is only a real fix if it improves BOTH
+  datasets on CSI AND moves the volume ratio closer to 1.
+  Better CSI with a worse volume ratio is this paper's own
+  warning showing up in our own experiment.
+
+  Saved results/result_exp8_mechanism_aware.json
+--- OK: EXP 8 - MECHANISM-AWARE MODEL (CSI + volume)
+
+############################################################
+#  BATCH COMPLETE - total 191 minutes
+############################################################
+All steps completed without error.
+
+-rw-r--r-- 1 root root 23369 Sep 10 10:47 results/result_exp6_metric_disagreement.json
+-rw-r--r-- 1 root root  9449 Sep 10 13:03 results/result_exp7_balanced_mixed.json
+-rw-r--r-- 1 root root  1279 Sep 10 13:56 results/result_exp8_mechanism_aware.json

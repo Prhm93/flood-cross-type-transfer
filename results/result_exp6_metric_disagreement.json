@@ -1,0 +1,722 @@
+{
+  "breach_home": {
+    "train_on": "breach",
+    "tested_on": "breach",
+    "events": [
+      {
+        "event_index": 0,
+        "csi_final": 0.12699975387644596,
+        "csi_mean": 0.0761943057687556,
+        "arrival_mae_s": 48526.88588007737,
+        "volume_ratio": 2.3826399759096724,
+        "true_volume": 1810.833241096676,
+        "pred_volume": 4314.563669943018
+      },
+      {
+        "event_index": 1,
+        "csi_final": 0.22679402400195933,
+        "csi_mean": 0.12395583078109045,
+        "arrival_mae_s": 50943.68932038835,
+        "volume_ratio": 2.4379705209885296,
+        "true_volume": 1810.8331466154286,
+        "pred_volume": 4414.757829877315
+      },
+      {
+        "event_index": 2,
+        "csi_final": 0.2211067580803134,
+        "csi_mean": 0.12550628864890195,
+        "arrival_mae_s": 47978.761061946905,
+        "volume_ratio": 2.4001954987783134,
+        "true_volume": 1810.8325325947662,
+        "pred_volume": 4346.352093775291
+      },
+      {
+        "event_index": 3,
+        "csi_final": 0.18143771541112752,
+        "csi_mean": 0.09591838766549164,
+        "arrival_mae_s": 50014.634146341465,
+        "volume_ratio": 2.3003741285709265,
+        "true_volume": 1810.8328506579892,
+        "pred_volume": 4165.593040819978
+      },
+      {
+        "event_index": 4,
+        "csi_final": 0.13236738703339881,
+        "csi_mean": 0.07534941644658791,
+        "arrival_mae_s": 35839.70315398887,
+        "volume_ratio": 2.1017470269985905,
+        "true_volume": 1810.8322606384245,
+        "pred_volume": 3805.9113201899454
+      },
+      {
+        "event_index": 5,
+        "csi_final": 0.1826022671266634,
+        "csi_mean": 0.10901008647482709,
+        "arrival_mae_s": 46552.56064690027,
+        "volume_ratio": 2.3741382966366635,
+        "true_volume": 1810.8325821515064,
+        "pred_volume": 4299.166982083349
+      },
+      {
+        "event_index": 6,
+        "csi_final": 0.13421828908554573,
+        "csi_mean": 0.07047092436837585,
+        "arrival_mae_s": 48715.17367458867,
+        "volume_ratio": 2.2296284514956812,
+        "true_volume": 1810.8332191213121,
+        "pred_volume": 4037.4852662663907
+      },
+      {
+        "event_index": 7,
+        "csi_final": 0.10957892144791923,
+        "csi_mean": 0.07410948253204752,
+        "arrival_mae_s": 40851.12107623318,
+        "volume_ratio": 2.50054561824077,
+        "true_volume": 1810.832580889497,
+        "pred_volume": 4528.069475510856
+      },
+      {
+        "event_index": 8,
+        "csi_final": 0.09268413247652002,
+        "csi_mean": 0.061530825247388996,
+        "arrival_mae_s": 41495.744680851065,
+        "volume_ratio": 2.5099109200196317,
+        "true_volume": 1810.8328262317118,
+        "pred_volume": 4545.029084888985
+      },
+      {
+        "event_index": 9,
+        "csi_final": 0.15191740412979352,
+        "csi_mean": 0.09222099051237528,
+        "arrival_mae_s": 45380.936995153475,
+        "volume_ratio": 2.260359843160584,
+        "true_volume": 1810.828014520146,
+        "pred_volume": 4093.1229268915486
+      },
+      {
+        "event_index": 10,
+        "csi_final": 0.3299877600979192,
+        "csi_mean": 0.18766546692294478,
+        "arrival_mae_s": 55852.038547071905,
+        "volume_ratio": 2.5496862331854926,
+        "true_volume": 1810.831256384714,
+        "pred_volume": 4617.051525026094
+      },
+      {
+        "event_index": 11,
+        "csi_final": 0.12435866112875642,
+        "csi_mean": 0.0870806096523029,
+        "arrival_mae_s": 41774.117647058825,
+        "volume_ratio": 2.450470325817916,
+        "true_volume": 1810.8324584396287,
+        "pred_volume": 4437.391204434214
+      },
+      {
+        "event_index": 12,
+        "csi_final": 0.25207823960880194,
+        "csi_mean": 0.13986059478585527,
+        "arrival_mae_s": 49509.60232783705,
+        "volume_ratio": 2.0908209869841703,
+        "true_volume": 1810.8329246185385,
+        "pred_volume": 3786.1274827143643
+      },
+      {
+        "event_index": 13,
+        "csi_final": 0.1641240157480315,
+        "csi_mean": 0.09566338656845091,
+        "arrival_mae_s": 43469.46107784431,
+        "volume_ratio": 2.2917496801004047,
+        "true_volume": 1810.8323372680552,
+        "pred_volume": 4149.974429649534
+      },
+      {
+        "event_index": 14,
+        "csi_final": 0.08049079754601227,
+        "csi_mean": 0.048651989493644784,
+        "arrival_mae_s": 36592.68292682927,
+        "volume_ratio": 2.0595390628556136,
+        "true_volume": 1810.8325536745506,
+        "pred_volume": 3729.4803805833217
+      },
+      {
+        "event_index": 15,
+        "csi_final": 0.08204873197414221,
+        "csi_mean": 0.05367229436263894,
+        "arrival_mae_s": 41912.72727272727,
+        "volume_ratio": 1.920221942555783,
+        "true_volume": 1810.8305710824934,
+        "pred_volume": 3477.1965968434233
+      },
+      {
+        "event_index": 16,
+        "csi_final": 0.08875,
+        "csi_mean": 0.07011614451198982,
+        "arrival_mae_s": 41628.16901408451,
+        "volume_ratio": 2.076229508007378,
+        "true_volume": 1810.8328011714384,
+        "pred_volume": 3759.704495859798
+      },
+      {
+        "event_index": 17,
+        "csi_final": 0.11417910447761194,
+        "csi_mean": 0.07347269980407181,
+        "arrival_mae_s": 38431.37254901961,
+        "volume_ratio": 2.1668013857878483,
+        "true_volume": 1810.8328515884805,
+        "pred_volume": 3923.7151322520804
+      },
+      {
+        "event_index": 18,
+        "csi_final": 0.3379936227618347,
+        "csi_mean": 0.20768526251366456,
+        "arrival_mae_s": 52433.64757070341,
+        "volume_ratio": 2.3244860037688015,
+        "true_volume": 1810.8303741743657,
+        "pred_volume": 4209.249859967735
+      }
+    ],
+    "spearman_csi_vs_logvolerr": 0.3508771929824562,
+    "n_bad_disagreements": 0,
+    "n_events": 19
+  },
+  "breach_away": {
+    "train_on": "breach",
+    "tested_on": "harvey",
+    "events": [
+      {
+        "event_index": 0,
+        "csi_final": 0.4450296247531271,
+        "csi_mean": 0.22693795019395643,
+        "arrival_mae_s": 73960.04872107186,
+        "volume_ratio": 84.27366551612005,
+        "true_volume": 141.07511045862884,
+        "pred_volume": 11888.916671440176
+      },
+      {
+        "event_index": 1,
+        "csi_final": 0.7406188281764319,
+        "csi_mean": 0.4405766217579316,
+        "arrival_mae_s": 47047.18309859155,
+        "volume_ratio": 56.23283447657365,
+        "true_volume": 59.93248082851824,
+        "pred_volume": 3370.1732742004897
+      },
+      {
+        "event_index": 2,
+        "csi_final": 0.2549407114624506,
+        "csi_mean": 0.2706067589396736,
+        "arrival_mae_s": 32405.91133004926,
+        "volume_ratio": 204.3342749736216,
+        "true_volume": 60.689234306006256,
+        "pred_volume": 12400.89069062203
+      },
+      {
+        "event_index": 3,
+        "csi_final": 0.21066491112574062,
+        "csi_mean": 0.2078505595786702,
+        "arrival_mae_s": 55745.454545454544,
+        "volume_ratio": 135.49300918316501,
+        "true_volume": 63.77969743969334,
+        "pred_volume": 8641.703130895856
+      },
+      {
+        "event_index": 4,
+        "csi_final": 0.8762755102040817,
+        "csi_mean": 0.5455672198992706,
+        "arrival_mae_s": 50065.58761435609,
+        "volume_ratio": 66.72420254367319,
+        "true_volume": 180.8525006787604,
+        "pred_volume": 12067.2388858194
+      },
+      {
+        "event_index": 5,
+        "csi_final": 0.3225806451612903,
+        "csi_mean": 0.30656552763932843,
+        "arrival_mae_s": 43292.903225806454,
+        "volume_ratio": 166.0761930187602,
+        "true_volume": 95.05047523946996,
+        "pred_volume": 15785.6210723951
+      },
+      {
+        "event_index": 6,
+        "csi_final": 0.8233418367346939,
+        "csi_mean": 0.5493676163514107,
+        "arrival_mae_s": 43942.35033259424,
+        "volume_ratio": 128.17049274466237,
+        "true_volume": 104.70714758882059,
+        "pred_volume": 13420.366700347222
+      },
+      {
+        "event_index": 7,
+        "csi_final": 0.6563039723661486,
+        "csi_mean": 0.30913094693839227,
+        "arrival_mae_s": 67041.86046511628,
+        "volume_ratio": 209.8079493939296,
+        "true_volume": 14.705008467051812,
+        "pred_volume": 3085.2276722925126
+      },
+      {
+        "event_index": 8,
+        "csi_final": 0.7193877551020408,
+        "csi_mean": 0.44805116457048483,
+        "arrival_mae_s": 46394.892258579406,
+        "volume_ratio": 139.7611317859602,
+        "true_volume": 75.26022898197334,
+        "pred_volume": 10518.454780991118
+      },
+      {
+        "event_index": 9,
+        "csi_final": 0.6044973544973545,
+        "csi_mean": 0.35132999649184987,
+        "arrival_mae_s": 64289.454545454544,
+        "volume_ratio": 160.36398573649808,
+        "true_volume": 24.18831239130668,
+        "pred_volume": 3878.934183309464
+      },
+      {
+        "event_index": 10,
+        "csi_final": 0.29098090849242925,
+        "csi_mean": 0.26390717577353523,
+        "arrival_mae_s": 41409.72972972973,
+        "volume_ratio": 163.8195570839438,
+        "true_volume": 54.981797251564785,
+        "pred_volume": 9007.093673430541
+      },
+      {
+        "event_index": 11,
+        "csi_final": 0.3818301514154049,
+        "csi_mean": 0.18332292501606948,
+        "arrival_mae_s": 76997.78129952456,
+        "volume_ratio": 141.168631406971,
+        "true_volume": 92.87921547335645,
+        "pred_volume": 13111.631734526894
+      },
+      {
+        "event_index": 12,
+        "csi_final": 0.40224570673712023,
+        "csi_mean": 0.1987505376863722,
+        "arrival_mae_s": 63058.25242718447,
+        "volume_ratio": 57.81819804320316,
+        "true_volume": 192.78515050776878,
+        "pred_volume": 11146.490011846903
+      },
+      {
+        "event_index": 13,
+        "csi_final": 0.34035759897828866,
+        "csi_mean": 0.23228281283892727,
+        "arrival_mae_s": 41784.86842105263,
+        "volume_ratio": 260.99149694471316,
+        "true_volume": 29.821970683522522,
+        "pred_volume": 7783.280770533895
+      },
+      {
+        "event_index": 14,
+        "csi_final": 0.7391304347826086,
+        "csi_mean": 0.34636061377280847,
+        "arrival_mae_s": 69652.17391304347,
+        "volume_ratio": 101.14390760519142,
+        "true_volume": 9.007631036007297,
+        "pred_volume": 911.0670012475766
+      },
+      {
+        "event_index": 15,
+        "csi_final": 0.8973214285714286,
+        "csi_mean": 0.5161160280776247,
+        "arrival_mae_s": 54991.34137686302,
+        "volume_ratio": 130.32849658835465,
+        "true_volume": 102.8533800731675,
+        "pred_volume": 13404.726393966555
+      },
+      {
+        "event_index": 16,
+        "csi_final": 0.8526785714285714,
+        "csi_mean": 0.48002818424291055,
+        "arrival_mae_s": 47006.7480258435,
+        "volume_ratio": 144.8362923596688,
+        "true_volume": 43.47746612775518,
+        "pred_volume": 6297.114995137146
+      },
+      {
+        "event_index": 17,
+        "csi_final": 0.3489137590520079,
+        "csi_mean": 0.16715942094161854,
+        "arrival_mae_s": 77533.62445414848,
+        "volume_ratio": 69.59862126004714,
+        "true_volume": 176.72606800267386,
+        "pred_volume": 12299.890673695434
+      },
+      {
+        "event_index": 18,
+        "csi_final": 0.7537473233404711,
+        "csi_mean": 0.4206447584386354,
+        "arrival_mae_s": 59186.59793814433,
+        "volume_ratio": 68.43419662383789,
+        "true_volume": 28.82506217168884,
+        "pred_volume": 1972.6199723517057
+      }
+    ],
+    "spearman_csi_vs_logvolerr": -0.45438596491228067,
+    "n_bad_disagreements": 9,
+    "n_events": 19
+  },
+  "harvey_home": {
+    "train_on": "harvey",
+    "tested_on": "harvey",
+    "events": [
+      {
+        "event_index": 0,
+        "csi_final": 0.30589123867069484,
+        "csi_mean": 0.1767471490940024,
+        "arrival_mae_s": 62768.4076433121,
+        "volume_ratio": 7.75182726845154,
+        "true_volume": 141.07511045862884,
+        "pred_volume": 1093.589888153012
+      },
+      {
+        "event_index": 1,
+        "csi_final": 0.739302172481896,
+        "csi_mean": 0.3641836722644117,
+        "arrival_mae_s": 43425.0,
+        "volume_ratio": 2.5792736174770305,
+        "true_volume": 59.93248082851824,
+        "pred_volume": 154.582266630945
+      },
+      {
+        "event_index": 2,
+        "csi_final": 0.24567474048442905,
+        "csi_mean": 0.23675163458437454,
+        "arrival_mae_s": 32317.241379310344,
+        "volume_ratio": 26.68991121596581,
+        "true_volume": 60.689234306006256,
+        "pred_volume": 1619.7902753922535
+      },
+      {
+        "event_index": 3,
+        "csi_final": 0.21066491112574062,
+        "csi_mean": 0.20155982483292437,
+        "arrival_mae_s": 50543.801652892565,
+        "volume_ratio": 17.637386101966445,
+        "true_volume": 63.77969743969334,
+        "pred_volume": 1124.9071492104722
+      },
+      {
+        "event_index": 4,
+        "csi_final": 0.6616393442622951,
+        "csi_mean": 0.438868036299284,
+        "arrival_mae_s": 48861.88786373314,
+        "volume_ratio": 7.834340921094125,
+        "true_volume": 180.8525006787604,
+        "pred_volume": 1416.8601467498156
+      },
+      {
+        "event_index": 5,
+        "csi_final": 0.3108665749656121,
+        "csi_mean": 0.27231363436426703,
+        "arrival_mae_s": 43204.681404421324,
+        "volume_ratio": 20.380492719990432,
+        "true_volume": 95.05047523946996,
+        "pred_volume": 1937.1755186496484
+      },
+      {
+        "event_index": 6,
+        "csi_final": 0.6515353805073432,
+        "csi_mean": 0.42544670725996925,
+        "arrival_mae_s": 40961.72747580045,
+        "volume_ratio": 9.29937454388183,
+        "true_volume": 104.70714758882059,
+        "pred_volume": 973.710982849956
+      },
+      {
+        "event_index": 7,
+        "csi_final": 0.6243386243386243,
+        "csi_mean": 0.30877269461370777,
+        "arrival_mae_s": 60345.91836734694,
+        "volume_ratio": 22.30961395659676,
+        "true_volume": 14.705008467051812,
+        "pred_volume": 328.06306212841264
+      },
+      {
+        "event_index": 8,
+        "csi_final": 0.5522922636103151,
+        "csi_mean": 0.40825444535803024,
+        "arrival_mae_s": 42697.60765550239,
+        "volume_ratio": 9.126409292694758,
+        "true_volume": 75.26022898197334,
+        "pred_volume": 686.8556531514168
+      },
+      {
+        "event_index": 9,
+        "csi_final": 0.5954907161803713,
+        "csi_mean": 0.3395512656526297,
+        "arrival_mae_s": 58198.92665474061,
+        "volume_ratio": 16.247456693463626,
+        "true_volume": 24.18831239130668,
+        "pred_volume": 392.99855806572486
+      },
+      {
+        "event_index": 10,
+        "csi_final": 0.29098090849242925,
+        "csi_mean": 0.2454792135364464,
+        "arrival_mae_s": 39385.94594594595,
+        "volume_ratio": 19.099129006682574,
+        "true_volume": 54.981797251564785,
+        "pred_volume": 1050.1044387269012
+      },
+      {
+        "event_index": 11,
+        "csi_final": 0.36083916083916084,
+        "csi_mean": 0.15034302739223152,
+        "arrival_mae_s": 73215.66068515497,
+        "volume_ratio": 16.32086779790816,
+        "true_volume": 92.87921547335645,
+        "pred_volume": 1515.8693969140768
+      },
+      {
+        "event_index": 12,
+        "csi_final": 0.37180373185901866,
+        "csi_mean": 0.17021299939404957,
+        "arrival_mae_s": 53657.142857142855,
+        "volume_ratio": 5.63172332662171,
+        "true_volume": 192.78515050776878,
+        "pred_volume": 1085.7126291408786
+      },
+      {
+        "event_index": 13,
+        "csi_final": 0.27419354838709675,
+        "csi_mean": 0.23397243054194877,
+        "arrival_mae_s": 37851.085141903175,
+        "volume_ratio": 17.869933441368286,
+        "true_volume": 29.821970683522522,
+        "pred_volume": 532.9166312049838
+      },
+      {
+        "event_index": 14,
+        "csi_final": 0.6444444444444445,
+        "csi_mean": 0.3156455902368314,
+        "arrival_mae_s": 66521.73913043478,
+        "volume_ratio": 6.2797653571314465,
+        "true_volume": 9.007631036007297,
+        "pred_volume": 56.56580932974066
+      },
+      {
+        "event_index": 15,
+        "csi_final": 0.8454137267479154,
+        "csi_mean": 0.4144075496524658,
+        "arrival_mae_s": 53316.35846372689,
+        "volume_ratio": 10.36067925649162,
+        "true_volume": 102.8533800731675,
+        "pred_volume": 1065.6308813841151
+      },
+      {
+        "event_index": 16,
+        "csi_final": 0.791693705386113,
+        "csi_mean": 0.42328062796499183,
+        "arrival_mae_s": 44769.032258064515,
+        "volume_ratio": 10.297115190561232,
+        "true_volume": 43.47746612775518,
+        "pred_volume": 447.6924769112193
+      },
+      {
+        "event_index": 17,
+        "csi_final": 0.2831926323867997,
+        "csi_mean": 0.13720557024655125,
+        "arrival_mae_s": 68165.21739130435,
+        "volume_ratio": 6.754719617668563,
+        "true_volume": 176.72606800267386,
+        "pred_volume": 1193.7350384910897
+      },
+      {
+        "event_index": 18,
+        "csi_final": 0.523696682464455,
+        "csi_mean": 0.3666889456431321,
+        "arrival_mae_s": 53681.818181818184,
+        "volume_ratio": 4.68263246069199,
+        "true_volume": 28.82506217168884,
+        "pred_volume": 134.97717180661493
+      }
+    ],
+    "spearman_csi_vs_logvolerr": -0.38947368421052625,
+    "n_bad_disagreements": 8,
+    "n_events": 19
+  },
+  "harvey_away": {
+    "train_on": "harvey",
+    "tested_on": "breach",
+    "events": [
+      {
+        "event_index": 0,
+        "csi_final": 0.182909604519774,
+        "csi_mean": 0.09589726087643557,
+        "arrival_mae_s": 49400.56657223796,
+        "volume_ratio": 0.3919824623871629,
+        "true_volume": 1810.833241096676,
+        "pred_volume": 709.814872817602
+      },
+      {
+        "event_index": 1,
+        "csi_final": 0.2112094395280236,
+        "csi_mean": 0.12399004001628935,
+        "arrival_mae_s": 57560.6864274571,
+        "volume_ratio": 0.3236047170154427,
+        "true_volume": 1810.8331466154286,
+        "pred_volume": 585.9941479726695
+      },
+      {
+        "event_index": 2,
+        "csi_final": 0.2798998121477771,
+        "csi_mean": 0.16569487401379385,
+        "arrival_mae_s": 51694.60580912863,
+        "volume_ratio": 0.32569189550966665,
+        "true_volume": 1810.8325325947662,
+        "pred_volume": 589.7734799913596
+      },
+      {
+        "event_index": 3,
+        "csi_final": 0.242296918767507,
+        "csi_mean": 0.1319117176663949,
+        "arrival_mae_s": 52033.846153846156,
+        "volume_ratio": 0.3426378974162151,
+        "true_volume": 1810.8328506579892,
+        "pred_volume": 620.4599605216645
+      },
+      {
+        "event_index": 4,
+        "csi_final": 0.11694290976058933,
+        "csi_mean": 0.0858680203794947,
+        "arrival_mae_s": 37281.95121951219,
+        "volume_ratio": 0.24425184669321395,
+        "true_volume": 1810.8322606384245,
+        "pred_volume": 442.2991237125825
+      },
+      {
+        "event_index": 5,
+        "csi_final": 0.22371967654986524,
+        "csi_mean": 0.12636918827758764,
+        "arrival_mae_s": 53660.25408348457,
+        "volume_ratio": 0.3456097741373381,
+        "true_volume": 1810.8325821515064,
+        "pred_volume": 625.8414397179149
+      },
+      {
+        "event_index": 6,
+        "csi_final": 0.13970007892659828,
+        "csi_mean": 0.095539769993685,
+        "arrival_mae_s": 43618.90909090909,
+        "volume_ratio": 0.3044005584494666,
+        "true_volume": 1810.8332191213121,
+        "pred_volume": 551.2186431593727
+      },
+      {
+        "event_index": 7,
+        "csi_final": 0.14933993399339934,
+        "csi_mean": 0.09123748608112196,
+        "arrival_mae_s": 48916.8,
+        "volume_ratio": 0.3453530478350266,
+        "true_volume": 1810.832580889497,
+        "pred_volume": 625.3765509291552
+      },
+      {
+        "event_index": 8,
+        "csi_final": 0.12863436123348018,
+        "csi_mean": 0.06783114922988794,
+        "arrival_mae_s": 48074.15730337079,
+        "volume_ratio": 0.33613945841591986,
+        "true_volume": 1810.8328262317118,
+        "pred_volume": 608.6923654912971
+      },
+      {
+        "event_index": 9,
+        "csi_final": 0.18820410868124585,
+        "csi_mean": 0.10485334155854395,
+        "arrival_mae_s": 47387.05035971223,
+        "volume_ratio": 0.3971295420111752,
+        "true_volume": 1810.828014520146,
+        "pred_volume": 719.1333000673912
+      },
+      {
+        "event_index": 10,
+        "csi_final": 0.2382297551789077,
+        "csi_mean": 0.18744625291385572,
+        "arrival_mae_s": 59441.269841269845,
+        "volume_ratio": 0.34515773695610985,
+        "true_volume": 1810.831256384714,
+        "pred_volume": 625.022418463137
+      },
+      {
+        "event_index": 11,
+        "csi_final": 0.16268260292164674,
+        "csi_mean": 0.08494108769605627,
+        "arrival_mae_s": 50836.36363636364,
+        "volume_ratio": 0.3908892544544941,
+        "true_volume": 1810.8324584396287,
+        "pred_volume": 707.8349496214651
+      },
+      {
+        "event_index": 12,
+        "csi_final": 0.2465423932651834,
+        "csi_mean": 0.17481529863320228,
+        "arrival_mae_s": 54512.45551601423,
+        "volume_ratio": 0.330650588385301,
+        "true_volume": 1810.8329246185385,
+        "pred_volume": 598.7529719925951
+      },
+      {
+        "event_index": 13,
+        "csi_final": 0.24453125,
+        "csi_mean": 0.15428366846889424,
+        "arrival_mae_s": 45209.48275862069,
+        "volume_ratio": 0.309924486389673,
+        "true_volume": 1810.8323372680552,
+        "pred_volume": 561.2212820656132
+      },
+      {
+        "event_index": 14,
+        "csi_final": 0.12560975609756098,
+        "csi_mean": 0.06010820171852421,
+        "arrival_mae_s": 39836.49635036496,
+        "volume_ratio": 0.2826135976419312,
+        "true_volume": 1810.8325536745506,
+        "pred_volume": 511.76590272109024
+      },
+      {
+        "event_index": 15,
+        "csi_final": 0.089058524173028,
+        "csi_mean": 0.053907901581688386,
+        "arrival_mae_s": 39949.51456310679,
+        "volume_ratio": 0.27398358546529555,
+        "true_volume": 1810.8305710824934,
+        "pred_volume": 496.13785253535025
+      },
+      {
+        "event_index": 16,
+        "csi_final": 0.09644087256027555,
+        "csi_mean": 0.038464854130356795,
+        "arrival_mae_s": 64858.06451612903,
+        "volume_ratio": 0.3059918314248631,
+        "true_volume": 1810.8328011714384,
+        "pred_volume": 554.1000452346634
+      },
+      {
+        "event_index": 17,
+        "csi_final": 0.1561938958707361,
+        "csi_mean": 0.08969404353785246,
+        "arrival_mae_s": 42947.10743801653,
+        "volume_ratio": 0.34518123094517383,
+        "true_volume": 1810.8328515884805,
+        "pred_volume": 625.065512747271
+      },
+      {
+        "event_index": 18,
+        "csi_final": 0.29862874555611985,
+        "csi_mean": 0.22447179047823523,
+        "arrival_mae_s": 56548.42105263158,
+        "volume_ratio": 0.33212039460238574,
+        "true_volume": 1810.8303741743657,
+        "pred_volume": 601.4136984287761
+      }
+    ],
+    "spearman_csi_vs_logvolerr": -0.3543859649122807,
+    "n_bad_disagreements": 0,
+    "n_events": 19
+  }
+}
