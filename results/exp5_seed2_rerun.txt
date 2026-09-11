@@ -1,0 +1,44 @@
+Device: cuda
+Loaded 16 existing exp5 results, adding seeds [2]
+
+  --- small (42,371 params), train breach, seed 2 ---
+    epoch   0  loss=0.002093  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 50 (loss 0.000003)
+    home CSI 0.1881  away CSI 0.4359  retained 231.8%
+
+  --- small (42,371 params), train harvey, seed 2 ---
+    epoch   0  loss=0.009771  lr=1.0e-03
+    epoch  20  loss=0.007677  lr=2.5e-04
+    epoch  40  loss=0.006983  lr=1.6e-05
+    epoch  59  loss=0.007162  lr=3.9e-06
+    best epoch 58 (loss 0.006753)
+    home CSI 0.4448  away CSI 0.0503  retained 11.3%
+
+  --- large (491,843 params), train breach, seed 2 ---
+    epoch   0  loss=0.005936  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  59  loss=0.000004  lr=1.6e-05
+    best epoch 30 (loss 0.000003)
+    home CSI 0.2068  away CSI 0.5651  retained 273.3%
+
+  --- large (491,843 params), train harvey, seed 2 ---
+    epoch   0  loss=0.011175  lr=1.0e-03
+    epoch  20  loss=0.007295  lr=5.0e-04
+    epoch  40  loss=0.006511  lr=1.3e-04
+    epoch  59  loss=0.006565  lr=6.3e-05
+    best epoch 58 (loss 0.006172)
+    home CSI 0.5611  away CSI 0.0387  retained 6.9%
+
+  Merged file now has 20 total runs -> results/result_exp5_stronger_model.json
+
+==================================================================
+  UPDATED SUMMARY WITH ALL SEEDS
+==================================================================
+  small  train=breach   n_seeds=5  retained mean=290.9%  median=278.8%  std=38.3
+  small  train=harvey   n_seeds=5  retained mean=37.3%  median=41.5%  std=13.3
+  large  train=breach   n_seeds=5  retained mean=289.1%  median=277.2%  std=33.1
+  large  train=harvey   n_seeds=5  retained mean=20.3%  median=28.6%  std=11.0
