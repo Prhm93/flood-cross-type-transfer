@@ -2,49 +2,81 @@
   {
     "tagged": false,
     "seed": 0,
-    "breach_csi": 0.15505150793123135,
-    "breach_volume_ratio": 0.6499907042813238,
-    "harvey_csi": 0.49481281321680276,
-    "harvey_volume_ratio": 13.77740066642404
+    "breach_csi": 0.12334425745174539,
+    "breach_volume_ratio": 0.33255916925763135,
+    "harvey_csi": 0.5371285411749421,
+    "harvey_volume_ratio": 25.104150670679548
   },
   {
     "tagged": false,
     "seed": 1,
-    "breach_csi": 0.16484709916170975,
-    "breach_volume_ratio": 1.160931986118223,
-    "harvey_csi": 0.5702459460986692,
-    "harvey_volume_ratio": 71.04568845745032
+    "breach_csi": 0.15913293885747393,
+    "breach_volume_ratio": 1.2428002856830291,
+    "harvey_csi": 0.5724472171380938,
+    "harvey_volume_ratio": 63.69803666573526
   },
   {
     "tagged": false,
     "seed": 2,
-    "breach_csi": 0.16819274830704,
-    "breach_volume_ratio": 2.0034225376250623,
-    "harvey_csi": 0.504629701768013,
-    "harvey_volume_ratio": 31.55138461294896
+    "breach_csi": 0.19413072448946,
+    "breach_volume_ratio": 0.8807780967650151,
+    "harvey_csi": 0.5562717518124575,
+    "harvey_volume_ratio": 19.224878454642983
+  },
+  {
+    "tagged": false,
+    "seed": 3,
+    "breach_csi": 0.17635000906322873,
+    "breach_volume_ratio": 0.5059452191518075,
+    "harvey_csi": 0.5051349519577656,
+    "harvey_volume_ratio": 28.631769738064193
+  },
+  {
+    "tagged": false,
+    "seed": 4,
+    "breach_csi": 0.06147475826560047,
+    "breach_volume_ratio": 0.13363064552117535,
+    "harvey_csi": 0.5399028441064729,
+    "harvey_volume_ratio": 17.82588266136536
   },
   {
     "tagged": true,
     "seed": 0,
-    "breach_csi": 0.17952161119681365,
-    "breach_volume_ratio": 0.8654014746080458,
-    "harvey_csi": 0.5600068735437288,
-    "harvey_volume_ratio": 29.63184522228438
+    "breach_csi": 0.1657011058869001,
+    "breach_volume_ratio": 1.221407222352203,
+    "harvey_csi": 0.5617188218380311,
+    "harvey_volume_ratio": 62.83004265235244
   },
   {
     "tagged": true,
     "seed": 1,
-    "breach_csi": 0.17648674128033376,
-    "breach_volume_ratio": 1.0926931771604949,
-    "harvey_csi": 0.2902675158447837,
-    "harvey_volume_ratio": 2.596944980860642
+    "breach_csi": 0.2050117400925032,
+    "breach_volume_ratio": 1.217520782271263,
+    "harvey_csi": 0.36132395004960066,
+    "harvey_volume_ratio": 2.390626827416252
   },
   {
     "tagged": true,
     "seed": 2,
-    "breach_csi": 0.2270442236099585,
-    "breach_volume_ratio": 0.5507557293245662,
-    "harvey_csi": 0.3969377109994429,
-    "harvey_volume_ratio": 1.3469554517094458
+    "breach_csi": 0.1900536185249213,
+    "breach_volume_ratio": 0.5715665947215843,
+    "harvey_csi": 0.5219140987005287,
+    "harvey_volume_ratio": 3.1154693428848144
+  },
+  {
+    "tagged": true,
+    "seed": 3,
+    "breach_csi": 0.1952807317978715,
+    "breach_volume_ratio": 0.6381661571069658,
+    "harvey_csi": 0.5253283221690888,
+    "harvey_volume_ratio": 19.819804358036706
+  },
+  {
+    "tagged": true,
+    "seed": 4,
+    "breach_csi": 0.21896989101195094,
+    "breach_volume_ratio": 0.8522697373456971,
+    "harvey_csi": 0.373539248904643,
+    "harvey_volume_ratio": 3.6353579855498506
   }
 ]

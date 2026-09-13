@@ -149,7 +149,7 @@ def main():
     results = []
     for tagged in [False, True]:
         label = 'with_tag' if tagged else 'no_tag'
-        for seed in [0, 1, 2]:
+        for seed in [0, 1, 2, 3, 4]:
             print(f"\n  --- {label}, seed {seed} ---")
             set_seed(seed)
             if tagged:
