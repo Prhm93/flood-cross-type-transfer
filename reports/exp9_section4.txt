@@ -1,0 +1,102 @@
+======================================================================
+  EXP9 SECTION 4 - metric checks (no training)
+======================================================================
+
+[1] auto_threshold() source:
+
+def auto_threshold(true_sequence):
+    """
+    Pick a sensible wet/dry threshold from the data itself.
+    Uses 1% of the maximum true depth in the sequence.
+    This adapts to whatever scale the data is on.
+    """
+    max_depth = float(np.max(true_sequence))
+    if max_depth <= 0:
+        return WET
+    return max(max_depth * 0.01, 1e-6)
+
+  score_rollouts signature: (rollouts, threshold_mode='auto', threshold_value=None, dt_seconds=3600.0)
+  score_rollouts default dt_seconds: 3600.0  (score_per_event uses 3600.0)
+
+  pairwise_disagreement() used as-is:
+def pairwise_disagreement(events):
+    total_pairs, disagreements = 0, 0
+    for a, b in itertools.combinations(events, 2):
+        csi_a, csi_b = a['csi_final'], b['csi_final']
+        if csi_a == csi_b:
+            continue
+        vol_a = abs(math.log10(max(a['volume_ratio'], 1e-6)))
+        vol_b = abs(math.log10(max(b['volume_ratio'], 1e-6)))
+        if vol_a == vol_b:
+            continue
+        csi_says_a_better = csi_a > csi_b
+        vol_says_a_better = vol_a < vol_b
+        total_pairs += 1
+        if csi_says_a_better != vol_says_a_better:
+            disagreements += 1
+    pct = 100.0 * disagreements / total_pairs if total_pairs else float('nan')
+    return disagreements, total_pairs, pct
+
+  spearman() used as-is:
+def spearman(x, y):
+    """Rank correlation, written by hand so scipy is not needed."""
+    x, y = np.asarray(x), np.asarray(y)
+    ok = np.isfinite(x) & np.isfinite(y)
+    x, y = x[ok], y[ok]
+    if len(x) < 3:
+        return float('nan')
+    # ranking twice with argsort turns values into ranks
+    rx = np.argsort(np.argsort(x))
+    ry = np.argsort(np.argsort(y))
+    return float(np.corrcoef(rx, ry)[0, 1])
+
+[2] CSI saturation check on each test set
+    point       truly wet at final step: median 0.080 (0% of events >= 99% wet) | 'everything wet' guess CSI median 0.0799
+    distributed truly wet at final step: median 1.000 (100% of events >= 99% wet) | 'everything wet' guess CSI median 1.0000
+    inflow      truly wet at final step: median 0.150 (0% of events >= 99% wet) | 'everything wet' guess CSI median 0.1502
+
+[3] scoring 15 models x 3 test sets
+    point       s0 done
+    point       s1 done
+    point       s2 done
+    point       s3 done
+    point       s4 done
+    distributed s0 done
+    distributed s1 done
+    distributed s2 done
+    distributed s3 done
+    distributed s4 done
+    inflow      s0 done
+    inflow      s1 done
+    inflow      s2 done
+    inflow      s3 done
+    inflow      s4 done
+
+  regression vs Section 3: 90/90 values match
+
+======================================================================
+  SUMMARY - medians across 5 seeds (arrival in MINUTES, 1 frame = 2 min)
+======================================================================
+
+  trained on point (home below floor 5/5)
+    HOME point       CSI 0.0962  vol 2.25x  arrival 16.8 min  bad 0/15  rho -0.657  pairwise 24.8%
+    away distributed CSI 0.9945  vol 54.41x  arrival 3.6 min  bad 0/15  rho -0.054  pairwise 44.4%
+         three-way: CSI flatters True | volume flags failure True | arrival flags failure False
+    away inflow      CSI 0.1581  vol 2.00x  arrival 16.8 min  bad 0/15  rho -0.668  pairwise 25.7%
+         three-way: CSI flatters True | volume flags failure False | arrival flags failure False
+
+  trained on distributed (home below floor 0/5)
+    away point       CSI 0.0856  vol 7.62x  arrival 23.4 min  bad 7/15  rho -0.554  pairwise 29.5%
+         three-way: CSI flatters False | volume flags failure True | arrival flags failure True
+    HOME distributed CSI 0.5230  vol 0.64x  arrival 9.2 min  bad 0/15  rho -0.393  pairwise 36.2%
+    away inflow      CSI 0.1463  vol 6.82x  arrival 23.1 min  bad 5/15  rho -0.596  pairwise 30.5%
+         three-way: CSI flatters False | volume flags failure True | arrival flags failure True
+
+  trained on inflow (home below floor 2/5)
+    away point       CSI 0.0990  vol 2.63x  arrival 17.7 min  bad 0/15  rho -0.625  pairwise 25.7%
+         three-way: CSI flatters False | volume flags failure False | arrival flags failure False
+    away distributed CSI 0.9997  vol 37.96x  arrival 3.6 min  bad 5/15  rho +0.096  pairwise 74.0%
+         three-way: CSI flatters True | volume flags failure True | arrival flags failure False
+    HOME inflow      CSI 0.1514  vol 2.35x  arrival 17.5 min  bad 0/15  rho -0.582  pairwise 29.5%
+
+  saved /root/projects/floodtransfer/results/result_exp9_section4_metrics.json  (22s)
