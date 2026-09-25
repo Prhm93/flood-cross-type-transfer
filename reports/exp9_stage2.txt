@@ -1,0 +1,146 @@
+======================================================================
+  EXP9 SECTION 3 - FULL RUN  epochs 100, seeds [0, 1, 2, 3, 4], device cuda
+======================================================================
+
+  --- train on inflow, seed 0 ---
+    epoch   0  loss=0.003371  lr=1.0e-03
+    epoch  25  loss=0.000016  lr=5.0e-04
+    epoch  50  loss=0.000015  lr=1.3e-04
+    epoch  75  loss=0.000014  lr=3.1e-05
+    epoch  99  loss=0.000013  lr=1.6e-05
+    best epoch 94 (loss 0.000013)
+    saved /root/projects/floodtransfer/results/synth3_inflow_s0.pt  (338s elapsed)
+
+  --- train on inflow, seed 1 ---
+    epoch   0  loss=0.002626  lr=1.0e-03
+    epoch  25  loss=0.000020  lr=1.0e-03
+    epoch  50  loss=0.000013  lr=2.5e-04
+    epoch  75  loss=0.000012  lr=3.1e-05
+    epoch  99  loss=0.000012  lr=7.8e-06
+    best epoch 93 (loss 0.000012)
+    saved /root/projects/floodtransfer/results/synth3_inflow_s1.pt  (682s elapsed)
+
+  --- train on inflow, seed 2 ---
+    epoch   0  loss=0.002460  lr=1.0e-03
+    epoch  25  loss=0.000017  lr=2.5e-04
+    epoch  50  loss=0.000016  lr=1.3e-04
+    epoch  75  loss=0.000015  lr=1.6e-05
+    epoch  99  loss=0.000016  lr=9.8e-07
+    best epoch 75 (loss 0.000015)
+    saved /root/projects/floodtransfer/results/synth3_inflow_s2.pt  (1021s elapsed)
+
+  --- train on inflow, seed 3 ---
+    epoch   0  loss=0.002274  lr=1.0e-03
+    epoch  25  loss=0.000016  lr=5.0e-04
+    epoch  50  loss=0.000014  lr=1.3e-04
+    epoch  75  loss=0.000013  lr=3.1e-05
+    epoch  99  loss=0.000013  lr=2.0e-06
+    best epoch 79 (loss 0.000013)
+    saved /root/projects/floodtransfer/results/synth3_inflow_s3.pt  (1357s elapsed)
+
+  --- train on inflow, seed 4 ---
+    epoch   0  loss=0.002741  lr=1.0e-03
+    epoch  25  loss=0.000017  lr=5.0e-04
+    epoch  50  loss=0.000015  lr=1.3e-04
+    epoch  75  loss=0.000014  lr=3.1e-05
+    epoch  99  loss=0.000014  lr=2.0e-06
+    best epoch 71 (loss 0.000013)
+    saved /root/projects/floodtransfer/results/synth3_inflow_s4.pt  (1691s elapsed)
+
+  point       s0  [HOME BELOW FLOOR]
+    HOME point       CSI 0.0981  vol 2.69x
+    away distributed CSI 1.0000  vol 83.21x
+    away inflow      CSI 0.1581  vol 2.39x
+
+  point       s1  [HOME BELOW FLOOR]
+    HOME point       CSI 0.1037  vol 4.18x
+    away distributed CSI 1.0000  vol 127.31x
+    away inflow      CSI 0.1649  vol 3.73x
+
+  point       s2  [HOME BELOW FLOOR]
+    HOME point       CSI 0.0962  vol 1.51x
+    away distributed CSI 0.0001  vol 0.02x
+    away inflow      CSI 0.2010  vol 1.35x
+
+  point       s3  [HOME BELOW FLOOR]
+    HOME point       CSI 0.0961  vol 1.94x
+    away distributed CSI 0.2244  vol 0.16x
+    away inflow      CSI 0.1273  vol 1.73x
+
+  point       s4  [HOME BELOW FLOOR]
+    HOME point       CSI 0.0899  vol 2.25x
+    away distributed CSI 0.9945  vol 54.41x
+    away inflow      CSI 0.1482  vol 2.00x
+
+  distributed s0
+    away point       CSI 0.0863  vol 7.62x
+    HOME distributed CSI 0.6293  vol 0.66x
+    away inflow      CSI 0.1454  vol 6.82x
+
+  distributed s1
+    away point       CSI 0.0121  vol 0.02x
+    HOME distributed CSI 0.5176  vol 0.50x
+    away inflow      CSI 0.0299  vol 0.01x
+
+  distributed s2
+    away point       CSI 0.0856  vol 14.22x
+    HOME distributed CSI 0.3802  vol 0.47x
+    away inflow      CSI 0.1489  vol 12.73x
+
+  distributed s3
+    away point       CSI 0.0853  vol 14.01x
+    HOME distributed CSI 0.5230  vol 0.64x
+    away inflow      CSI 0.1463  vol 12.53x
+
+  distributed s4
+    away point       CSI 0.1413  vol 3.07x
+    HOME distributed CSI 0.8540  vol 1.04x
+    away inflow      CSI 0.1514  vol 2.75x
+
+  inflow      s0
+    away point       CSI 0.0990  vol 5.07x
+    away distributed CSI 0.9997  vol 37.96x
+    HOME inflow      CSI 0.1594  vol 4.52x
+
+  inflow      s1  [HOME BELOW FLOOR]
+    away point       CSI 0.0858  vol 6.23x
+    away distributed CSI 1.0000  vol 96.70x
+    HOME inflow      CSI 0.1485  vol 5.57x
+
+  inflow      s2
+    away point       CSI 0.0921  vol 2.63x
+    away distributed CSI 0.3007  vol 8.51x
+    HOME inflow      CSI 0.1514  vol 2.35x
+
+  inflow      s3  [HOME BELOW FLOOR]
+    away point       CSI 0.1326  vol 1.03x
+    away distributed CSI 0.2941  vol 3.23x
+    HOME inflow      CSI 0.0880  vol 0.92x
+
+  inflow      s4
+    away point       CSI 0.1250  vol 2.27x
+    away distributed CSI 1.0000  vol 73.17x
+    HOME inflow      CSI 0.1577  vol 2.01x
+
+  regression vs exp3 v2: 40/40 values match
+
+======================================================================
+  SUMMARY - median [IQR] across seeds
+======================================================================
+
+  trained on point  (home below 0.15 CSI floor in 5/5 seeds)
+    HOME point       CSI 0.0962 [0.0961, 0.0981]  vol 2.25x [1.94, 2.69]
+    away distributed CSI 0.9945 [0.2244, 1.0000]  vol 54.41x [0.16, 83.21]  retained 964.6% [233.6, 1019.4]
+    away inflow      CSI 0.1581 [0.1482, 0.1649]  vol 2.00x [1.73, 2.39]  retained 161.2% [159.1, 164.9]
+
+  trained on distributed  (home below 0.15 CSI floor in 0/5 seeds)
+    away point       CSI 0.0856 [0.0853, 0.0863]  vol 7.62x [3.07, 14.01]  retained 16.3% [13.7, 16.5]
+    HOME distributed CSI 0.5230 [0.5176, 0.6293]  vol 0.64x [0.50, 0.66]
+    away inflow      CSI 0.1463 [0.1454, 0.1489]  vol 6.82x [2.75, 12.53]  retained 23.1% [17.7, 28.0]
+
+  trained on inflow  (home below 0.15 CSI floor in 2/5 seeds)
+    away point       CSI 0.0990 [0.0921, 0.1250]  vol 2.63x [2.27, 5.07]  retained 62.1% [60.9, 79.3]
+    away distributed CSI 0.9997 [0.3007, 1.0000]  vol 37.96x [8.51, 73.17]  retained 627.1% [334.3, 634.3]
+    HOME inflow      CSI 0.1514 [0.1485, 0.1577]  vol 2.35x [2.01, 4.52]
+
+  saved /root/projects/floodtransfer/results/result_exp9_inflow_matrix.json  (total 1712s)

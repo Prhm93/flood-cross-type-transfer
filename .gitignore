@@ -10,3 +10,4 @@ __pycache__/
 .DS_Store
 raw_datasets.zip*
 reports/check_new_data.txt
+results/_smoke_exp9/
