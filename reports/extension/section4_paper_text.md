@@ -68,7 +68,7 @@ between the dike-breach and Harvey datasets.
 Within test sets, the Spearman correlation between event CSI and absolute log volume
 error is mostly negative (-0.39 to -0.67), meaning higher-CSI events tend to have smaller
 volume errors. It is near zero on the distributed test set (-0.054 and +0.096), where CSI
-saturates. Pairwise ranking disagreement: [NEED NUMBER FROM ME, from the rerun].
+saturates. Pairwise ranking disagreement between CSI and volume error is 24.8% to 36.2% in every cell except the distributed test set. There it reaches 44.4% for the point-trained model and 74.0% for the inflow-trained model, where CSI ranks event pairs in the opposite order to volume error in about three of every four pairs (50% would mean no relationship).
 
 ## Revisions needed in paper v3
 
