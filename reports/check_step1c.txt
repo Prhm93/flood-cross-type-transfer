@@ -1,0 +1,592 @@
+=== sections 1-4 of check_step1b ===
+1. Inside FloodCastBench.zip
+========================================================================
+    2881 files    12.4 GB  EXTRACTED  High-fidelity flood forecasting/30m/Australia
+     865 files   154.4 MB  EXTRACTED  High-fidelity flood forecasting/30m/UK
+    2881 files     3.1 GB  EXTRACTED  High-fidelity flood forecasting/60m/Australia
+     865 files    38.5 MB  zip only   High-fidelity flood forecasting/60m/UK
+    1729 files   137.7 MB  zip only   Low-fidelity flood forecasting/480m/Mozambique
+    4033 files     5.4 GB  zip only   Low-fidelity flood forecasting/480m/Pakistan
+       8 files   400.7 MB  EXTRACTED  Relevant data/DEM
+       5 files    519.0 B  EXTRACTED  Relevant data/Georeferenced files
+       4 files     5.7 MB  EXTRACTED  Relevant data/Initial conditions/High-fidelity flood forecasting
+       2 files     1.4 MB  EXTRACTED  Relevant data/Initial conditions/Low-fidelity flood forecasting
+       8 files    12.8 MB  EXTRACTED  Relevant data/Land use and land cover
+     481 files    34.1 MB  EXTRACTED  Relevant data/Rainfall/Australia flood
+     289 files   115.3 MB  EXTRACTED  Relevant data/Rainfall/Mozambique flood
+     672 files     3.3 GB  EXTRACTED  Relevant data/Rainfall/Pakistan flood
+     145 files     1.1 MB  EXTRACTED  Relevant data/Rainfall/UK flood
+
+========================================================================
+2. Frame timing (file name = seconds since start)
+========================================================================
+  Australia 30m: 2881 frames, 0 s to 864000 s (10.00 days), step(s) [300] s, hourly frames 241
+  Australia 60m: 2881 frames, 0 s to 864000 s (10.00 days), step(s) [300] s, hourly frames 241
+  UK 30m: 865 frames, 0 s to 259200 s (3.00 days), step(s) [300] s, hourly frames 73
+  UK 60m: not extracted
+
+========================================================================
+3. Grid sizes as rows x cols (size read only, nothing loaded)
+========================================================================
+
+  Australia
+      1073 x 1073   Relevant data/DEM/Australia_DEM.tif
+      1073 x 1073   Relevant data/Initial conditions/High-fidelity flood forecasting/Australia_30m.tif
+       536 x 536    Relevant data/Initial conditions/High-fidelity flood forecasting/Australia_60m.tif
+      1073 x 1073   Relevant data/Land use and land cover/Australia.tif
+      1073 x 1073   Relevant data/Rainfall/Australia flood/20220220-S190000.tif
+      1073 x 1073   High-fidelity flood forecasting/30m/Australia/0.tif
+       536 x 536    High-fidelity flood forecasting/60m/Australia/0.tif
+
+  UK
+       180 x 285    Relevant data/DEM/UK_DEM.tif
+       170 x 275    Relevant data/Initial conditions/High-fidelity flood forecasting/UK_30m.tif
+        85 x 137    Relevant data/Initial conditions/High-fidelity flood forecasting/UK_60m.tif
+       180 x 285    Relevant data/Land use and land cover/UK.tif
+       180 x 285    Relevant data/Rainfall/UK flood/20151204-S120000.tif
+       170 x 275    High-fidelity flood forecasting/30m/UK/0.tif
+
+  Pakistan
+     13035 x 7298   Relevant data/DEM/Pakistan_DEM.tif
+       810 x 441    Relevant data/Initial conditions/Low-fidelity flood forecasting/Pakistan_480m.tif
+     13035 x 7298   Relevant data/Land use and land cover/Pakistan.tif
+     13035 x 7298   Relevant data/Rainfall/Pakistan flood/20220818-S000000.tif
+
+  Mozambique
+      2624 x 2321   Relevant data/DEM/Mozambique_DEM.tif
+       151 x 138    Relevant data/Initial conditions/Low-fidelity flood forecasting/Mozambique_480m.tif
+      2624 x 2321   Relevant data/Land use and land cover/Mozambique.tif
+      2624 x 2321   Relevant data/Rainfall/Mozambique flood/20190314-S030000.tif
+
+========================================================================
+4. Water budget: rain in vs water gained (30 m, hourly frames)
+========================================================================
+  Rain units ASSUMED mm/h (not confirmed from the paper yet).
+  Outflow is not counted, so any extra water is a LOWER bound on
+  water entering through the domain edges (for example a river).
+
+  Australia: grid (1073, 1073), 241 hourly frames, 481 half-hourly rain files
+    start: max depth 1.060 m, 4.0% of cells deeper than 1 cm
+    volume: start 2.27e+06 m3 | peak 3.781e+08 m3 at hour 240 | end 3.781e+08 m3
+    rain: domain-mean total 363.2 mm -> 3.764e+08 m3 (3.762e+08 m3 before the peak)
+    water gained up to peak / rain up to peak = 1.00
+
+  UK: grid (170, 275), 73 hourly frames, 145 half-hourly rain files
+    start: max depth 2.481 m, 15.9% of cells deeper than 1 cm
+    volume: start 1.471e+06 m3 | peak 5.901e+06 m3 at hour 40 | end 5.796e+06 m3
+    rain: domain-mean total 108.7 mm -> 4.575e+06 m3 (4.546e+06 m3 before the peak)
+    water gained up to peak / rain up to peak = 0.97
+
+========================================================================
+5. Where is the joint scaler?
+
+=== saved scaler.json copies ===
+/root/projects/floodtransfer/results/scaler.json
+
+=== src/unified_loader.py ===
+     1	"""
+     2	unified_loader.py
+     3	=================
+     4	
+     5	One loader, two datasets, same output format.
+     6	
+     7	This is the key engineering piece for the cross-type transfer paper.
+     8	It takes either the Harvey rainfall data OR the SWE-GNN breach data
+     9	and outputs the SAME graph structure with the SAME feature columns.
+    10	
+    11	That means a model trained on one can be directly tested on the other.
+    12	
+    13	OUTPUT FORMAT (per sample)
+    14	--------------------------
+    15	Each sample is a dictionary with:
+    16	
+    17	    nodes_static  : (N, 1)           terrain elevation (scaled 0-1)
+    18	    nodes_dynamic : (N, T, 4)        per-timestep features:
+    19	                                       channel 0 = water depth
+    20	                                       channel 1 = velocity x
+    21	                                       channel 2 = velocity y
+    22	                                       channel 3 = rainfall (0 if not available)
+    23	    edge_index    : (2, E)           which nodes connect to which
+    24	    num_nodes     : int              N
+    25	    num_steps     : int              T
+    26	    dataset       : str              'harvey' or 'breach'
+    27	    sample_id     : int              index within the dataset
+    28	
+    29	WHY THIS FORMAT
+    30	---------------
+    31	- Both datasets have depth and velocity vectors. Those are channels 0-2.
+    32	- Harvey has rainfall (channel 3). Breach data does not (the breach is
+    33	  a boundary source, not rain). So channel 3 is zero for breach data.
+    34	  This is deliberate: the model sees a zero-rain field and must cope.
+    35	  That asymmetry IS the transfer challenge.
+    36	- Elevation goes into static features because it does not change over time.
+    37	- Edge index defines the graph: which cells are neighbours.
+    38	
+    39	DATASETS
+    40	--------
+    41	Harvey (FloodGNN-GRU, Zenodo 10.5281/zenodo.10787632):
+    42	    - 228 test / ~val / ~train graph chunks from Hurricane Harvey, Houston TX
+    43	    - LISFLOOD-FP simulation, 30m resolution, 1-hour steps
+    44	    - Each chunk: ~600-1600 nodes, 132 timesteps, 8 dynamic features
+    45	    - Already in graph form with edges
+    46	
+    47	SWE-GNN dike breach (Zenodo 10.5281/zenodo.7764418):
+    48	    - 100 simulations (60 train, 20 val, 20 test) of dike breaches
+    49	    - Delft3D-FM solver, 100m cells on a 64x64 regular grid, 1-hour steps
+    50	    - Stored as plain text: WD/VX/VY matrices + DEM xyz
+    51	    - We convert the grid into a graph (each cell = node, 4-connected edges)
+    52	"""
+    53	
+    54	import os
+    55	import glob
+    56	import numpy as np
+    57	
+    58	
+    59	# ------------------------------------------------------------------ #
+    60	# HARVEY LOADER
+    61	# ------------------------------------------------------------------ #
+    62	
+    63	def load_harvey(npz_path):
+    64	    """
+    65	    Load one Harvey npz file (train.npz, val.npz, or test.npz).
+    66	
+    67	    Returns a list of sample dictionaries in the unified format.
+    68	
+    69	    Feature mapping (from FloodGNN-GRU/dataset.py, confirmed by inspection):
+    70	        data[..., 0]   = water depth (scaled, non-negative)
+    71	        data[..., 1:3] = velocity (vx, vy) at current time
+    72	        data[..., 3:5] = velocity (vx, vy) at previous time
+    73	        data[..., 5:7] = velocity magnitude (scalar, two copies)
+    74	        data[..., 7]   = rainfall
+    75	
+    76	    We keep: depth (col 0), current velocity (cols 1,2), rainfall (col 7).
+    77	    We drop: previous velocity and scalar magnitude (redundant for our test).
+    78	
+    79	    Static features (3 columns): likely elevation, slope, Manning's n.
+    80	    We keep column 0 (elevation) as the static node feature.
+    81	    """
+    82	    print(f"Loading Harvey data from {npz_path} ...")
+    83	    raw = np.load(npz_path, allow_pickle=True)
+    84	    items = raw[list(raw.keys())[0]]  # the single key, usually 'harvey'
+    85	
+    86	    samples = []
+    87	    for i, item in enumerate(items):
+    88	        data = item['data']       # (N, T, 8)
+    89	        static = item['static']   # (N, 3)
+    90	        edges = item['s_edges']   # (E, 2)
+    91	
+    92	        N, T, _ = data.shape
+    93	
+    94	        # Build the 4-channel dynamic array: depth, vx, vy, rain
+    95	        dynamic = np.zeros((N, T, 4), dtype=np.float32)
+    96	        dynamic[:, :, 0] = data[:, :, 0]   # water depth
+    97	        dynamic[:, :, 1] = data[:, :, 1]   # velocity x (current)
+    98	        dynamic[:, :, 2] = data[:, :, 2]   # velocity y (current)
+    99	        dynamic[:, :, 3] = data[:, :, 7]   # rainfall
+   100	
+   101	        samples.append({
+   102	            'nodes_static':  static[:, :1].astype(np.float32),  # elevation
+   103	            'nodes_dynamic': dynamic,
+   104	            'edge_index':    edges.T.astype(np.int64),  # (2, E)
+   105	            'num_nodes':     N,
+   106	            'num_steps':     T,
+   107	            'dataset':       'harvey',
+   108	            'sample_id':     i,
+   109	        })
+   110	
+   111	    print(f"  Loaded {len(samples)} Harvey samples. "
+   112	          f"Typical: {samples[0]['num_nodes']} nodes, "
+   113	          f"{samples[0]['num_steps']} steps.")
+   114	    return samples
+   115	
+   116	
+   117	# ------------------------------------------------------------------ #
+   118	# SWE-GNN BREACH LOADER
+   119	# ------------------------------------------------------------------ #
+   120	
+   121	def _grid_edges(H, W):
+   122	    """
+   123	    Build edge index for a regular H x W grid (4-connected: up, down, left, right).
+   124	
+   125	    Each cell is a node numbered row-major: node = row * W + col.
+   126	    Returns (2, E) int64 array.
+   127	
+   128	    Example for a 3x3 grid:
+   129	        0-1-2
+   130	        |x|x|
+   131	        3-4-5
+   132	        |x|x|
+   133	        6-7-8
+   134	        Node 4 connects to 1, 3, 5, 7.
+   135	    """
+   136	    edges = []
+   137	    for r in range(H):
+   138	        for c in range(W):
+   139	            me = r * W + c
+   140	            if r > 0:     edges.append([me, (r - 1) * W + c])  # up
+   141	            if r < H - 1: edges.append([me, (r + 1) * W + c])  # down
+   142	            if c > 0:     edges.append([me, me - 1])            # left
+   143	            if c < W - 1: edges.append([me, me + 1])            # right
+   144	    return np.array(edges, dtype=np.int64).T  # (2, E)
+   145	
+   146	
+   147	def load_breach_sim(raw_dir, sim_id, dim=64):
+   148	    """
+   149	    Load one SWE-GNN dike-breach simulation.
+   150	
+   151	    File layout (confirmed by prior inspection):
+   152	        DEM/DEM_{id}.txt  — x, y, elevation triples (dim*dim rows, 3 cols)
+   153	        WD/WD_{id}.txt    — water depth matrix (T rows, dim*dim cols)
+   154	        VX/VX_{id}.txt    — velocity x matrix (T rows, dim*dim cols)
+   155	        VY/VY_{id}.txt    — velocity y matrix (T rows, dim*dim cols)
+   156	
+   157	    Returns depth (T, N), vx (T, N), vy (T, N), dem (N,) — all flat,
+   158	    where N = dim * dim.
+   159	    """
+   160	    dem_path = os.path.join(raw_dir, 'DEM', f'DEM_{sim_id}.txt')
+   161	    wd_path  = os.path.join(raw_dir, 'WD',  f'WD_{sim_id}.txt')
+   162	    vx_path  = os.path.join(raw_dir, 'VX',  f'VX_{sim_id}.txt')
+   163	    vy_path  = os.path.join(raw_dir, 'VY',  f'VY_{sim_id}.txt')
+   164	
+   165	    dem_xyz = np.loadtxt(dem_path)              # (N, 3) — x, y, elevation
+   166	    elevation = dem_xyz[:, 2].astype(np.float32)  # just the height column
+   167	
+   168	    depth = np.loadtxt(wd_path).astype(np.float32)  # (T, N)
+   169	    vx    = np.loadtxt(vx_path).astype(np.float32)  # (T, N)
+   170	    vy    = np.loadtxt(vy_path).astype(np.float32)  # (T, N)
+   171	
+   172	    N = dim * dim
+   173	    assert elevation.shape[0] == N, f"DEM has {elevation.shape[0]} cells, expected {N}"
+   174	    assert depth.shape[1] == N, f"WD has {depth.shape[1]} cols, expected {N}"
+   175	
+   176	    return depth, vx, vy, elevation
+   177	
+   178	
+   179	def load_breach(raw_dir, sim_ids, dim=64):
+   180	    """
+   181	    Load multiple SWE-GNN breach simulations and return unified-format samples.
+   182	
+   183	    sim_ids: list of integer simulation IDs to load (e.g. range(1, 61))
+   184	    raw_dir: path to the folder containing DEM/, WD/, VX/, VY/ subfolders
+   185	
+   186	    Rainfall channel is set to ZERO — breach floods have no rain,
+   187	    the water enters through the breach boundary. This is the key
+   188	    physical difference from Harvey and is the whole point of the test.
+   189	    """
+   190	    # Build the edge index once (same grid for all sims of the same dim)
+   191	    edge_index = _grid_edges(dim, dim)
+   192	
+   193	    samples = []
+   194	    for sid in sim_ids:
+   195	        try:
+   196	            depth, vx, vy, elev = load_breach_sim(raw_dir, sid, dim)
+   197	        except FileNotFoundError as e:
+   198	            print(f"  [skip] sim {sid}: {e}")
+   199	            continue
+   200	
+   201	        T, N = depth.shape
+   202	
+   203	        # Normalise elevation to 0-1 range (same as Harvey)
+   204	        e_min, e_max = elev.min(), elev.max()
+   205	        if e_max > e_min:
+   206	            elev_norm = (elev - e_min) / (e_max - e_min)
+   207	        else:
+   208	            elev_norm = np.zeros_like(elev)
+   209	
+   210	        # Build 4-channel dynamic: depth, vx, vy, rain=0
+   211	        dynamic = np.zeros((N, T, 4), dtype=np.float32)
+   212	        dynamic[:, :, 0] = depth.T    # (T, N) -> (N, T)
+   213	        dynamic[:, :, 1] = vx.T
+   214	        dynamic[:, :, 2] = vy.T
+   215	        # channel 3 stays zero — no rainfall in breach floods
+   216	
+   217	        samples.append({
+   218	            'nodes_static':  elev_norm.reshape(-1, 1),   # (N, 1)
+   219	            'nodes_dynamic': dynamic,                     # (N, T, 4)
+   220	            'edge_index':    edge_index,                  # (2, E)
+   221	            'num_nodes':     N,
+   222	            'num_steps':     T,
+   223	            'dataset':       'breach',
+   224	            'sample_id':     sid,
+   225	        })
+   226	
+   227	    print(f"  Loaded {len(samples)} breach samples. "
+   228	          f"Typical: {samples[0]['num_nodes']} nodes, "
+   229	          f"{samples[0]['num_steps']} steps.")
+   230	    return samples
+   231	
+   232	
+   233	# ------------------------------------------------------------------ #
+   234	# QUICK SUMMARY — print what you loaded so you can sanity-check
+   235	# ------------------------------------------------------------------ #
+   236	
+   237	def summarise(samples, label=""):
+   238	    """Print a quick overview of a loaded dataset."""
+   239	    if not samples:
+   240	        print(f"[{label}] No samples loaded.")
+   241	        return
+   242	
+   243	    nodes = [s['num_nodes'] for s in samples]
+   244	    steps = [s['num_steps'] for s in samples]
+   245	    ds    = samples[0]['dataset']
+   246	
+   247	    print(f"\n{'='*60}")
+   248	    print(f"  {label or ds.upper()} — {len(samples)} samples")
+   249	    print(f"{'='*60}")
+   250	    print(f"  Nodes:     {min(nodes)} – {max(nodes)}")
+   251	    print(f"  Timesteps: {min(steps)} – {max(steps)}")
+   252	    print(f"  Edges:     {samples[0]['edge_index'].shape[1]}")
+   253	    print(f"  Dataset:   {ds}")
+   254	
+   255	    # Check each channel of the first sample
+   256	    d = samples[0]['nodes_dynamic']
+   257	    names = ['depth', 'vx', 'vy', 'rain']
+   258	    print(f"  Dynamic features (sample 0):")
+   259	    for ch, name in enumerate(names):
+   260	        col = d[:, :, ch]
+   261	        print(f"    ch{ch} ({name:5s}): min={col.min():.4f} max={col.max():.4f} "
+   262	              f"mean={col.mean():.4f} frac>0={float((col > 0).mean()):.3f}")
+   263	
+   264	    s = samples[0]['nodes_static']
+   265	    print(f"  Static (elevation): min={s.min():.4f} max={s.max():.4f}")
+   266	    print()
+   267	
+   268	
+   269	# ------------------------------------------------------------------ #
+   270	# SELF-TEST
+   271	# ------------------------------------------------------------------ #
+   272	
+   273	if __name__ == "__main__":
+   274	    import sys
+   275	
+   276	    print("Self-testing unified_loader.py ...\n")
+   277	
+   278	    # --- Test grid edge builder ---
+   279	    edges = _grid_edges(3, 3)
+   280	    assert edges.shape[0] == 2, f"edge_index should be (2, E), got {edges.shape}"
+   281	    # 3x3 grid: 12 edges total (each of the 12 neighbour pairs, counted once each direction)
+   282	    # Actually 4-connected 3x3 = 2*(3*2) + 2*(3*2) = 24 directed edges
+   283	    # Interior edges: horizontal 3*2=6, vertical 2*3=6, total undirected=12, directed=24
+   284	    assert edges.shape[1] == 24, f"3x3 grid should have 24 directed edges, got {edges.shape[1]}"
+   285	
+   286	    # Node 4 (center) should connect to 1, 3, 5, 7
+   287	    center_neighbours = set(edges[1, edges[0] == 4].tolist())
+   288	    assert center_neighbours == {1, 3, 5, 7}, f"center node 4 neighbours wrong: {center_neighbours}"
+   289	    print("  Grid edge builder: OK (3x3 grid, 24 edges, center connects to 1,3,5,7)")
+   290	
+   291	    # --- Test with synthetic breach-style data ---
+   292	    import tempfile
+   293	    dim = 4
+   294	    T = 5
+   295	    N = dim * dim
+   296	    tmpdir = tempfile.mkdtemp()
+   297	    for folder in ['DEM', 'WD', 'VX', 'VY']:
+   298	        os.makedirs(os.path.join(tmpdir, folder))
+   299	
+   300	    # DEM: x, y, elevation
+   301	    coords = np.array([[i, j, np.random.rand()]
+   302	                        for i in range(dim) for j in range(dim)])
+   303	    np.savetxt(os.path.join(tmpdir, 'DEM', 'DEM_1.txt'), coords)
+   304	
+   305	    # WD, VX, VY: T rows, N columns
+   306	    np.savetxt(os.path.join(tmpdir, 'WD', 'WD_1.txt'),
+   307	               np.abs(np.random.rand(T, N)))
+   308	    np.savetxt(os.path.join(tmpdir, 'VX', 'VX_1.txt'),
+   309	               np.random.randn(T, N) * 0.3)
+   310	    np.savetxt(os.path.join(tmpdir, 'VY', 'VY_1.txt'),
+   311	               np.random.randn(T, N) * 0.3)
+   312	
+   313	    samples = load_breach(tmpdir, [1], dim=dim)
+   314	    assert len(samples) == 1
+   315	    s = samples[0]
+   316	    assert s['nodes_dynamic'].shape == (N, T, 4)
+   317	    assert s['nodes_static'].shape == (N, 1)
+   318	    assert s['edge_index'].shape[0] == 2
+   319	    assert s['dataset'] == 'breach'
+   320	    assert (s['nodes_dynamic'][:, :, 3] == 0).all(), "rain channel should be all zeros for breach"
+   321	    summarise(samples, "SYNTHETIC BREACH")
+   322	
+   323	    # Clean up
+   324	    import shutil
+   325	    shutil.rmtree(tmpdir)
+   326	    print("  Synthetic breach loader: OK")
+   327	    print("\nAll self-tests passed.")
+   328	    print("\nTo use with real data:")
+   329	    print("  harvey = load_harvey('data/harvey/test.npz')")
+   330	    print("  breach = load_breach('data/breach/raw', range(501, 520), dim=64)")
+=== src/normalise.py ===
+     1	"""
+     2	normalise.py
+     3	============
+     4	
+     5	Bring both datasets onto the same scale so a model trained on one
+     6	can be tested on the other without one dataset's numbers being 10x
+     7	bigger than the other's.
+     8	
+     9	HOW IT WORKS
+    10	------------
+    11	For each of the 4 dynamic channels (depth, vx, vy, rain) and the
+    12	1 static channel (elevation), we find the min and max across ALL
+    13	samples in BOTH datasets, then scale everything to [0, 1].
+    14	
+    15	Velocity can be negative (flow going left or down), so we scale
+    16	it to [0, 1] where 0.5 means zero flow. This preserves the sign
+    17	information — values below 0.5 mean negative, above 0.5 mean positive.
+    18	
+    19	WHY JOINTLY
+    20	-----------
+    21	If we normalised each dataset on its own, "0.5" would mean different
+    22	things in each dataset. Joint normalisation means "0.5 depth" is
+    23	the same physical amount in both — which is what transfer testing needs.
+    24	
+    25	USAGE
+    26	-----
+    27	    from src.normalise import fit_scaler, apply_scaler
+    28	
+    29	    # Fit on BOTH datasets together
+    30	    scaler = fit_scaler(breach_samples + harvey_samples)
+    31	
+    32	    # Apply to each
+    33	    breach_normed = apply_scaler(breach_samples, scaler)
+    34	    harvey_normed = apply_scaler(harvey_samples, scaler)
+    35	"""
+    36	
+    37	import numpy as np
+    38	import json
+    39	import copy
+    40	
+    41	
+    42	def fit_scaler(samples):
+    43	    """
+    44	    Walk through all samples and find the global min/max for each channel.
+    45	
+    46	    Returns a dict with min/max for dynamic channels 0-3 and static channel 0.
+    47	    """
+    48	    # Start with extreme values that will be replaced immediately
+    49	    d_min = np.full(4, np.inf)
+    50	    d_max = np.full(4, -np.inf)
+    51	    s_min = np.inf
+    52	    s_max = -np.inf
+    53	
+    54	    for s in samples:
+    55	        dyn = s['nodes_dynamic']  # (N, T, 4)
+    56	        sta = s['nodes_static']   # (N, 1)
+    57	
+    58	        for ch in range(4):
+    59	            col = dyn[:, :, ch]
+    60	            d_min[ch] = min(d_min[ch], col.min())
+    61	            d_max[ch] = max(d_max[ch], col.max())
+    62	
+    63	        s_min = min(s_min, sta.min())
+    64	        s_max = max(s_max, sta.max())
+    65	
+    66	    scaler = {
+    67	        'dynamic_min': d_min.tolist(),
+    68	        'dynamic_max': d_max.tolist(),
+    69	        'static_min': float(s_min),
+    70	        'static_max': float(s_max),
+    71	    }
+    72	    
+    73	    # Print what we found
+    74	    names = ['depth', 'vx', 'vy', 'rain']
+    75	    print("Scaler fitted on all samples:")
+    76	    for ch in range(4):
+    77	        print(f"  {names[ch]:5s}: min={d_min[ch]:.4f}  max={d_max[ch]:.4f}  "
+    78	              f"range={d_max[ch]-d_min[ch]:.4f}")
+    79	    print(f"  elev : min={s_min:.4f}  max={s_max:.4f}  "
+    80	          f"range={s_max-s_min:.4f}")
+    81	
+    82	    return scaler
+    83	
+    84	
+    85	def apply_scaler(samples, scaler):
+    86	    """
+    87	    Scale all samples to [0, 1] using the fitted min/max.
+    88	
+    89	    Returns NEW sample dicts (does not modify the originals).
+    90	    """
+    91	    d_min = np.array(scaler['dynamic_min'], dtype=np.float32)
+    92	    d_max = np.array(scaler['dynamic_max'], dtype=np.float32)
+    93	    d_range = d_max - d_min
+    94	
+    95	    # Avoid division by zero (if a channel is constant, keep it at 0)
+    96	    d_range[d_range == 0] = 1.0
+    97	
+    98	    s_min = scaler['static_min']
+    99	    s_range = scaler['static_max'] - s_min
+   100	    if s_range == 0:
+   101	        s_range = 1.0
+   102	
+   103	    normed = []
+   104	    for s in samples:
+   105	        new_s = copy.copy(s)  # shallow copy — we replace the arrays
+   106	
+   107	        # Dynamic: (N, T, 4) -> scale each channel
+   108	        dyn = s['nodes_dynamic'].copy()
+   109	        dyn = (dyn - d_min) / d_range
+   110	        new_s['nodes_dynamic'] = dyn.astype(np.float32)
+   111	
+   112	        # Static: (N, 1) -> scale
+   113	        sta = s['nodes_static'].copy()
+   114	        sta = (sta - s_min) / s_range
+   115	        new_s['nodes_static'] = sta.astype(np.float32)
+   116	
+   117	        normed.append(new_s)
+   118	
+   119	    return normed
+   120	
+   121	
+   122	def save_scaler(scaler, path):
+   123	    """Save the scaler to a JSON file so it can be reloaded later."""
+   124	    with open(path, 'w') as f:
+   125	        json.dump(scaler, f, indent=2)
+   126	    print(f"Scaler saved to {path}")
+   127	
+   128	
+   129	def load_scaler(path):
+   130	    """Load a saved scaler."""
+   131	    with open(path) as f:
+   132	        return json.load(f)
+   133	
+   134	
+   135	# ------------------------------------------------------------------ #
+   136	# Self-test
+   137	# ------------------------------------------------------------------ #
+   138	if __name__ == "__main__":
+   139	    print("Self-testing normalise.py ...\n")
+   140	
+   141	    # Make two fake samples with known ranges
+   142	    s1 = {
+   143	        'nodes_dynamic': np.array([[[0.0, -2.0, -1.0, 0.0],
+   144	                                     [4.0,  2.0,  1.0, 10.0]]]),  # (1, 2, 4)
+   145	        'nodes_static': np.array([[0.0]]),
+   146	    }
+   147	    s2 = {
+   148	        'nodes_dynamic': np.array([[[2.0, 0.0, 0.0, 5.0],
+   149	                                     [2.0, 0.0, 0.0, 5.0]]]),
+   150	        'nodes_static': np.array([[100.0]]),
+   151	    }
+   152	
+   153	    scaler = fit_scaler([s1, s2])
+   154	
+   155	    # Check the ranges
+   156	    assert scaler['dynamic_min'] == [0.0, -2.0, -1.0, 0.0]
+   157	    assert scaler['dynamic_max'] == [4.0, 2.0, 1.0, 10.0]
+   158	    print("  fit_scaler ranges: OK")
+   159	
+   160	    # Apply and check
+   161	    normed = apply_scaler([s1, s2], scaler)
+   162	
+   163	    # s1 depth: [0, 4] -> [0.0, 1.0]
+   164	    assert abs(normed[0]['nodes_dynamic'][0, 0, 0] - 0.0) < 1e-6
+   165	    assert abs(normed[0]['nodes_dynamic'][0, 1, 0] - 1.0) < 1e-6
+   166	
+   167	    # s1 vx: [-2, 2] -> [0.0, 1.0], so -2 -> 0.0, 2 -> 1.0
+   168	    assert abs(normed[0]['nodes_dynamic'][0, 0, 1] - 0.0) < 1e-6
+   169	    assert abs(normed[0]['nodes_dynamic'][0, 1, 1] - 1.0) < 1e-6
+   170	
+   171	    # s2 static: [0, 100] -> [0.0, 1.0]
+   172	    assert abs(normed[1]['nodes_static'][0, 0] - 1.0) < 1e-6
+   173	    print("  apply_scaler values: OK")
+   174	
+   175	    print("\nAll self-tests passed.")

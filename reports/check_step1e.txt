@@ -1,0 +1,600 @@
+=== sizes ===
+  404 scripts/exp3_controlled_synthetic.py
+  163 scripts/exp3_v2_stronger.py
+  567 total
+
+=== imports between them ===
+scripts/exp3_controlled_synthetic.py:50:import argparse
+scripts/exp3_controlled_synthetic.py:51:import json
+scripts/exp3_controlled_synthetic.py:52:import os
+scripts/exp3_controlled_synthetic.py:53:import sys
+scripts/exp3_controlled_synthetic.py:54:import time
+scripts/exp3_controlled_synthetic.py:56:import numpy as np
+scripts/exp3_controlled_synthetic.py:57:import torch
+scripts/exp3_controlled_synthetic.py:61:from src.experiment_lib import (set_seed, train_model, evaluate, build_model,
+scripts/exp3_controlled_synthetic.py:63:from src.unified_loader import _grid_edges
+scripts/exp3_v2_stronger.py:24:import argparse
+scripts/exp3_v2_stronger.py:25:import json
+scripts/exp3_v2_stronger.py:26:import os
+scripts/exp3_v2_stronger.py:27:import sys
+scripts/exp3_v2_stronger.py:28:import time
+scripts/exp3_v2_stronger.py:30:import numpy as np
+scripts/exp3_v2_stronger.py:31:import torch
+scripts/exp3_v2_stronger.py:35:from src.experiment_lib import set_seed, train_model, evaluate, build_model, get_device
+scripts/exp3_v2_stronger.py:36:from scripts.exp3_controlled_synthetic import generate_dataset, normalise_together
+
+=== exp3 logs and outputs ===
+-rw-r--r-- 1 root root    4642 Sep  9 13:23 result_exp3_controlled.json
+-rw-r--r-- 1 root root    7799 Sep 10 01:40 result_exp3_v2_stronger.json
+
+=== scripts/exp3_v2_stronger.py ===
+     1	"""
+     2	exp3_v2_stronger.py
+     3	====================
+     4	
+     5	FIXES THE UNSTABLE DIRECTION from the first controlled experiment.
+     6	
+     7	What changed from exp3_controlled_synthetic.py:
+     8	  - More training simulations per mechanism (60 instead of 40)
+     9	  - Longer solver runs (more steps -> floods develop further)
+    10	  - Longer training schedule (100 epochs instead of 60)
+    11	  - FIVE seeds instead of three, so one bad run cannot dominate the average
+    12	  - Reports median and IQR alongside mean, because seed 2 of the old run
+    13	    was a clear outlier (a degenerate near-zero-water run) and a mean alone
+    14	    hides that
+    15	
+    16	Same solver, same terrain generator, same everything else — this is a
+    17	continuation of exp3, not a different experiment.
+    18	
+    19	Run:
+    20	    python3 scripts/exp3_v2_stronger.py
+    21	    python3 scripts/exp3_v2_stronger.py --quick    (smoke test)
+    22	"""
+    23	
+    24	import argparse
+    25	import json
+    26	import os
+    27	import sys
+    28	import time
+    29	
+    30	import numpy as np
+    31	import torch
+    32	
+    33	sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    34	
+    35	from src.experiment_lib import set_seed, train_model, evaluate, build_model, get_device
+    36	from scripts.exp3_controlled_synthetic import generate_dataset, normalise_together
+    37	
+    38	OUT = 'results'
+    39	
+    40	
+    41	def median_iqr(values):
+    42	    """Median and interquartile range — more robust to one bad seed than mean/std."""
+    43	    v = np.asarray(values, dtype=float)
+    44	    v = v[np.isfinite(v)]
+    45	    if len(v) == 0:
+    46	        return float('nan'), float('nan'), float('nan')
+    47	    return float(np.median(v)), float(np.percentile(v, 25)), float(np.percentile(v, 75))
+    48	
+    49	
+    50	def main():
+    51	    ap = argparse.ArgumentParser()
+    52	    ap.add_argument('--quick', action='store_true')
+    53	    ap.add_argument('--dim', type=int, default=48)
+    54	    ap.add_argument('--n-train', type=int, default=60)
+    55	    ap.add_argument('--n-test', type=int, default=15)
+    56	    ap.add_argument('--solver-steps', type=int, default=2400)
+    57	    ap.add_argument('--dt', type=float, default=2.0)
+    58	    ap.add_argument('--dx', type=float, default=50.0)
+    59	    ap.add_argument('--epochs', type=int, default=100)
+    60	    ap.add_argument('--seeds', type=int, nargs='+', default=[0, 1, 2, 3, 4])
+    61	    ap.add_argument('--out-dir', default='results')
+    62	    args = ap.parse_args()
+    63	
+    64	    if args.quick:
+    65	        args.dim, args.n_train, args.n_test = 24, 4, 3
+    66	        args.solver_steps, args.epochs, args.seeds = 200, 3, [0]
+    67	
+    68	    os.makedirs(args.out_dir, exist_ok=True)
+    69	    device = get_device()
+    70	
+    71	    print("=" * 66)
+    72	    print("  EXPERIMENT 3 v2 — CONTROLLED, LARGER, 5 SEEDS")
+    73	    print("  Fixes the point->distributed instability from v1")
+    74	    print("=" * 66)
+    75	    print(f"  grid {args.dim}x{args.dim}, {args.n_train} train + {args.n_test} "
+    76	          f"test sims per mechanism, {args.epochs} epochs, seeds {args.seeds}")
+    77	
+    78	    t0 = time.time()
+    79	    print("\n  Generating POINT-SOURCE floods...")
+    80	    pt_train = generate_dataset('point', args.n_train, args.dim,
+    81	                                 args.solver_steps, args.dt, args.dx, 0)
+    82	    pt_test = generate_dataset('point', args.n_test, args.dim,
+    83	                                args.solver_steps, args.dt, args.dx, 900)
+    84	
+    85	    print("\n  Generating DISTRIBUTED floods, SAME terrain seeds...")
+    86	    di_train = generate_dataset('distributed', args.n_train, args.dim,
+    87	                                 args.solver_steps, args.dt, args.dx, 0)
+    88	    di_test = generate_dataset('distributed', args.n_test, args.dim,
+    89	                                args.solver_steps, args.dt, args.dx, 900)
+    90	    print(f"\n  Generation took {time.time() - t0:.0f}s")
+    91	
+    92	    pt_train, pt_test, di_train, di_test = normalise_together(
+    93	        [pt_train, pt_test, di_train, di_test])
+    94	    data = {'point': {'train': pt_train, 'test': pt_test},
+    95	            'distributed': {'train': di_train, 'test': di_test}}
+    96	
+    97	    results = []
+    98	    for train_on in ['point', 'distributed']:
+    99	        away = 'distributed' if train_on == 'point' else 'point'
+   100	        for seed in args.seeds:
+   101	            print(f"\n  --- train on {train_on}, seed {seed} ---")
+   102	            set_seed(seed)
+   103	            model = build_model('vector', 64, 3, device)
+   104	            ckpt = os.path.join(args.out_dir, f'synth2_{train_on}_s{seed}.pt')
+   105	            train_model(model, data[train_on]['train'], device,
+   106	                        epochs=args.epochs, max_train_samples=args.n_train,
+   107	                        ckpt_path=ckpt, log_every=max(1, args.epochs // 4))
+   108	
+   109	            home = evaluate(model, data[train_on]['test'], device,
+   110	                            max_steps=30, max_samples=args.n_test)
+   111	            awayr = evaluate(model, data[away]['test'], device,
+   112	                             max_steps=30, max_samples=args.n_test)
+   113	
+   114	            retained = (100.0 * awayr['csi_final'] / home['csi_final']
+   115	                        if home['csi_final'] > 0 else float('nan'))
+   116	
+   117	            # flag degenerate runs (near-zero home performance) explicitly
+   118	            degenerate = home['csi_final'] < 0.02 and home['volume_ratio'] < 0.1
+   119	
+   120	            print(f"    HOME ({train_on:11s}) CSI {home['csi_final']:.4f}  "
+   121	                  f"vol {home['volume_ratio']:.2f}x{'  [DEGENERATE]' if degenerate else ''}")
+   122	            print(f"    AWAY ({away:11s}) CSI {awayr['csi_final']:.4f}  "
+   123	                  f"vol {awayr['volume_ratio']:.2f}x")
+   124	            print(f"    retained {retained:.1f}%")
+   125	
+   126	            results.append({
+   127	                'train_on': train_on, 'away': away, 'seed': seed,
+   128	                'home': home, 'away_scores': awayr, 'retained_pct': retained,
+   129	                'degenerate': bool(degenerate),
+   130	            })
+   131	
+   132	    print("\n" + "=" * 66)
+   133	    print("  SUMMARY (median and IQR are more robust than mean to one bad seed)")
+   134	    print("=" * 66)
+   135	    for tr in ['point', 'distributed']:
+   136	        rs = [r for r in results if r['train_on'] == tr]
+   137	        n_degenerate = sum(r['degenerate'] for r in rs)
+   138	        home_vals = [r['home']['csi_final'] for r in rs]
+   139	        away_vals = [r['away_scores']['csi_final'] for r in rs]
+   140	        ret_vals = [r['retained_pct'] for r in rs]
+   141	
+   142	        hm, hlo, hhi = median_iqr(home_vals)
+   143	        am, alo, ahi = median_iqr(away_vals)
+   144	        rm, rlo, rhi = median_iqr(ret_vals)
+   145	
+   146	        print(f"\n  trained on {tr}:")
+   147	        print(f"    home CSI   median {hm:.4f}  IQR [{hlo:.4f}, {hhi:.4f}]  "
+   148	              f"mean {np.mean(home_vals):.4f}")
+   149	        print(f"    away CSI   median {am:.4f}  IQR [{alo:.4f}, {ahi:.4f}]  "
+   150	              f"mean {np.mean(away_vals):.4f}")
+   151	        print(f"    retained % median {rm:.1f}  IQR [{rlo:.1f}, {rhi:.1f}]  "
+   152	              f"mean {np.mean(ret_vals):.1f}")
+   153	        if n_degenerate:
+   154	            print(f"    WARNING: {n_degenerate}/{len(rs)} runs flagged degenerate "
+   155	                  f"(near-zero home performance) — excluded from headline claims")
+   156	
+   157	    with open(os.path.join(args.out_dir, 'result_exp3_v2_stronger.json'), 'w') as f:
+   158	        json.dump({'config': vars(args), 'results': results}, f,
+   159	                  indent=2, default=str)
+   160	    print(f"\n  Saved {args.out_dir}/result_exp3_v2_stronger.json")
+   161	
+   162	
+   163	if __name__ == '__main__':
+   164	    main()
+=== scripts/exp3_controlled_synthetic.py ===
+     1	"""
+     2	exp3_controlled_synthetic.py
+     3	============================
+     4	
+     5	THE CONFOUND-KILLER EXPERIMENT.
+     6	
+     7	The reviewer's strongest objection: your two real datasets differ in flood
+     8	type AND solver AND region AND resolution AND terrain AND sample count.
+     9	So a transfer failure cannot be attributed to flood type alone.
+    10	
+    11	This experiment removes every confound. We generate our own floods with:
+    12	
+    13	    SAME terrain generator      SAME grid size      SAME solver
+    14	    SAME resolution             SAME time step      SAME sample count
+    15	    SAME model architecture     SAME training budget
+    16	
+    17	and change EXACTLY ONE THING: how the water enters.
+    18	
+    19	    Mechanism A (point source): water enters at one cell, like a breach
+    20	    Mechanism B (distributed):  water falls on every cell, like rainfall
+    21	
+    22	If transfer still fails here, the flood mechanism itself is the cause,
+    23	because nothing else differs. That is the controlled result the paper needs.
+    24	
+    25	THE SOLVER
+    26	----------
+    27	We use the local inertial (or "simplified shallow water") formulation of
+    28	Bates et al. (2010), which is the scheme used inside LISFLOOD-FP. It is a
+    29	standard, citable, physically grounded method — not a toy.
+    30	
+    31	Flow between two neighbouring cells:
+    32	
+    33	    q_new = (q_old - g * h_flow * dt * dS) / (1 + g * dt * n^2 * |q| / h_flow^(7/3))
+    34	
+    35	where h_flow is the depth of water available to flow between the cells,
+    36	dS is the water-surface slope, n is Manning's roughness, g is gravity.
+    37	
+    38	Then depth is updated by conservation of mass:
+    39	
+    40	    dh/dt = (inflow - outflow) / cell_area  + source
+    41	
+    42	The `source` term is where the two mechanisms differ, and it is the ONLY
+    43	difference between them.
+    44	
+    45	Run:
+    46	    python3 scripts/exp3_controlled_synthetic.py
+    47	    python3 scripts/exp3_controlled_synthetic.py --quick   (smoke test size)
+    48	"""
+    49	
+    50	import argparse
+    51	import json
+    52	import os
+    53	import sys
+    54	import time
+    55	
+    56	import numpy as np
+    57	import torch
+    58	
+    59	sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    60	
+    61	from src.experiment_lib import (set_seed, train_model, evaluate, build_model,
+    62	                                 get_device)
+    63	from src.unified_loader import _grid_edges
+    64	
+    65	G = 9.81
+    66	
+    67	
+    68	# ------------------------------------------------------------------ #
+    69	# TERRAIN
+    70	# ------------------------------------------------------------------ #
+    71	
+    72	def make_terrain(dim, seed, relief=2.0):
+    73	    """
+    74	    Generate gently undulating terrain by summing a few smooth waves.
+    75	    Identical generator for both mechanisms — only the seed varies, and
+    76	    we use THE SAME SEEDS for both, so terrain is matched pairwise.
+    77	    """
+    78	    rng = np.random.RandomState(seed)
+    79	    y, x = np.mgrid[0:dim, 0:dim] / dim
+    80	
+    81	    z = np.zeros((dim, dim), dtype=np.float64)
+    82	    for _ in range(4):
+    83	        kx, ky = rng.uniform(1, 4, 2)
+    84	        phase = rng.uniform(0, 2 * np.pi)
+    85	        amp = rng.uniform(0.3, 1.0)
+    86	        z += amp * np.sin(2 * np.pi * (kx * x + ky * y) + phase)
+    87	
+    88	    z -= z.min()
+    89	    if z.max() > 0:
+    90	        z = z / z.max() * relief
+    91	    # gentle overall tilt so water has somewhere to go
+    92	    z += 0.5 * x * relief * 0.3
+    93	    return z.astype(np.float64)
+    94	
+    95	
+    96	# ------------------------------------------------------------------ #
+    97	# SOLVER — local inertial shallow water (Bates et al. 2010)
+    98	# ------------------------------------------------------------------ #
+    99	
+   100	def simulate(z, source_field, n_steps, dt=2.0, dx=50.0, manning=0.05,
+   101	             depth_floor=1e-4, save_every=None):
+   102	    """
+   103	    Run the flood simulation.
+   104	
+   105	    z            : (D,D) bed elevation, metres
+   106	    source_field : (D,D) water added per second per cell, metres/second.
+   107	                   This is the ONLY thing that differs between mechanisms.
+   108	    n_steps      : number of solver steps
+   109	    dt           : solver time step, seconds
+   110	    dx           : cell size, metres
+   111	    manning      : roughness
+   112	
+   113	    Returns depth (T,D,D), vx (T,D,D), vy (T,D,D) at the saved times.
+   114	    """
+   115	    D = z.shape[0]
+   116	    h = np.zeros((D, D), dtype=np.float64)
+   117	
+   118	    # discharge per unit width on cell faces
+   119	    qx = np.zeros((D, D + 1), dtype=np.float64)   # faces in x
+   120	    qy = np.zeros((D + 1, D), dtype=np.float64)   # faces in y
+   121	
+   122	    if save_every is None:
+   123	        save_every = max(1, n_steps // 40)
+   124	
+   125	    depths, vxs, vys = [], [], []
+   126	
+   127	    for step in range(n_steps):
+   128	        wse = z + h   # water surface elevation
+   129	
+   130	        # ---- x-direction faces (between column i-1 and i) ----
+   131	        dS = (wse[:, 1:] - wse[:, :-1]) / dx
+   132	        hf = np.maximum(wse[:, 1:], wse[:, :-1]) - np.maximum(z[:, 1:], z[:, :-1])
+   133	        hf = np.maximum(hf, 0.0)
+   134	
+   135	        q_old = qx[:, 1:-1]
+   136	        num = q_old - G * hf * dt * dS
+   137	        den = 1.0 + G * dt * manning ** 2 * np.abs(q_old) / \
+   138	            np.maximum(hf, depth_floor) ** (7.0 / 3.0)
+   139	        q_new = num / den
+   140	        q_new = np.where(hf > depth_floor, q_new, 0.0)
+   141	        qx[:, 1:-1] = q_new
+   142	
+   143	        # ---- y-direction faces ----
+   144	        dS = (wse[1:, :] - wse[:-1, :]) / dx
+   145	        hf = np.maximum(wse[1:, :], wse[:-1, :]) - np.maximum(z[1:, :], z[:-1, :])
+   146	        hf = np.maximum(hf, 0.0)
+   147	
+   148	        q_old = qy[1:-1, :]
+   149	        num = q_old - G * hf * dt * dS
+   150	        den = 1.0 + G * dt * manning ** 2 * np.abs(q_old) / \
+   151	            np.maximum(hf, depth_floor) ** (7.0 / 3.0)
+   152	        q_new = num / den
+   153	        q_new = np.where(hf > depth_floor, q_new, 0.0)
+   154	        qy[1:-1, :] = q_new
+   155	
+   156	        # ---- mass conservation ----
+   157	        # net flux into each cell = (flux in from left - flux out right) etc.
+   158	        div = (qx[:, 1:] - qx[:, :-1]) / dx + (qy[1:, :] - qy[:-1, :]) / dx
+   159	        h = h - dt * div + dt * source_field
+   160	        h = np.maximum(h, 0.0)
+   161	
+   162	        if step % save_every == 0:
+   163	            # cell-centred velocities from face discharges
+   164	            qxc = 0.5 * (qx[:, :-1] + qx[:, 1:])
+   165	            qyc = 0.5 * (qy[:-1, :] + qy[1:, :])
+   166	            hsafe = np.maximum(h, depth_floor)
+   167	            depths.append(h.copy())
+   168	            vxs.append(qxc / hsafe)
+   169	            vys.append(qyc / hsafe)
+   170	
+   171	    return (np.stack(depths).astype(np.float32),
+   172	            np.stack(vxs).astype(np.float32),
+   173	            np.stack(vys).astype(np.float32))
+   174	
+   175	
+   176	# ------------------------------------------------------------------ #
+   177	# THE TWO MECHANISMS — the only difference
+   178	# ------------------------------------------------------------------ #
+   179	
+   180	def source_point(dim, rate_m3s, dx, seed):
+   181	    """
+   182	    MECHANISM A — point source (breach-like).
+   183	    All the water enters through ONE cell.
+   184	    """
+   185	    rng = np.random.RandomState(seed + 10000)
+   186	    field = np.zeros((dim, dim))
+   187	    # place the source on the left edge, random row
+   188	    r = rng.randint(dim // 4, 3 * dim // 4)
+   189	    c = 1
+   190	    field[r, c] = rate_m3s / (dx * dx)   # m3/s spread over one cell area
+   191	    return field
+   192	
+   193	
+   194	def source_distributed(dim, rate_m3s, dx, seed):
+   195	    """
+   196	    MECHANISM B — distributed source (rainfall-like).
+   197	    The SAME total water volume, but spread over every cell.
+   198	    """
+   199	    field = np.full((dim, dim), rate_m3s / (dx * dx * dim * dim))
+   200	    return field
+   201	
+   202	
+   203	# ------------------------------------------------------------------ #
+   204	# DATASET GENERATION
+   205	# ------------------------------------------------------------------ #
+   206	
+   207	def generate_dataset(mechanism, n_sims, dim, n_steps, dt, dx, seed_offset=0,
+   208	                     verbose=True):
+   209	    """
+   210	    Generate n_sims simulations for one mechanism, in the unified format.
+   211	
+   212	    Crucially, both mechanisms use THE SAME terrain seeds, so simulation i
+   213	    of mechanism A has exactly the same terrain as simulation i of
+   214	    mechanism B. Only the water source differs.
+   215	    """
+   216	    edge_index = _grid_edges(dim, dim)
+   217	    samples = []
+   218	
+   219	    for i in range(n_sims):
+   220	        terrain_seed = seed_offset + i        # SAME for both mechanisms
+   221	        z = make_terrain(dim, terrain_seed)
+   222	
+   223	        rng = np.random.RandomState(terrain_seed + 500)
+   224	        rate = rng.uniform(20.0, 60.0)         # m3/s, same range both ways
+   225	
+   226	        if mechanism == 'point':
+   227	            src = source_point(dim, rate, dx, terrain_seed)
+   228	        elif mechanism == 'distributed':
+   229	            src = source_distributed(dim, rate, dx, terrain_seed)
+   230	        else:
+   231	            raise ValueError(mechanism)
+   232	
+   233	        depth, vx, vy = simulate(z, src, n_steps=n_steps, dt=dt, dx=dx)
+   234	
+   235	        T = depth.shape[0]
+   236	        N = dim * dim
+   237	
+   238	        dyn = np.zeros((N, T, 4), dtype=np.float32)
+   239	        dyn[:, :, 0] = depth.reshape(T, N).T
+   240	        dyn[:, :, 1] = vx.reshape(T, N).T
+   241	        dyn[:, :, 2] = vy.reshape(T, N).T
+   242	        # channel 3 (the 'rainfall' slot) carries the source field for the
+   243	        # distributed mechanism and zero for the point mechanism — exactly
+   244	        # mirroring the real datasets' asymmetry
+   245	        if mechanism == 'distributed':
+   246	            dyn[:, :, 3] = float(src.mean())
+   247	
+   248	        zn = (z - z.min()) / max(z.max() - z.min(), 1e-9)
+   249	
+   250	        samples.append({
+   251	            'nodes_static': zn.reshape(-1, 1).astype(np.float32),
+   252	            'nodes_dynamic': dyn,
+   253	            'edge_index': edge_index,
+   254	            'num_nodes': N,
+   255	            'num_steps': T,
+   256	            'dataset': f'synth_{mechanism}',
+   257	            'sample_id': terrain_seed,
+   258	        })
+   259	
+   260	        if verbose and (i + 1) % 10 == 0:
+   261	            wet = float((depth[-1] > 0.05).mean())
+   262	            print(f"    {mechanism}: {i+1}/{n_sims} sims  "
+   263	                  f"(last sim final wet fraction {wet:.3f}, "
+   264	                  f"max depth {depth.max():.2f} m)")
+   265	
+   266	    return samples
+   267	
+   268	
+   269	def normalise_together(list_of_sample_lists):
+   270	    """Joint min-max normalisation across all provided sample lists."""
+   271	    d_min = np.full(4, np.inf)
+   272	    d_max = np.full(4, -np.inf)
+   273	    for lst in list_of_sample_lists:
+   274	        for s in lst:
+   275	            d = s['nodes_dynamic']
+   276	            for c in range(4):
+   277	                d_min[c] = min(d_min[c], float(d[:, :, c].min()))
+   278	                d_max[c] = max(d_max[c], float(d[:, :, c].max()))
+   279	    rng_ = d_max - d_min
+   280	    rng_[rng_ == 0] = 1.0
+   281	
+   282	    out = []
+   283	    for lst in list_of_sample_lists:
+   284	        new = []
+   285	        for s in lst:
+   286	            s2 = dict(s)
+   287	            s2['nodes_dynamic'] = ((s['nodes_dynamic'] - d_min) / rng_).astype(np.float32)
+   288	            new.append(s2)
+   289	        out.append(new)
+   290	    return out
+   291	
+   292	
+   293	# ------------------------------------------------------------------ #
+   294	# MAIN
+   295	# ------------------------------------------------------------------ #
+   296	
+   297	def main():
+   298	    ap = argparse.ArgumentParser()
+   299	    ap.add_argument('--quick', action='store_true', help='tiny smoke-test run')
+   300	    ap.add_argument('--dim', type=int, default=48)
+   301	    ap.add_argument('--n-train', type=int, default=40)
+   302	    ap.add_argument('--n-test', type=int, default=12)
+   303	    ap.add_argument('--solver-steps', type=int, default=1600)
+   304	    ap.add_argument('--dt', type=float, default=2.0)
+   305	    ap.add_argument('--dx', type=float, default=50.0)
+   306	    ap.add_argument('--epochs', type=int, default=60)
+   307	    ap.add_argument('--seeds', type=int, nargs='+', default=[0, 1, 2])
+   308	    ap.add_argument('--out-dir', default='results')
+   309	    args = ap.parse_args()
+   310	
+   311	    if args.quick:
+   312	        args.dim, args.n_train, args.n_test = 24, 4, 3
+   313	        args.solver_steps, args.epochs, args.seeds = 200, 3, [0]
+   314	
+   315	    os.makedirs(args.out_dir, exist_ok=True)
+   316	    device = get_device()
+   317	
+   318	    print("=" * 66)
+   319	    print("  EXPERIMENT 3 — CONTROLLED CROSS-MECHANISM TRANSFER")
+   320	    print("  Same terrain, same solver, same grid, same everything.")
+   321	    print("  ONLY the water source differs.")
+   322	    print("=" * 66)
+   323	    print(f"  grid {args.dim}x{args.dim}, {args.n_train} train + {args.n_test} "
+   324	          f"test sims per mechanism, device {device}")
+   325	
+   326	    # ---- generate ----
+   327	    t0 = time.time()
+   328	    print("\n  Generating POINT-SOURCE floods (breach-like)...")
+   329	    pt_train = generate_dataset('point', args.n_train, args.dim,
+   330	                                 args.solver_steps, args.dt, args.dx, 0)
+   331	    pt_test = generate_dataset('point', args.n_test, args.dim,
+   332	                                args.solver_steps, args.dt, args.dx, 900)
+   333	
+   334	    print("\n  Generating DISTRIBUTED floods (rainfall-like), SAME terrain seeds...")
+   335	    di_train = generate_dataset('distributed', args.n_train, args.dim,
+   336	                                 args.solver_steps, args.dt, args.dx, 0)
+   337	    di_test = generate_dataset('distributed', args.n_test, args.dim,
+   338	                                args.solver_steps, args.dt, args.dx, 900)
+   339	
+   340	    print(f"\n  Generation took {time.time() - t0:.0f}s")
+   341	
+   342	    pt_train, pt_test, di_train, di_test = normalise_together(
+   343	        [pt_train, pt_test, di_train, di_test])
+   344	
+   345	    data = {'point': {'train': pt_train, 'test': pt_test},
+   346	            'distributed': {'train': di_train, 'test': di_test}}
+   347	
+   348	    # ---- train and cross-test ----
+   349	    results = []
+   350	    for train_on in ['point', 'distributed']:
+   351	        away = 'distributed' if train_on == 'point' else 'point'
+   352	        for seed in args.seeds:
+   353	            print(f"\n  --- train on {train_on}, seed {seed} ---")
+   354	            set_seed(seed)
+   355	            model = build_model('vector', 64, 3, device)
+   356	            ckpt = os.path.join(args.out_dir, f'synth_{train_on}_s{seed}.pt')
+   357	            train_model(model, data[train_on]['train'], device,
+   358	                        epochs=args.epochs, max_train_samples=args.n_train,
+   359	                        ckpt_path=ckpt, log_every=max(1, args.epochs // 4))
+   360	
+   361	            home = evaluate(model, data[train_on]['test'], device,
+   362	                            max_steps=30, max_samples=args.n_test)
+   363	            awayr = evaluate(model, data[away]['test'], device,
+   364	                             max_steps=30, max_samples=args.n_test)
+   365	
+   366	            retained = (100.0 * awayr['csi_final'] / home['csi_final']
+   367	                        if home['csi_final'] > 0 else float('nan'))
+   368	
+   369	            print(f"    HOME ({train_on:11s}) CSI {home['csi_final']:.4f}  "
+   370	                  f"vol ratio {home['volume_ratio']:.2f}")
+   371	            print(f"    AWAY ({away:11s}) CSI {awayr['csi_final']:.4f}  "
+   372	                  f"vol ratio {awayr['volume_ratio']:.2f}")
+   373	            print(f"    retained {retained:.1f}%")
+   374	
+   375	            results.append({
+   376	                'train_on': train_on, 'away': away, 'seed': seed,
+   377	                'home': home, 'away_scores': awayr, 'retained_pct': retained,
+   378	            })
+   379	
+   380	    # ---- summary ----
+   381	    print("\n" + "=" * 66)
+   382	    print("  CONTROLLED EXPERIMENT SUMMARY")
+   383	    print("=" * 66)
+   384	    for tr in ['point', 'distributed']:
+   385	        rs = [r for r in results if r['train_on'] == tr]
+   386	        if not rs:
+   387	            continue
+   388	        hm = np.mean([r['home']['csi_final'] for r in rs])
+   389	        aw = np.mean([r['away_scores']['csi_final'] for r in rs])
+   390	        rt = np.nanmean([r['retained_pct'] for r in rs])
+   391	        print(f"  trained on {tr:12s}: home CSI {hm:.4f}  away CSI {aw:.4f}  "
+   392	              f"retained {rt:.1f}%")
+   393	
+   394	    print("\n  INTERPRETATION: terrain, grid, solver, resolution and sample")
+   395	    print("  count are IDENTICAL across the two mechanisms. Any transfer gap")
+   396	    print("  here is attributable to the flood-driving mechanism alone.")
+   397	
+   398	    with open(os.path.join(args.out_dir, 'result_exp3_controlled.json'), 'w') as f:
+   399	        json.dump({'config': vars(args), 'results': results}, f,
+   400	                  indent=2, default=str)
+   401	    print(f"\n  Saved {args.out_dir}/result_exp3_controlled.json")
+   402	
+   403	
+   404	if __name__ == '__main__':
+   405	    main()

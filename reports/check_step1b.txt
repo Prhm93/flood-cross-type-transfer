@@ -1,0 +1,120 @@
+
+========================================================================
+1. Inside FloodCastBench.zip
+========================================================================
+    2881 files    12.4 GB  EXTRACTED  High-fidelity flood forecasting/30m/Australia
+     865 files   154.4 MB  EXTRACTED  High-fidelity flood forecasting/30m/UK
+    2881 files     3.1 GB  EXTRACTED  High-fidelity flood forecasting/60m/Australia
+     865 files    38.5 MB  zip only   High-fidelity flood forecasting/60m/UK
+    1729 files   137.7 MB  zip only   Low-fidelity flood forecasting/480m/Mozambique
+    4033 files     5.4 GB  zip only   Low-fidelity flood forecasting/480m/Pakistan
+       8 files   400.7 MB  EXTRACTED  Relevant data/DEM
+       5 files    519.0 B  EXTRACTED  Relevant data/Georeferenced files
+       4 files     5.7 MB  EXTRACTED  Relevant data/Initial conditions/High-fidelity flood forecasting
+       2 files     1.4 MB  EXTRACTED  Relevant data/Initial conditions/Low-fidelity flood forecasting
+       8 files    12.8 MB  EXTRACTED  Relevant data/Land use and land cover
+     481 files    34.1 MB  EXTRACTED  Relevant data/Rainfall/Australia flood
+     289 files   115.3 MB  EXTRACTED  Relevant data/Rainfall/Mozambique flood
+     672 files     3.3 GB  EXTRACTED  Relevant data/Rainfall/Pakistan flood
+     145 files     1.1 MB  EXTRACTED  Relevant data/Rainfall/UK flood
+
+========================================================================
+2. Frame timing (file name = seconds since start)
+========================================================================
+  Australia 30m: 2881 frames, 0 s to 864000 s (10.00 days), step(s) [300] s, hourly frames 241
+  Australia 60m: 2881 frames, 0 s to 864000 s (10.00 days), step(s) [300] s, hourly frames 241
+  UK 30m: 865 frames, 0 s to 259200 s (3.00 days), step(s) [300] s, hourly frames 73
+  UK 60m: not extracted
+
+========================================================================
+3. Grid sizes as rows x cols (size read only, nothing loaded)
+========================================================================
+
+  Australia
+      1073 x 1073   Relevant data/DEM/Australia_DEM.tif
+      1073 x 1073   Relevant data/Initial conditions/High-fidelity flood forecasting/Australia_30m.tif
+       536 x 536    Relevant data/Initial conditions/High-fidelity flood forecasting/Australia_60m.tif
+      1073 x 1073   Relevant data/Land use and land cover/Australia.tif
+      1073 x 1073   Relevant data/Rainfall/Australia flood/20220220-S190000.tif
+      1073 x 1073   High-fidelity flood forecasting/30m/Australia/0.tif
+       536 x 536    High-fidelity flood forecasting/60m/Australia/0.tif
+
+  UK
+       180 x 285    Relevant data/DEM/UK_DEM.tif
+       170 x 275    Relevant data/Initial conditions/High-fidelity flood forecasting/UK_30m.tif
+        85 x 137    Relevant data/Initial conditions/High-fidelity flood forecasting/UK_60m.tif
+       180 x 285    Relevant data/Land use and land cover/UK.tif
+       180 x 285    Relevant data/Rainfall/UK flood/20151204-S120000.tif
+       170 x 275    High-fidelity flood forecasting/30m/UK/0.tif
+
+  Pakistan
+     13035 x 7298   Relevant data/DEM/Pakistan_DEM.tif
+       810 x 441    Relevant data/Initial conditions/Low-fidelity flood forecasting/Pakistan_480m.tif
+     13035 x 7298   Relevant data/Land use and land cover/Pakistan.tif
+     13035 x 7298   Relevant data/Rainfall/Pakistan flood/20220818-S000000.tif
+
+  Mozambique
+      2624 x 2321   Relevant data/DEM/Mozambique_DEM.tif
+       151 x 138    Relevant data/Initial conditions/Low-fidelity flood forecasting/Mozambique_480m.tif
+      2624 x 2321   Relevant data/Land use and land cover/Mozambique.tif
+      2624 x 2321   Relevant data/Rainfall/Mozambique flood/20190314-S030000.tif
+
+========================================================================
+4. Water budget: rain in vs water gained (30 m, hourly frames)
+========================================================================
+  Rain units ASSUMED mm/h (not confirmed from the paper yet).
+  Outflow is not counted, so any extra water is a LOWER bound on
+  water entering through the domain edges (for example a river).
+
+  Australia: grid (1073, 1073), 241 hourly frames, 481 half-hourly rain files
+    start: max depth 1.060 m, 4.0% of cells deeper than 1 cm
+    volume: start 2.27e+06 m3 | peak 3.781e+08 m3 at hour 240 | end 3.781e+08 m3
+    rain: domain-mean total 363.2 mm -> 3.764e+08 m3 (3.762e+08 m3 before the peak)
+    water gained up to peak / rain up to peak = 1.00
+
+  UK: grid (170, 275), 73 hourly frames, 145 half-hourly rain files
+    start: max depth 2.481 m, 15.9% of cells deeper than 1 cm
+    volume: start 1.471e+06 m3 | peak 5.901e+06 m3 at hour 40 | end 5.796e+06 m3
+    rain: domain-mean total 108.7 mm -> 4.575e+06 m3 (4.546e+06 m3 before the peak)
+    water gained up to peak / rain up to peak = 0.97
+
+========================================================================
+5. Where is the joint scaler?
+========================================================================
+  src/experiment_lib.py:L28: from src.normalise import fit_scaler, apply_scaler
+  src/experiment_lib.py:L39: CACHE_PATH = 'data/cache_normalised.pkl'
+  src/experiment_lib.py:L75: scaler = fit_scaler(breach_train + breach_val + harvey_train + harvey_val)
+  src/normalise.py:L27: from src.normalise import fit_scaler, apply_scaler
+  src/normalise.py:L30: scaler = fit_scaler(breach_samples + harvey_samples)
+  src/normalise.py:L42: def fit_scaler(samples):
+  src/normalise.py:L66: scaler = {
+  src/normalise.py:L122: def save_scaler(scaler, path):
+  src/normalise.py:L129: def load_scaler(path):
+  src/normalise.py:L153: scaler = fit_scaler([s1, s2])
+  src/normalise.py:L158: print("  fit_scaler ranges: OK")
+  scripts/eval_persistence.py:L34: from src.normalise import fit_scaler, apply_scaler
+  scripts/eval_persistence.py:L105: scaler = fit_scaler(all_samples)
+  scripts/train.py:L54: from src.normalise import fit_scaler, apply_scaler, save_scaler, load_scaler
+  scripts/train.py:L96: print("\n=== Fitting joint scaler ===")
+  scripts/train.py:L98: scaler = fit_scaler(all_samples)
+  scripts/train.py:L102: save_scaler(scaler, os.path.join(args.out_dir, 'scaler.json'))
+  scripts/train_finetune.py:L46: from src.normalise import fit_scaler, apply_scaler
+  scripts/train_finetune.py:L203: print("\n=== Fitting joint scaler ===")
+  scripts/train_finetune.py:L205: scaler = fit_scaler(all_samples)
+  scripts/train_mixed.py:L40: from src.normalise import fit_scaler, apply_scaler, save_scaler
+  scripts/train_mixed.py:L192: print("\n=== Fitting joint scaler ===")
+  scripts/train_mixed.py:L194: scaler = fit_scaler(all_samples)
+
+  RAM available 58.2 GB, pickle 5.0 GB
+  Opening the pickle (your own file, may take a minute) ...
+    cache: dict, 3 keys ['breach', 'harvey', 'scaler']
+      [breach]: dict, 3 keys ['train', 'val', 'test']
+        [train]: list of length 60
+        [val]: list of length 20
+        [test]: list of length 19
+      [harvey]: dict, 3 keys ['train', 'val', 'test']
+        [train]: list of length 1063
+        [val]: list of length 228
+        [test]: list of length 228
+      [scaler] = {'dynamic_min': [0.0, -1.0, -1.0672999620437622, 0.0], 'dynamic_max': [4.075699806213379, 1.1943000555038452, 1.5680999755859375, 1.0410000085830688], 'static_min': -0.1642661988735199, 'static_max': 1.0}
+========================================================================

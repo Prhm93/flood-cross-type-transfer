@@ -1,0 +1,101 @@
+=== results/scaler.json ===
+{
+  "dynamic_min": [
+    0.0,
+    -1.0,
+    -1.0672999620437622,
+    0.0
+  ],
+  "dynamic_max": [
+    4.075699806213379,
+    1.1943000555038452,
+    1.5680999755859375,
+    1.0410000085830688
+  ],
+  "static_min": -0.1642661988735199,
+  "static_max": 1.0
+}
+=== scalar vs vector variant ===
+src/model.py:45:    'vector':  model receives vx and vy as separate channels (can see direction)
+src/model.py:46:    'scalar':  model receives only speed = sqrt(vx² + vy²) (direction thrown away)
+src/model.py:70:    def __init__(self, in_dim, out_dim):
+src/model.py:74:            nn.Linear(in_dim * 2, out_dim),
+src/model.py:76:            nn.Linear(out_dim, out_dim),
+src/model.py:78:        self.norm = nn.LayerNorm(out_dim)
+src/model.py:105:    variant='vector': input has vx and vy separately (5 input features)
+src/model.py:106:    variant='scalar': input has speed only (4 input features)
+src/model.py:109:    def __init__(self, variant='vector', hidden=64, num_layers=3):
+src/model.py:111:        self.variant = variant
+src/model.py:113:        # Input size depends on variant
+src/model.py:114:        if variant == 'vector':
+src/model.py:116:        elif variant == 'scalar':
+src/model.py:119:            raise ValueError(f"variant must be 'vector' or 'scalar', got {variant}")
+src/model.py:149:        if self.variant == 'vector':
+src/model.py:153:            # Replace vx, vy with scalar speed = sqrt(vx² + vy²)
+src/model.py:194:    # Test vector variant
+src/model.py:195:    model_v = FloodGNN(variant='vector', hidden=32, num_layers=2)
+src/model.py:197:    assert out_v.shape == (N, 3), f"vector output shape wrong: {out_v.shape}"
+src/model.py:198:    print(f"  vector variant: {count_params(model_v):,} params, output {out_v.shape}  OK")
+src/model.py:200:    # Test scalar variant
+src/model.py:201:    model_s = FloodGNN(variant='scalar', hidden=32, num_layers=2)
+src/model.py:203:    assert out_s.shape == (N, 3), f"scalar output shape wrong: {out_s.shape}"
+src/model.py:204:    print(f"  scalar variant: {count_params(model_s):,} params, output {out_s.shape}  OK")
+src/model.py:214:    model_full = FloodGNN(variant='vector', hidden=64, num_layers=3)
+src/experiment_lib.py:324:def build_model(variant='vector', hidden=64, layers=3, device='cpu'):
+src/experiment_lib.py:325:    m = FloodGNN(variant=variant, hidden=hidden, num_layers=layers)
+
+=== exp3 synthetic generator ===
+exp3_controlled_synthetic.py
+exp3_v2_stronger.py
+src/model_mechanism.py
+scripts/exp3_controlled_synthetic.py
+scripts/make_paper_figures3.py
+scripts/make_paper_figures_fixed.py
+scripts/exp8_mechanism_aware.py
+scripts/smoke_test.py
+scripts/exp3_v2_stronger.py
+
+=== georeferenced files ===
+--- /root/projects/hydraulic-attention/data/raw/FloodCastBench/Relevant data/Georeferenced files/Australia.tfw
+30.0000000000
+0.0000000000
+0.0000000000
+-30.0000000000
+517452.1920651174
+6808598.8593140217
+
+--- /root/projects/hydraulic-attention/data/raw/FloodCastBench/Relevant data/Georeferenced files/Mozambique.tfw
+30.0000000000
+0.0000000000
+0.0000000000
+-30.0000000000
+617322.4925851781
+7829063.4984181076
+
+--- /root/projects/hydraulic-attention/data/raw/FloodCastBench/Relevant data/Georeferenced files/Pakistan.tfw
+30.0000000000
+0.0000000000
+0.0000000000
+-30.0000000000
+337127.9191328756
+3192398.1353707141
+
+--- /root/projects/hydraulic-attention/data/raw/FloodCastBench/Relevant data/Georeferenced files/Spatial_References.txt
+Australia flood: WGS_1984_UTM_Zone_56S
+Mozambique flood: WGS_1984_UTM_Zone_36S
+Pakistan flood: WGS_1984_UTM_Zone_42N
+UK flood: WGS_1984_UTM_Zone_30N
+--- /root/projects/hydraulic-attention/data/raw/FloodCastBench/Relevant data/Georeferenced files/UK.tfw
+30.0000000000
+0.0000000000
+0.0000000000
+-30.0000000000
+502156.9710706269
+6087446.3114053411
+
+
+=== peak depth and peak rain ===
+Australia hour 240: max depth 18.248 m, 99th pct of wet cells 3.979 m
+Australia peak rain 26.33 mm/h
+UK hour 40: max depth 5.457 m, 99th pct of wet cells 3.289 m
+UK peak rain 9.83 mm/h
