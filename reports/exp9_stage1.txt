@@ -1,0 +1,67 @@
+======================================================================
+  EXP9 STAGE 1 - inflow mechanism data (no training)
+======================================================================
+
+[B] solver copy check
+    identical to exp3 simulate(): True
+
+  regenerating exp3 v2 point + distributed data ...
+    point: 10/60 sims  (last sim final wet fraction 0.100, max depth 0.90 m)
+    point: 20/60 sims  (last sim final wet fraction 0.129, max depth 0.63 m)
+    point: 30/60 sims  (last sim final wet fraction 0.074, max depth 1.05 m)
+    point: 40/60 sims  (last sim final wet fraction 0.055, max depth 1.11 m)
+    point: 50/60 sims  (last sim final wet fraction 0.047, max depth 0.89 m)
+    point: 60/60 sims  (last sim final wet fraction 0.084, max depth 0.95 m)
+    point: 10/15 sims  (last sim final wet fraction 0.065, max depth 0.52 m)
+    distributed: 10/60 sims  (last sim final wet fraction 0.203, max depth 0.34 m)
+    distributed: 20/60 sims  (last sim final wet fraction 0.207, max depth 0.27 m)
+    distributed: 30/60 sims  (last sim final wet fraction 0.138, max depth 0.23 m)
+    distributed: 40/60 sims  (last sim final wet fraction 0.106, max depth 0.23 m)
+    distributed: 50/60 sims  (last sim final wet fraction 0.100, max depth 0.19 m)
+    distributed: 60/60 sims  (last sim final wet fraction 0.188, max depth 0.31 m)
+    distributed: 10/15 sims  (last sim final wet fraction 0.060, max depth 0.16 m)
+    done in 68s
+
+  exp3 v2 scaler: min [0.0, -2.2407, -5.1579, 0.0]  max [1.38, 5.4105, 4.7841, 0.0]
+
+[A] re-scoring saved synth2 seed-0 checkpoints
+    point       csi_final    now 0.09810  stored 0.09810  MATCH
+    point       volume_ratio now 2.68588  stored 2.68588  MATCH
+    distributed csi_final    now 0.62925  stored 0.62925  MATCH
+    distributed volume_ratio now 0.66098  stored 0.66098  MATCH
+
+  generating INFLOW mechanism, same terrain seeds ...
+    inflow: 10/60 sims (final wet fraction 0.155, max depth 0.81 m)
+    inflow: 20/60 sims (final wet fraction 0.144, max depth 0.71 m)
+    inflow: 30/60 sims (final wet fraction 0.110, max depth 0.90 m)
+    inflow: 40/60 sims (final wet fraction 0.077, max depth 0.96 m)
+    inflow: 50/60 sims (final wet fraction 0.091, max depth 0.69 m)
+    inflow: 60/60 sims (final wet fraction 0.122, max depth 0.80 m)
+    inflow: 10/15 sims (final wet fraction 0.087, max depth 0.59 m)
+    worst relative volume difference vs point: 3.23e-16
+
+  physical summary (metres, before scaling):
+    point        median max depth 0.81 m, median final wet fraction 0.085
+    distributed  median max depth 0.26 m, median final wet fraction 0.169
+    inflow       median max depth 0.71 m, median final wet fraction 0.121
+
+  inflow after scaling: share of values outside [0, 1]
+    depth min 0.000 max 0.904 outside 0.000%
+    vx    min -0.140 max 0.472 outside 0.000%
+    vy    min 0.416 max 0.801 outside 0.000%
+    rain  min 0.000 max 0.000 outside 0.000%
+
+  leakage audit: overlap-free True, matched test terrains True
+
+  saved /root/projects/floodtransfer/results/scaler_synth_exp3v2.json
+  saved /root/projects/floodtransfer/data/synth3_cache.pkl (335 MB)
+
+======================================================================
+  PASS  B solver identical
+  PASS  A checkpoints reproduce stored scores
+  PASS  C same total water as point
+  PASS  D no train/test terrain overlap
+  PASS  E test terrains matched across mechanisms
+
+  OVERALL: PASS  (105s)
+======================================================================

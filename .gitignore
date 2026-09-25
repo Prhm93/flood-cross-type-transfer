@@ -9,3 +9,4 @@ __pycache__/
 *.zip
 .DS_Store
 raw_datasets.zip*
+reports/check_new_data.txt

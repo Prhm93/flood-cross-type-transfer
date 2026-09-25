@@ -1,0 +1,15 @@
+{
+  "dynamic_min": [
+    0.0,
+    -2.240680456161499,
+    -5.157858848571777,
+    0.0
+  ],
+  "dynamic_max": [
+    1.3800474405288696,
+    5.410489082336426,
+    4.784086227416992,
+    1.0397741789347492e-05
+  ],
+  "note": "rebuilt from exp3 v2 point+distributed data; inflow NOT in the fit"
+}
