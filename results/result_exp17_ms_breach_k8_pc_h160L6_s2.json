@@ -1,0 +1,30 @@
+{
+  "config": {
+    "data": "breach",
+    "seed": 2,
+    "epochs": 100,
+    "kmax": 8,
+    "preclamp": true,
+    "hidden": 160,
+    "layers": 6
+  },
+  "scores": {
+    "breach": {
+      "csi": 0.16443062137700434,
+      "allwet_csi": 0.13427734375,
+      "S": 0.034830181940273486,
+      "ets": 0.0,
+      "volume_ratio": 0.9834755851268625,
+      "arrival_h": 12.57353197371386
+    },
+    "harvey": {
+      "csi": 0.5663787032430893,
+      "allwet_csi": 0.6308900523560209,
+      "S": -0.17477542809319072,
+      "ets": 0.0,
+      "volume_ratio": 10.697410177223508,
+      "arrival_h": 15.225775815192058
+    }
+  },
+  "gate": false
+}
