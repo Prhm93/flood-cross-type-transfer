@@ -1,0 +1,61 @@
+======================================================================
+[settings] stored in the main result files
+======================================================================
+  result_breach_vector_s0.json: keys ['tag', 'train_on', 'variant', 'seed', 'epochs', 'best_epoch', 'model_params', 'home_scores', 'away_scores', 'transfer_gap']
+  result_harvey_vector_s0.json: keys ['tag', 'train_on', 'variant', 'seed', 'epochs', 'best_epoch', 'model_params', 'home_scores', 'away_scores', 'transfer_gap']
+
+  loading cache (about a minute) ...
+
+======================================================================
+[real] median ETS over 19 events, final step (all-wet = 0)
+======================================================================
+    small breach s0: ETS on breach +0.0009 | on harvey -0.0013
+    small breach s1: ETS on breach +0.0014 | on harvey -0.0079
+    small breach s2: ETS on breach +0.0415 | on harvey -0.0131
+    small harvey s0: ETS on breach +0.0716 | on harvey -0.0054
+    small harvey s1: ETS on breach +0.0483 | on harvey -0.0097
+    small harvey s2: ETS on breach -0.0398 | on harvey +0.0439
+    large breach s0: ETS on breach +0.0760 | on harvey +0.0000
+    large breach s1: ETS on breach +0.0429 | on harvey +0.0000
+    large breach s2: ETS on breach +0.0443 | on harvey +0.0000
+    large breach s3: ETS on breach +0.0172 | on harvey +0.0000
+    large breach s4: ETS on breach +0.0021 | on harvey +0.0000
+    large harvey s0: ETS on breach -0.0027 | on harvey +0.0179
+    large harvey s1: ETS on breach -0.0034 | on harvey +0.0151
+    large harvey s2: ETS on breach -0.0925 | on harvey +0.0000
+    large harvey s3: ETS on breach -0.0386 | on harvey +0.0074
+    large harvey s4: ETS on breach +0.0000 | on harvey +0.0000
+
+======================================================================
+[synthetic] median ETS over 15 events, final step
+======================================================================
+/root/projects/floodtransfer/scripts/exp13_ets.py:44: RuntimeWarning: All-NaN slice encountered
+  return float(np.nanmedian([ets(p[-1], t[-1], auto_threshold(t[:, np.newaxis, :])) for p, t in roll]))
+    point       s0: on point +0.0145  on distributed +nan  on inflow +0.0144
+    point       s1: on point +0.0207  on distributed +nan  on inflow +0.0213
+    point       s2: on point +0.0247  on distributed +0.0000  on inflow +0.0744
+    point       s3: on point +0.0145  on distributed +0.0000  on inflow -0.0133
+    point       s4: on point +0.0025  on distributed +0.0000  on inflow +0.0018
+    distributed s0: on point +0.0009  on distributed +0.0000  on inflow -0.0034
+    distributed s1: on point -0.0037  on distributed +0.0000  on inflow +0.0145
+    distributed s2: on point +0.0001  on distributed +0.0000  on inflow -0.0004
+    distributed s3: on point +0.0001  on distributed +0.0000  on inflow -0.0004
+    distributed s4: on point +0.0662  on distributed +0.0000  on inflow +0.0277
+    inflow      s0: on point +0.0144  on distributed +0.0000  on inflow +0.0165
+    inflow      s1: on point +0.0003  on distributed +nan  on inflow -0.0002
+    inflow      s2: on point +0.0111  on distributed +0.0000  on inflow +0.0039
+    inflow      s3: on point +0.0672  on distributed +0.0000  on inflow -0.0159
+    inflow      s4: on point +0.0438  on distributed +nan  on inflow +0.0270
+
+======================================================================
+  SUMMARY: median ETS across seeds (own test set marked *)
+======================================================================
+    small breach      breach* +0.0014  harvey  -0.0079
+    small harvey      breach  +0.0483  harvey* -0.0054
+    large breach      breach* +0.0429  harvey  +0.0000
+    large harvey      breach  -0.0034  harvey* +0.0074
+    synth point       point* +0.0145  distributed  +0.0000  inflow  +0.0144
+    synth distributed point  +0.0001  distributed* +0.0000  inflow  -0.0004
+    synth inflow      point  +0.0144  distributed  +0.0000  inflow* +0.0039
+
+  saved /root/projects/floodtransfer/results/result_exp13_ets.json

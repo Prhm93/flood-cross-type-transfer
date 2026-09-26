@@ -1,0 +1,141 @@
+{
+  "small_breach_s0": {
+    "breach": 0.0008822139056547117,
+    "harvey": -0.00126395618285204
+  },
+  "small_breach_s1": {
+    "breach": 0.001390482420518399,
+    "harvey": -0.007874015748031496
+  },
+  "small_breach_s2": {
+    "breach": 0.04148691348417376,
+    "harvey": -0.013127979719649914
+  },
+  "small_harvey_s0": {
+    "breach": 0.07163449296972767,
+    "harvey": -0.005401420605986941
+  },
+  "small_harvey_s1": {
+    "breach": 0.048265640446070485,
+    "harvey": -0.009744092998380402
+  },
+  "small_harvey_s2": {
+    "breach": -0.0397812539217163,
+    "harvey": 0.04391891891891892
+  },
+  "large_breach_s0": {
+    "breach": 0.07600015106019346,
+    "harvey": 0.0
+  },
+  "large_breach_s1": {
+    "breach": 0.042946612405186144,
+    "harvey": 0.0
+  },
+  "large_breach_s2": {
+    "breach": 0.044263094800244374,
+    "harvey": 0.0
+  },
+  "large_breach_s3": {
+    "breach": 0.017180653732670956,
+    "harvey": 0.0
+  },
+  "large_breach_s4": {
+    "breach": 0.0021432814673001408,
+    "harvey": 0.0
+  },
+  "large_harvey_s0": {
+    "breach": -0.0027436395377036615,
+    "harvey": 0.017921336805379794
+  },
+  "large_harvey_s1": {
+    "breach": -0.003420781414342225,
+    "harvey": 0.01510610463000119
+  },
+  "large_harvey_s2": {
+    "breach": -0.09254675516199232,
+    "harvey": 0.0
+  },
+  "large_harvey_s3": {
+    "breach": -0.03864242385821998,
+    "harvey": 0.00735799135949096
+  },
+  "large_harvey_s4": {
+    "breach": 0.0,
+    "harvey": 0.0
+  },
+  "synth_point_s0": {
+    "point": 0.014527181923643821,
+    "distributed": NaN,
+    "inflow": 0.014434014567839869
+  },
+  "synth_point_s1": {
+    "point": 0.020656722377977256,
+    "distributed": NaN,
+    "inflow": 0.021266395277057107
+  },
+  "synth_point_s2": {
+    "point": 0.02468601126028584,
+    "distributed": 0.0,
+    "inflow": 0.07444530202491431
+  },
+  "synth_point_s3": {
+    "point": 0.014505510070390295,
+    "distributed": 0.0,
+    "inflow": -0.01330588840696905
+  },
+  "synth_point_s4": {
+    "point": 0.002510209433891574,
+    "distributed": 0.0,
+    "inflow": 0.0017566853737752035
+  },
+  "synth_distributed_s0": {
+    "point": 0.0008973086827094626,
+    "distributed": 0.0,
+    "inflow": -0.003369929965303264
+  },
+  "synth_distributed_s1": {
+    "point": -0.003723918953448919,
+    "distributed": 0.0,
+    "inflow": 0.01446911641979872
+  },
+  "synth_distributed_s2": {
+    "point": 9.338710166459918e-05,
+    "distributed": 0.0,
+    "inflow": -0.00036440996427207153
+  },
+  "synth_distributed_s3": {
+    "point": 8.530734247751346e-05,
+    "distributed": 0.0,
+    "inflow": -0.00043399794587397565
+  },
+  "synth_distributed_s4": {
+    "point": 0.06618154678608079,
+    "distributed": 0.0,
+    "inflow": 0.027685553435202924
+  },
+  "synth_inflow_s0": {
+    "point": 0.014427630836839667,
+    "distributed": 0.0,
+    "inflow": 0.016513483578190276
+  },
+  "synth_inflow_s1": {
+    "point": 0.0002517148734000632,
+    "distributed": NaN,
+    "inflow": -0.00017342416794926662
+  },
+  "synth_inflow_s2": {
+    "point": 0.011148621940888392,
+    "distributed": 0.0,
+    "inflow": 0.003948942105633426
+  },
+  "synth_inflow_s3": {
+    "point": 0.06723280106280445,
+    "distributed": 0.0,
+    "inflow": -0.015944759204298088
+  },
+  "synth_inflow_s4": {
+    "point": 0.043809499255554336,
+    "distributed": NaN,
+    "inflow": 0.026988312660741608
+  }
+}
