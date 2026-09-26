@@ -1,0 +1,9 @@
+    epoch   0  k=1  loss=0.003278  lr=1.0e-03
+    epoch  10  k=2  loss=0.000035  lr=1.0e-03
+    epoch  20  k=4  loss=0.000042  lr=2.5e-04
+    epoch  30  k=5  loss=0.000051  lr=6.3e-05
+    epoch  40  k=7  loss=0.000064  lr=3.1e-05
+    epoch  50  k=8  loss=0.000063  lr=7.8e-06
+    epoch  60  k=8  loss=0.000066  lr=2.0e-06
+    epoch  70  k=8  loss=0.000056  lr=9.8e-07
+    epoch  80  k=8  loss=0.000061  lr=2.4e-07
