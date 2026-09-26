@@ -1,0 +1,77 @@
+all-wet CSI: dam-break 0.1343, rainfall 0.6309
+
+[figA]
+
+  figA:
+    Dam-break model, own data: median CSI 0.134, median volume 2.30x | 64.3% of pairs disagree | above-median CSI + bad volume 0/19 | beat flooding everything 15/19
+    Dam-break model, rainfall data: median CSI 0.604, median volume 135.49x | 35.7% of pairs disagree | above-median CSI + bad volume 9/19 | beat flooding everything 1/19
+    Rainfall model, own data: median CSI 0.524, median volume 10.30x | 38.0% of pairs disagree | above-median CSI + bad volume 8/19 | beat flooding everything 0/19
+    Rainfall model, dam-break data: median CSI 0.183, median volume 0.33x | 38.6% of pairs disagree | above-median CSI + bad volume 0/19 | beat flooding everything 14/19
+  saved /root/projects/floodtransfer/results/figures/figA_per_event_scatter.png
+  saved /root/projects/floodtransfer/results/figures/figA_per_event_scatter.pdf
+
+[figB]
+  loading cache for figB (about a minute) ...
+
+  figB all-wet CSI by relative threshold:
+    dam-break: 0.1%=0.139  0.5%=0.136  1%=0.134  2%=0.130  5%=0.119  10%=0.107
+    rainfall: 0.1%=0.881  0.5%=0.668  1%=0.631  2%=0.552  5%=0.427  10%=0.201
+  saved /root/projects/floodtransfer/results/figures/figB_threshold_robustness.png
+  saved /root/projects/floodtransfer/results/figures/figB_threshold_robustness.pdf
+
+[figC]
+
+  figC medians:
+    breach_only     dam-break 0.180  rainfall 0.486
+    harvey_only     dam-break 0.149  rainfall 0.538
+    naive_mixed     dam-break 0.113  rainfall 0.498
+    balanced_mixed  dam-break 0.090  rainfall 0.537
+    weighted_mixed  dam-break 0.139  rainfall 0.520
+  saved /root/projects/floodtransfer/results/figures/figC_mixing_regimes.png
+  saved /root/projects/floodtransfer/results/figures/figC_mixing_regimes.pdf
+
+[figD]
+
+  figD medians (compare with Table 17):
+    breach_csi             no tag    median 0.1591  (n=5)
+    breach_csi             with tag  median 0.1953  (n=5)
+    breach_volume_ratio    no tag    median 0.5059  (n=5)
+    breach_volume_ratio    with tag  median 0.8523  (n=5)
+    harvey_csi             no tag    median 0.5399  (n=5)
+    harvey_csi             with tag  median 0.5219  (n=5)
+    harvey_volume_ratio    no tag    median 25.1042  (n=5)
+    harvey_volume_ratio    with tag  median 3.6354  (n=5)
+  saved /root/projects/floodtransfer/results/figures/figD_mechanism_tag.png
+  saved /root/projects/floodtransfer/results/figures/figD_mechanism_tag.pdf
+
+[figE]
+
+  figE differences: ['1: +0.023', '2: +0.052', '5: +0.001', '10: +0.052', '20: -0.034', '40: -0.021']
+  saved /root/projects/floodtransfer/results/figures/figE_finetune_curve.png
+  saved /root/projects/floodtransfer/results/figures/figE_finetune_curve.pdf
+
+[figG]
+  figG harvey small: home median 0.445  away median 0.176
+  figG harvey large: home median 0.527  away median 0.136
+  figG breach small: home median 0.170  away median 0.542
+  figG breach large: home median 0.202  away median 0.561
+  saved /root/projects/floodtransfer/results/figures/figG_capacity.png
+  saved /root/projects/floodtransfer/results/figures/figG_capacity.pdf
+
+[figH]
+
+  figH medians of seeds 0-2:
+    breach  csi           own 0.166  other 0.527  -> FLATTERS the transfer
+    breach  volume_ratio  own 1.842  other 89.367  -> reports the failure
+    breach  arrival_h     own 12.543  other 15.436  -> reports the failure
+    harvey  csi           own 0.489  other 0.096  -> reports the failure
+    harvey  volume_ratio  own 12.482  other 0.330  -> FLATTERS the transfer
+    harvey  arrival_h     own 13.023  other 13.798  -> inconclusive
+  saved /root/projects/floodtransfer/results/figures/figH_three_way.png
+  saved /root/projects/floodtransfer/results/figures/figH_three_way.pdf
+
+[figI]
+
+  figI distributed volume: home median 0.64x, away median 7.62x
+  saved /root/projects/floodtransfer/results/figures/figI_controlled.png
+  saved /root/projects/floodtransfer/results/figures/figI_controlled.pdf
