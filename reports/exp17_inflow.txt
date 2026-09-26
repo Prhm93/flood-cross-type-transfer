@@ -8,3 +8,12 @@ Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pyto
     epoch  40  k=7  loss=0.000066  lr=1.6e-05
     epoch  50  k=8  loss=0.000077  lr=7.8e-06
     epoch  60  k=8  loss=0.000077  lr=2.0e-06
+    epoch  70  k=8  loss=0.000083  lr=4.9e-07
+    epoch  80  k=8  loss=0.000076  lr=2.4e-07
+    epoch  90  k=8  loss=0.000076  lr=6.1e-08
+    epoch  99  k=8  loss=0.000077  lr=1.5e-08
+  away point       CSI 0.1392 (all-wet 0.0799, S +0.064)  ETS +0.0636  vol 0.66x  arrival 7.32
+  away distributed CSI 0.8364 (all-wet 1.0000, S +nan)  ETS +0.0000  vol 7.02x  arrival 2.38
+  HOME inflow      CSI 0.2174 (all-wet 0.1502, S +0.079)  ETS +0.0900  vol 0.91x  arrival 6.35
+
+  GATE: FAIL   [4.4 min]
