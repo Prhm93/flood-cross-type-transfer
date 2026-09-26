@@ -1,0 +1,32 @@
+{
+  "config": {
+    "dataset": "breach",
+    "epochs": 2,
+    "seed": 0,
+    "hidden": 64,
+    "layers": 3,
+    "max_train_samples": null,
+    "tag": "allsamples",
+    "quick": true
+  },
+  "train_minutes": 0.1478564977645874,
+  "scores": {
+    "breach": {
+      "csi": 0.17453187336325718,
+      "allwet_csi": 0.13427734375,
+      "S": 0.046498181978539596,
+      "ets": 0.014218524542860394,
+      "volume_ratio": 1.9157086740432343,
+      "arrival_h": 13.54720377285159
+    },
+    "harvey": {
+      "csi": 0.4904589794850449,
+      "allwet_csi": 0.6308900523560209,
+      "S": -0.3804586513242045,
+      "ets": -0.02170900692840668,
+      "volume_ratio": 83.10820457091074,
+      "arrival_h": 14.34656989317929
+    }
+  },
+  "gate": false
+}
