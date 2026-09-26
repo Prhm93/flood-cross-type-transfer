@@ -9,3 +9,8 @@
     epoch  70  k=8  loss=0.011253  lr=9.8e-07
     epoch  80  k=8  loss=0.011764  lr=2.4e-07
     epoch  90  k=8  loss=0.011070  lr=6.1e-08
+    epoch  99  k=8  loss=0.011303  lr=3.1e-08
+  away breach      CSI 0.0012 (all-wet 0.1343, S -0.154)  ETS +0.0011  vol 0.01x  arrival 0.94
+  HOME harvey      CSI 0.5280 (all-wet 0.6309, S -0.279)  ETS -0.0108  vol 3.22x  arrival 13.86
+
+  GATE: FAIL   [77.2 min]
