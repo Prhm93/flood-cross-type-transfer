@@ -1,0 +1,9 @@
+0.05 m = 0.01227 in scaled units; 19 test floods
+  ours, small (42k params)   CSI@40 mean 0.226 (seeds [0.226, 0.232, 0.222, 0.232, 0.224])  ETS +0.100  all-wet CSI 0.155
+  ours, large (492k params)  CSI@40 mean 0.156 (seeds [0.156])  ETS +0.001  all-wet CSI 0.155
+  SWE-GNN reproduction depth_s0           CSI@40 mean 0.178  (n=19)
+  SWE-GNN reproduction depth_s1           CSI@40 mean 0.183  (n=19)
+  SWE-GNN reproduction depth_s2           CSI@40 mean 0.184  (n=19)
+  SWE-GNN reproduction directional_s0     CSI@40 mean 0.164  (n=19)
+  SWE-GNN reproduction directional_s1     CSI@40 mean 0.153  (n=19)
+  SWE-GNN reproduction directional_s2     CSI@40 mean 0.177  (n=19)

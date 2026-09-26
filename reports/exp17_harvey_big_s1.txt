@@ -2,3 +2,4 @@
     epoch   0  k=1  loss=0.008883  lr=1.0e-03
     epoch  10  k=2  loss=0.008402  lr=5.0e-04
     epoch  20  k=4  loss=0.009760  lr=2.5e-04
+    epoch  30  k=5  loss=0.010101  lr=6.3e-05
