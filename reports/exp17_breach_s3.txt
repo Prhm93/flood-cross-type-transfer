@@ -1,0 +1,16 @@
+  breach source channel added (log-scale max 7.83)
+    epoch   0  k=1  loss=0.002198  lr=1.0e-03
+    epoch  10  k=2  loss=0.000014  lr=1.0e-03
+    epoch  20  k=4  loss=0.000030  lr=2.5e-04
+    epoch  30  k=5  loss=0.000032  lr=6.3e-05
+    epoch  40  k=7  loss=0.000051  lr=3.1e-05
+    epoch  50  k=8  loss=0.000056  lr=7.8e-06
+    epoch  60  k=8  loss=0.000065  lr=2.0e-06
+    epoch  70  k=8  loss=0.000066  lr=9.8e-07
+    epoch  80  k=8  loss=0.000069  lr=2.4e-07
+    epoch  90  k=8  loss=0.000060  lr=6.1e-08
+    epoch  99  k=8  loss=0.000055  lr=3.1e-08
+  HOME breach      CSI 0.2390 (all-wet 0.1343, S +0.121)  ETS +0.0997  vol 0.60x  arrival 12.25
+  away harvey      CSI 0.4194 (all-wet 0.6309, S -0.573)  ETS +0.0011  vol 34.71x  arrival 15.33
+
+  GATE: FAIL   [4.0 min]
