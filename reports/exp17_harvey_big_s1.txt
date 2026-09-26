@@ -7,3 +7,4 @@
     epoch  50  k=8  loss=0.011245  lr=7.8e-06
     epoch  60  k=8  loss=0.011239  lr=2.0e-06
     epoch  70  k=8  loss=0.011273  lr=4.9e-07
+    epoch  80  k=8  loss=0.011385  lr=2.4e-07
