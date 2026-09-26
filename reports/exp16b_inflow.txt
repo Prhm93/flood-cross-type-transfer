@@ -3,3 +3,10 @@
     epoch  40  loss=0.000014  lr=2.5e-04
     epoch  60  loss=0.000014  lr=6.3e-05
     epoch  80  loss=0.000014  lr=1.6e-05
+    epoch  99  loss=0.000013  lr=7.8e-06
+    best epoch 94 (loss 0.000013)
+  away point       CSI 0.0984 (all-wet 0.0799, S +0.020)  ETS final +0.015  ETS s15 +0.037  vol 2.51x
+  away distributed CSI 0.5812 (all-wet 1.0000, S +nan)  ETS final +0.000  ETS s15 +0.000  vol 5.21x
+  HOME inflow      CSI 0.1626 (all-wet 0.1502, S +0.015)  ETS final +0.016  ETS s15 +0.081  vol 2.46x
+
+  GATE (ETS final >= 0.10, volume 0.5-2x): FAIL   [9.6 min]
