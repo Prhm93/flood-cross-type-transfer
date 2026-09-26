@@ -332,6 +332,7 @@ def figE():
     diff = [a - b for a, b in zip(meds['finetune'], meds['scratch'])]
     axd.bar(range(len(ns)), diff, color=[GOOD if d > 0 else DANGER for d in diff], width=0.6)
     axd.axhline(0, color=INK, lw=1.2)
+    axd.margins(y=0.2)
     for i, d in enumerate(diff):
         axd.text(i, d + (0.003 if d >= 0 else -0.003), f'{d:+.3f}', ha='center',
                  va='bottom' if d >= 0 else 'top', fontsize=9.5, fontweight='bold',
@@ -432,7 +433,7 @@ def figH(AW):
             ax.scatter([1] * len(oth), oth, s=24, color=INK, zorder=4)
             fmt = (lambda v: f'{v:.3f}') if k == 'csi' else (lambda v: f'{v:.2f}x') if k == 'volume_ratio' else (lambda v: f'{v:.1f} h')
             for xx, v in ((0, h), (1, a)):
-                ax.text(xx, v, fmt(v), ha='center', va='bottom', fontsize=10, fontweight='bold', color=INK)
+                ax.annotate(fmt(v), (xx, v), xytext=(16, 6), textcoords='offset points', ha='left', va='bottom', fontsize=10, fontweight='bold', color=INK, bbox=dict(facecolor=PAPER, edgecolor='none', pad=1.2), zorder=7)
             if k == 'csi':
                 ax.hlines(AW[tr], -0.35, 0.35, colors=MUTED, linestyles='--', lw=2)
                 ax.hlines(AW[other], 0.65, 1.35, colors=MUTED, linestyles='--', lw=2)
@@ -501,7 +502,7 @@ def figI():
         axb.plot([h, a], [y, y], color='#C3CBD6', lw=2.6, zorder=2)
         axb.scatter([h], [y], s=140, color=S_DIST, zorder=4, edgecolor='white', linewidth=1.5)
         axb.scatter([a], [y], s=140, facecolors='white', edgecolors=S_DIST, linewidths=2.2, zorder=4)
-        axb.text(a * 1.15, y, f'{a:.1f}x', fontsize=10, color=INK, va='center', fontweight='bold')
+        axb.text(a * 1.15, y, f'{a:.2g}x', fontsize=10, color=INK, va='center', fontweight='bold')
     axb.set_xscale('log')
     axb.set_yticks(ys)
     axb.set_yticklabels([f"seed {r['seed']}" for r in sub])
