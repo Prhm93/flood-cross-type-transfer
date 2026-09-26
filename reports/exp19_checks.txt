@@ -1,0 +1,43 @@
+========================================================================
+[A] units confound: breach models on Harvey
+========================================================================
+  training max depth (scaled units): breach 1.0000, harvey 0.3060 -> factor 3.268
+  A0 as in paper    CSI 0.546 (all-wet 0.631)  S -0.230  ETS -0.0037  volume 67.72x   [5 seeds]
+  A1 depth matched  CSI 0.542 (all-wet 0.631)  S -0.240  ETS -0.0046  volume 20.75x   [5 seeds]
+  A2 rain removed   CSI 0.524 (all-wet 0.631)  S -0.289  ETS -0.0020  volume 57.86x   [5 seeds]
+  A3 both           CSI 0.522 (all-wet 0.631)  S -0.296  ETS -0.0031  volume 17.73x   [5 seeds]
+
+========================================================================
+[B] saturation: synthetic models by step and by threshold
+========================================================================
+
+  share of cells truly wet (median over events):
+    point       by step s3=0.01  s5=0.02  s10=0.03  s15=0.05  s20=0.06  s30=0.08 | final step by threshold 1%=0.08  5%=0.07  10%=0.06  20%=0.06
+    distributed by step s3=1.00  s5=1.00  s10=1.00  s15=1.00  s20=1.00  s30=1.00 | final step by threshold 1%=1.00  5%=0.67  10%=0.31  20%=0.17
+    inflow      by step s3=0.02  s5=0.04  s10=0.07  s15=0.09  s20=0.11  s30=0.15 | final step by threshold 1%=0.15  5%=0.13  10%=0.10  20%=0.08
+
+  skill S / ETS by rollout step (1% threshold), median over 5 seeds:
+    pair                                s3            s5           s10           s15           s20           s30
+    point->point               +0.25/+0.25   +0.15/+0.16   +0.08/+0.09   +0.07/+0.07   +0.07/+0.07   +0.07/+0.08
+    point->distributed         -0.01/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00
+    point->inflow              +0.31/+0.31   +0.45/+0.45   +0.23/+0.23   +0.20/+0.20   +0.18/+0.19   +0.13/+0.14
+    distributed->point         +0.02/+0.04   +0.01/+0.02   -0.02/+0.01   -0.03/-0.01   -0.04/-0.02   -0.04/-0.01
+    distributed->distributed  -44.57/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00
+    distributed->inflow        -0.02/-0.01   +0.04/+0.06   +0.02/+0.03   +0.00/+0.01   -0.01/+0.01   -0.01/+0.01
+    inflow->point              +0.27/+0.27   +0.11/+0.12   +0.04/+0.04   +0.03/+0.04   +0.04/+0.04   +0.04/+0.05
+    inflow->distributed        -6.90/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00    +nan/+0.00
+    inflow->inflow             +0.24/+0.25   +0.40/+0.41   +0.14/+0.15   +0.11/+0.11   +0.10/+0.10   +0.08/+0.09
+
+  skill S / ETS at the final step by threshold, median over 5 seeds:
+    pair                                1%            5%           10%           20%
+    point->point               +0.07/+0.08   +0.09/+0.11   +0.08/+0.11   +0.08/+0.11
+    point->distributed          +nan/+0.00   +0.00/+0.00   +0.00/+0.00   +0.00/+0.00
+    point->inflow              +0.13/+0.14   +0.16/+0.18   +0.17/+0.20   +0.18/+0.20
+    distributed->point         -0.04/-0.01   -0.06/-0.00   -0.06/+0.00   -0.05/+0.00
+    distributed->distributed    +nan/+0.00   +0.11/+0.34   +0.29/+0.33   +0.31/+0.35
+    distributed->inflow        -0.01/+0.01   -0.02/+0.07   -0.04/+0.02   -0.06/+0.00
+    inflow->point              +0.04/+0.05   +0.06/+0.06   +0.04/+0.06   +0.02/+0.06
+    inflow->distributed         +nan/+0.00   +0.01/+0.01   +0.01/+0.01   +0.04/+0.04
+    inflow->inflow             +0.08/+0.09   +0.14/+0.14   +0.19/+0.20   +0.29/+0.33
+
+  saved /root/projects/floodtransfer/results/result_exp19_checks.json

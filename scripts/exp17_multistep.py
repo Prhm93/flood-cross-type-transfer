@@ -126,10 +126,14 @@ def main():
     ap.add_argument('--epochs', type=int, default=100)
     ap.add_argument('--kmax', type=int, default=8)
     ap.add_argument('--preclamp', action='store_true')
+    ap.add_argument('--hidden', type=int, default=64)
+    ap.add_argument('--layers', type=int, default=3)
     a = ap.parse_args()
     global PRECLAMP
     PRECLAMP = a.preclamp
     tag = '_pc' if a.preclamp else ''
+    if (a.hidden, a.layers) != (64, 3):
+        tag += f'_h{a.hidden}L{a.layers}'
     ck = os.path.join(R, f'exp15_ms_{a.data}_k{a.kmax}{tag}_s{a.seed}.pt')
     js = os.path.join(R, f'result_exp17_ms_{a.data}_k{a.kmax}{tag}_s{a.seed}.json')
     if os.path.exists(js):
@@ -151,10 +155,10 @@ def main():
     t0 = time.time()
     if not os.path.exists(ck):
         set_seed(a.seed)
-        m = build_model('vector', 64, 3, device)
+        m = build_model('vector', a.hidden, a.layers, device)
         train_multistep(m, train, device, a.epochs, a.kmax, ck + '.partial')
         os.replace(ck + '.partial', ck)
-    m = build_model('vector', 64, 3, device)
+    m = build_model('vector', a.hidden, a.layers, device)
     m.load_state_dict(torch.load(ck, map_location=device, weights_only=True))
     m.eval()
     with torch.no_grad():
