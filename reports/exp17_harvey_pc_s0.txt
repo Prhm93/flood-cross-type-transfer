@@ -4,3 +4,4 @@
     epoch  20  k=4  loss=0.009726  lr=2.5e-04
     epoch  30  k=5  loss=0.010058  lr=6.3e-05
     epoch  40  k=7  loss=0.010969  lr=3.1e-05
+    epoch  50  k=8  loss=0.011813  lr=7.8e-06
