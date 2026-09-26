@@ -10,3 +10,6 @@
 [B] leakage check: breach models, true vs constant inflow
 ========================================================================
   true hydrograph  1%: S +0.119 ETS +0.090 | 10%: S +0.065 ETS +0.098 | volume 0.75x
+  constant inflow  1%: S +0.119 ETS +0.090 | 10%: S +0.065 ETS +0.098 | volume 0.75x
+
+  saved /root/projects/floodtransfer/results/result_exp20_real_checks.json
