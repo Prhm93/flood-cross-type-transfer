@@ -1,0 +1,15 @@
+    epoch   0  k=1  loss=0.002893  lr=1.0e-03
+    epoch  10  k=2  loss=0.000138  lr=5.0e-04
+    epoch  20  k=4  loss=0.000255  lr=2.5e-04
+    epoch  30  k=5  loss=0.000180  lr=6.3e-05
+    epoch  40  k=7  loss=0.000280  lr=1.6e-05
+    epoch  50  k=8  loss=0.000449  lr=7.8e-06
+    epoch  60  k=8  loss=0.000312  lr=2.0e-06
+    epoch  70  k=8  loss=0.000373  lr=4.9e-07
+    epoch  80  k=8  loss=0.000602  lr=2.4e-07
+    epoch  90  k=8  loss=0.000422  lr=6.1e-08
+    epoch  99  k=8  loss=0.000370  lr=3.1e-08
+  away point       ETS@rel1 +0.043 ETS@rel10 +0.007 FB@rel10 0.01 vol 0.08x
+  HOME distributed ETS@rel1 +0.000 ETS@rel10 +0.290 FB@rel10 1.73 vol 0.89x
+  away inflow      ETS@rel1 +0.048 ETS@rel10 +0.007 FB@rel10 0.01 vol 0.12x
+  saved /root/projects/floodtransfer/results/result_exp22_distributed_linear_s1.json  [8.0 min]

@@ -7,3 +7,11 @@
     epoch  60  k=8  loss=0.000066  lr=2.0e-06
     epoch  70  k=8  loss=0.000056  lr=9.8e-07
     epoch  80  k=8  loss=0.000061  lr=2.4e-07
+    epoch  90  k=8  loss=0.000061  lr=6.1e-08
+    epoch  99  k=8  loss=0.000060  lr=3.1e-08
+  HOME point       ETS@rel1 +0.067 ETS@rel10 +0.090 FB@rel10 1.21 vol 0.63x
+/root/projects/floodtransfer/scripts/exp22_rerun.py:114: RuntimeWarning: All-NaN slice encountered
+  print(f"  {'HOME' if te == a.data else 'away'} {te:11s} ETS@rel1 {np.nanmedian([e['ets'] for e in r['rel1']]):+.3f} "
+  away distributed ETS@rel1 +nan ETS@rel10 +0.000 FB@rel10 3.25 vol 21.49x
+  away inflow      ETS@rel1 +0.122 ETS@rel10 +0.231 FB@rel10 1.49 vol 1.68x
+  saved /root/projects/floodtransfer/results/result_exp22_point_log_s0.json  [8.1 min]

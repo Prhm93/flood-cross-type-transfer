@@ -7,3 +7,9 @@
     epoch  60  k=8  loss=0.000066  lr=2.0e-06
     epoch  70  k=8  loss=0.000056  lr=9.8e-07
     epoch  80  k=8  loss=0.000061  lr=2.4e-07
+    epoch  90  k=8  loss=0.000061  lr=6.1e-08
+    epoch  99  k=8  loss=0.000060  lr=3.1e-08
+  HOME point       ETS@rel1 +0.090 ETS@rel10 +0.128 FB@rel10 1.41 vol 0.61x
+  away distributed ETS@rel1 +0.000 ETS@rel10 +0.306 FB@rel10 0.79 vol 0.56x
+  away inflow      ETS@rel1 +0.056 ETS@rel10 +0.086 FB@rel10 1.09 vol 0.52x
+  saved /root/projects/floodtransfer/results/result_exp22_point_linear_s0.json  [8.1 min]

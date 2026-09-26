@@ -7,3 +7,9 @@
     epoch  60  k=8  loss=0.000397  lr=2.0e-06
     epoch  70  k=8  loss=0.000245  lr=9.8e-07
     epoch  80  k=8  loss=0.000344  lr=2.4e-07
+    epoch  90  k=8  loss=0.000371  lr=6.1e-08
+    epoch  99  k=8  loss=0.000335  lr=3.1e-08
+  away point       ETS@rel1 +0.005 ETS@rel10 +0.061 FB@rel10 0.59 vol 0.93x
+  HOME distributed ETS@rel1 +0.000 ETS@rel10 +0.289 FB@rel10 1.74 vol 0.93x
+  away inflow      ETS@rel1 -0.004 ETS@rel10 +0.002 FB@rel10 0.54 vol 0.69x
+  saved /root/projects/floodtransfer/results/result_exp22_distributed_global_s0.json  [8.1 min]

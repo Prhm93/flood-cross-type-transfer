@@ -1,0 +1,2 @@
+    epoch   0  k=1  loss=0.002745  lr=1.0e-03
+    epoch  10  k=2  loss=0.000072  lr=1.0e-03

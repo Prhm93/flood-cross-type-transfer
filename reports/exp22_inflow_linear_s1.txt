@@ -1,0 +1,15 @@
+    epoch   0  k=1  loss=0.003555  lr=1.0e-03
+    epoch  10  k=2  loss=0.000068  lr=1.0e-03
+    epoch  20  k=4  loss=0.000083  lr=2.5e-04
+    epoch  30  k=5  loss=0.000089  lr=6.3e-05
+    epoch  40  k=7  loss=0.000110  lr=3.1e-05
+    epoch  50  k=8  loss=0.000120  lr=7.8e-06
+    epoch  60  k=8  loss=0.000119  lr=2.0e-06
+    epoch  70  k=8  loss=0.000118  lr=9.8e-07
+    epoch  80  k=8  loss=0.000112  lr=2.4e-07
+    epoch  90  k=8  loss=0.000117  lr=6.1e-08
+    epoch  99  k=8  loss=0.000115  lr=3.1e-08
+  away point       ETS@rel1 +0.066 ETS@rel10 +0.091 FB@rel10 3.24 vol 0.94x
+  away distributed ETS@rel1 +0.000 ETS@rel10 +0.291 FB@rel10 1.78 vol 1.26x
+  HOME inflow      ETS@rel1 +0.111 ETS@rel10 +0.154 FB@rel10 2.64 vol 1.05x
+  saved /root/projects/floodtransfer/results/result_exp22_inflow_linear_s1.json  [8.0 min]

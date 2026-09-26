@@ -5,3 +5,10 @@
     epoch  40  k=7  loss=0.000048  lr=1.6e-05
     epoch  50  k=8  loss=0.000068  lr=3.9e-06
     epoch  60  k=8  loss=0.000065  lr=2.0e-06
+    epoch  70  k=8  loss=0.000056  lr=4.9e-07
+    epoch  80  k=8  loss=0.000067  lr=1.2e-07
+    epoch  90  k=8  loss=0.000070  lr=6.1e-08
+    epoch  99  k=8  loss=0.000073  lr=1.5e-08
+  HOME breach      ETS@rel1 +0.100 ETS@rel10 +0.090 FB@rel10 0.50 vol 0.52x
+  away harvey      ETS@rel1 -0.001 ETS@rel10 +0.000 FB@rel10 4.75 vol 93.83x
+  saved /root/projects/floodtransfer/results/result_exp22_breach_log_s0.json  [9.9 min]
