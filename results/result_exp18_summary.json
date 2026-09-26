@@ -1,0 +1,200 @@
+{
+  "point->point": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": 0
+  },
+  "point->distributed": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": null
+  },
+  "point->inflow": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": null
+  },
+  "distributed->point": {
+    "csi": [
+      0.06190789027555253,
+      0.06190789027555253,
+      0.06190789027555253
+    ],
+    "allwet_csi": [
+      0.0798611111111111,
+      0.0798611111111111,
+      0.0798611111111111
+    ],
+    "S": [
+      -0.01951142490807875,
+      -0.01951142490807875,
+      -0.01951142490807875
+    ],
+    "ets": [
+      -0.02895880622537993,
+      -0.02895880622537993,
+      -0.02895880622537993
+    ],
+    "volume_ratio": [
+      0.4671579390739768,
+      0.4671579390739768,
+      0.4671579390739768
+    ],
+    "arrival": [
+      17.259955679010965,
+      17.259955679010965,
+      17.259955679010965
+    ],
+    "n": 1,
+    "gate_pass": null
+  },
+  "distributed->distributed": {
+    "csi": [
+      0.8851273148148149,
+      0.8851273148148149,
+      0.8851273148148149
+    ],
+    "allwet_csi": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "S": null,
+    "ets": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "volume_ratio": [
+      0.903699359288851,
+      0.903699359288851,
+      0.903699359288851
+    ],
+    "arrival": [
+      4.414095910226447,
+      4.414095910226447,
+      4.414095910226447
+    ],
+    "n": 1,
+    "gate_pass": 1
+  },
+  "distributed->inflow": {
+    "csi": [
+      0.12612751123765217,
+      0.12612751123765217,
+      0.12612751123765217
+    ],
+    "allwet_csi": [
+      0.1501736111111111,
+      0.1501736111111111,
+      0.1501736111111111
+    ],
+    "S": [
+      -0.02829530853342665,
+      -0.02829530853342665,
+      -0.02829530853342665
+    ],
+    "ets": [
+      0.00570576956410636,
+      0.00570576956410636,
+      0.00570576956410636
+    ],
+    "volume_ratio": [
+      0.40107661783820947,
+      0.40107661783820947,
+      0.40107661783820947
+    ],
+    "arrival": [
+      16.095389557550398,
+      16.095389557550398,
+      16.095389557550398
+    ],
+    "n": 1,
+    "gate_pass": null
+  },
+  "inflow->point": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": null
+  },
+  "inflow->distributed": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": null
+  },
+  "inflow->inflow": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": 0
+  },
+  "breach->breach": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": 0
+  },
+  "breach->harvey": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": null
+  },
+  "harvey->breach": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": null
+  },
+  "harvey->harvey": {
+    "csi": null,
+    "allwet_csi": null,
+    "S": null,
+    "ets": null,
+    "volume_ratio": null,
+    "arrival": null,
+    "n": 0,
+    "gate_pass": 0
+  }
+}

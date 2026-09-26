@@ -1,0 +1,27 @@
+runs found: {'distributed': [0]}
+
+Synthetic 3 x 3 (30-step rollout, 15 events; arrival in minutes)
+| Trained on | Tested on | Seeds | CSI | All-wet CSI | S | ETS | Volume ratio | Arrival (min) |
+|---|---|---|---|---|---|---|---|---|
+| point | point (own) | 0 | - | - | - | - | - | - |
+| point | distributed | 0 | - | - | - | - | - | - |
+| point | inflow | 0 | - | - | - | - | - | - |
+| distributed | point | 1 | 0.062 [0.062, 0.062] | 0.080 [0.080, 0.080] | -0.020 [-0.020, -0.020] | -0.029 [-0.029, -0.029] | 0.47x [0.47, 0.47] | 17.3 [17.3, 17.3] |
+| distributed | distributed (own) | 1 | 0.885 [0.885, 0.885] | 1.000 [1.000, 1.000] | - | 0.000 [0.000, 0.000] | 0.90x [0.90, 0.90] | 4.4 [4.4, 4.4] |
+| distributed | inflow | 1 | 0.126 [0.126, 0.126] | 0.150 [0.150, 0.150] | -0.028 [-0.028, -0.028] | 0.006 [0.006, 0.006] | 0.40x [0.40, 0.40] | 16.1 [16.1, 16.1] |
+| inflow | point | 0 | - | - | - | - | - | - |
+| inflow | distributed | 0 | - | - | - | - | - | - |
+| inflow | inflow (own) | 0 | - | - | - | - | - | - |
+  seeds passing the gate: {'distributed': '1/1'}
+
+Real 2 x 2 (40-step rollout, 19 events; arrival in hours)
+| Trained on | Tested on | Seeds | CSI | All-wet CSI | S | ETS | Volume ratio | Arrival (h) |
+|---|---|---|---|---|---|---|---|---|
+| breach | breach (own) | 0 | - | - | - | - | - | - |
+| breach | harvey | 0 | - | - | - | - | - | - |
+| harvey | breach | 0 | - | - | - | - | - | - |
+| harvey | harvey (own) | 0 | - | - | - | - | - | - |
+  seeds passing the gate: {}
+
+  saved results/result_exp18_summary.json and reports/exp18_summary.md
+  saved figL_trained_synthetic.png/.pdf
