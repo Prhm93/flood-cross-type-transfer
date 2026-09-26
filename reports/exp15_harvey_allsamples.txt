@@ -2,3 +2,4 @@ training exp15_harvey_allsamples_h64_s0: 1063 samples, all per epoch, 100 epochs
     epoch   0  loss=0.008403  lr=1.0e-03
     epoch  10  loss=0.006951  lr=1.0e-03
     epoch  20  loss=0.006547  lr=1.0e-03
+    epoch  30  loss=0.006257  lr=1.0e-03
