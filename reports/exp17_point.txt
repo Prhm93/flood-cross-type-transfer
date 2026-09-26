@@ -1,0 +1,10 @@
+/root/projects/floodtransfer/scripts/exp17_multistep.py:107: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)
+  tot, n = tot + float(loss), n + 1
+    epoch   0  k=1  loss=0.001708  lr=1.0e-03
+    epoch  10  k=2  loss=0.000024  lr=1.0e-03
+    epoch  20  k=4  loss=0.000041  lr=2.5e-04
+    epoch  30  k=5  loss=0.000045  lr=6.3e-05
+    epoch  40  k=7  loss=0.000066  lr=3.1e-05
+    epoch  50  k=8  loss=0.000068  lr=7.8e-06
+    epoch  60  k=8  loss=0.000068  lr=2.0e-06
