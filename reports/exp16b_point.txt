@@ -1,0 +1,5 @@
+    epoch   0  loss=0.003327  lr=1.0e-03
+    epoch  20  loss=0.000015  lr=1.0e-03
+    epoch  40  loss=0.000012  lr=5.0e-04
+    epoch  60  loss=0.000012  lr=6.3e-05
+    epoch  80  loss=0.000011  lr=7.8e-06
