@@ -8,3 +8,11 @@
     epoch  70  k=8  loss=0.000077  lr=4.9e-07
     epoch  80  k=8  loss=0.000066  lr=2.4e-07
     epoch  90  k=8  loss=0.000077  lr=6.1e-08
+    epoch  99  k=8  loss=0.000079  lr=1.5e-08
+/root/projects/floodtransfer/scripts/exp17_multistep.py:45: RuntimeWarning: All-NaN slice encountered
+  'ets': float(np.nanmedian(ef)), 'volume_ratio': float(volume_ratio(roll)),
+  HOME point       CSI 0.1402 (all-wet 0.0799, S +0.066)  ETS +0.0689  vol 0.73x  arrival 8.45
+  away distributed CSI 1.0000 (all-wet 1.0000, S +nan)  ETS +nan  vol 13.04x  arrival 1.81
+  away inflow      CSI 0.2755 (all-wet 0.1502, S +0.147)  ETS +0.1549  vol 1.35x  arrival 5.47
+
+  GATE: FAIL   [5.4 min]

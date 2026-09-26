@@ -8,3 +8,9 @@
     epoch  70  k=8  loss=0.000005  lr=9.8e-07
     epoch  80  k=8  loss=0.000005  lr=2.4e-07
     epoch  90  k=8  loss=0.000005  lr=6.1e-08
+    epoch  99  k=8  loss=0.000005  lr=3.1e-08
+  away point       CSI 0.0294 (all-wet 0.0799, S -0.055)  ETS -0.0456  vol 1.26x  arrival 8.97
+  HOME distributed CSI 0.7706 (all-wet 1.0000, S +nan)  ETS +0.0000  vol 0.76x  arrival 4.01
+  away inflow      CSI 0.1191 (all-wet 0.1502, S -0.037)  ETS -0.0097  vol 1.32x  arrival 7.53
+
+  GATE: PASS   [5.4 min]
