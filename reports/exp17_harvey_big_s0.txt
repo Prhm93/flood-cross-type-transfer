@@ -8,3 +8,4 @@
     epoch  60  k=8  loss=0.011602  lr=2.0e-06
     epoch  70  k=8  loss=0.011253  lr=9.8e-07
     epoch  80  k=8  loss=0.011764  lr=2.4e-07
+    epoch  90  k=8  loss=0.011070  lr=6.1e-08
