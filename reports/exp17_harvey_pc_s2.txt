@@ -5,3 +5,5 @@
     epoch  30  k=5  loss=0.010336  lr=6.3e-05
     epoch  40  k=7  loss=0.011496  lr=3.1e-05
     epoch  50  k=8  loss=0.011697  lr=7.8e-06
+    epoch  60  k=8  loss=0.011580  lr=2.0e-06
+    epoch  70  k=8  loss=0.011462  lr=9.8e-07
