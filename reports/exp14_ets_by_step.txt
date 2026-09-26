@@ -1,0 +1,10 @@
+median ETS over 19 events at each rollout step (0 = chance)
+model            test    s1      s2      s3      s5      s10     s20     s30     s40    
+small breach s0  breach  +1.000  +0.000  +0.000  +0.004  +0.021  +0.001  +0.001  +0.001 
+small breach s0  harvey  +1.000  -0.001  -0.004  -0.003  -0.002  -0.001  -0.001  -0.001 
+small harvey s0  breach  +1.000  +0.000  +0.000  +0.000  +0.018  +0.039  +0.060  +0.075 
+small harvey s0  harvey  +1.000  +0.000  -0.006  -0.031  -0.017  -0.022  -0.022  -0.005 
+large breach s0  breach  +1.000  +0.000  +0.000  -0.000  +0.032  +0.060  +0.063  +0.074 
+large breach s0  harvey  +1.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000 
+large harvey s0  breach  +1.000  +0.000  +0.000  +0.000  -0.002  -0.004  -0.004  -0.004 
+large harvey s0  harvey  +1.000  +0.000  +0.006  +0.008  +0.030  +0.031  +0.015  +0.016 
