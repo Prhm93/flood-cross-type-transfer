@@ -1,3 +1,4 @@
   breach source channel added (log-scale max 7.83)
     epoch   0  k=1  loss=0.008397  lr=1.0e-03
     epoch  10  k=2  loss=0.008208  lr=1.0e-03
+    epoch  20  k=4  loss=0.009598  lr=2.5e-04

@@ -1,0 +1,16 @@
+    epoch   0  k=1  loss=0.001857  lr=1.0e-03
+    epoch  10  k=2  loss=0.000002  lr=1.0e-03
+    epoch  20  k=4  loss=0.000003  lr=5.0e-04
+    epoch  30  k=5  loss=0.000005  lr=1.3e-04
+    epoch  40  k=7  loss=0.000006  lr=6.3e-05
+    epoch  50  k=8  loss=0.000005  lr=1.6e-05
+    epoch  60  k=8  loss=0.000005  lr=3.9e-06
+    epoch  70  k=8  loss=0.000004  lr=2.0e-06
+    epoch  80  k=8  loss=0.000005  lr=4.9e-07
+    epoch  90  k=8  loss=0.000005  lr=1.2e-07
+    epoch  99  k=8  loss=0.000005  lr=6.1e-08
+  away point       CSI 0.1302 (all-wet 0.0799, S +0.055)  ETS +0.0942  vol 0.03x  arrival 12.05
+  HOME distributed CSI 0.7345 (all-wet 1.0000, S +nan)  ETS +0.0000  vol 0.64x  arrival 4.88
+  away inflow      CSI 0.2099 (all-wet 0.1502, S +0.070)  ETS +0.1590  vol 0.06x  arrival 11.67
+
+  GATE: PASS   [5.1 min]
