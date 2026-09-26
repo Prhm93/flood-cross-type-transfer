@@ -1,0 +1,36 @@
+{
+  "config": {
+    "data": "distributed",
+    "seed": 1,
+    "epochs": 100,
+    "kmax": 8,
+    "preclamp": false
+  },
+  "scores": {
+    "point": {
+      "csi": 0.0,
+      "allwet_csi": 0.0798611111111111,
+      "S": -0.08679245283018867,
+      "ets": 0.0,
+      "volume_ratio": 3.580251312292032e-05,
+      "arrival_h": 0.0
+    },
+    "distributed": {
+      "csi": 0.0,
+      "allwet_csi": 1.0,
+      "S": NaN,
+      "ets": 0.0,
+      "volume_ratio": 3.5802513351348044e-05,
+      "arrival_h": NaN
+    },
+    "inflow": {
+      "csi": 0.0,
+      "allwet_csi": 0.1501736111111111,
+      "S": -0.1767109295199183,
+      "ets": 0.0,
+      "volume_ratio": 0.0,
+      "arrival_h": NaN
+    }
+  },
+  "gate": false
+}

@@ -70,11 +70,13 @@ def breach_source(samples, depth_max_m, scale=None):
     return out, scale
 
 
+PRECLAMP = False
+
+
 def step(model, cur, sta, ei, src_next):
     delta = model(cur, sta, ei)
-    dep = torch.relu(cur[:, 0:1] + delta[:, 0:1])
-    vel = cur[:, 1:3] + delta[:, 1:3]
-    return torch.cat([dep, vel, src_next], dim=1)
+    raw = cur[:, :3] + delta
+    return torch.cat([torch.relu(raw[:, 0:1]), raw[:, 1:3], src_next], dim=1), raw
 
 
 def train_multistep(model, samples, device, epochs, kmax, ckpt, lr=1e-3):
@@ -97,14 +99,14 @@ def train_multistep(model, samples, device, epochs, kmax, ckpt, lr=1e-3):
             t0 = np.random.randint(0, T - k)
             cur, loss = dyn[:, t0, :], 0.0
             for j in range(k):
-                cur = step(model, cur, sta, ei, dyn[:, t0 + j + 1, 3:4])
-                loss = loss + F.mse_loss(cur[:, :3], dyn[:, t0 + j + 1, :3])
+                cur, raw = step(model, cur, sta, ei, dyn[:, t0 + j + 1, 3:4])
+                loss = loss + F.mse_loss(raw if PRECLAMP else cur[:, :3], dyn[:, t0 + j + 1, :3])
             loss = loss / k
             opt.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
-            tot, n = tot + float(loss), n + 1
+            tot, n = tot + float(loss.detach()), n + 1
         ep_loss = tot / max(n, 1)
         sched.step(ep_loss)
         if k == kmax and ep_loss < best:
@@ -119,20 +121,26 @@ def train_multistep(model, samples, device, epochs, kmax, ckpt, lr=1e-3):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--data', choices=SYN + ('breach',), required=True)
+    ap.add_argument('--data', choices=SYN + ('breach', 'harvey'), required=True)
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--epochs', type=int, default=100)
     ap.add_argument('--kmax', type=int, default=8)
+    ap.add_argument('--preclamp', action='store_true')
     a = ap.parse_args()
-    ck = os.path.join(R, f'exp15_ms_{a.data}_k{a.kmax}_s{a.seed}.pt')
-    js = os.path.join(R, f'result_exp17_ms_{a.data}_k{a.kmax}_s{a.seed}.json')
+    global PRECLAMP
+    PRECLAMP = a.preclamp
+    tag = '_pc' if a.preclamp else ''
+    ck = os.path.join(R, f'exp15_ms_{a.data}_k{a.kmax}{tag}_s{a.seed}.pt')
+    js = os.path.join(R, f'result_exp17_ms_{a.data}_k{a.kmax}{tag}_s{a.seed}.json')
     if os.path.exists(js):
         sys.exit(f'{js} exists - not overwritten')
     device = get_device()
-    if a.data == 'breach':
+    if a.data in ('breach', 'harvey'):
         cache = load_cache()
         dmax = float(json.load(open(os.path.join(R, 'scaler.json')))['dynamic_max'][0])
         train, scale = breach_source(cache['breach']['train'], dmax)
+        if a.data == 'harvey':
+            train = cache['harvey']['train']
         tests = {'breach': (breach_source(cache['breach']['test'], dmax, scale)[0], 40, 19),
                  'harvey': (cache['harvey']['test'], 40, 19)}
         print(f"  breach source channel added (log-scale max {scale:.2f})")
