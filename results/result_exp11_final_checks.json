@@ -1,0 +1,260 @@
+{
+  "params_vector": 42371,
+  "params_scalar": 42307,
+  "per_step": {
+    "breach": {
+      "allwet": {
+        "5": 0.022705078125,
+        "10": 0.040771484375,
+        "20": 0.072509765625,
+        "30": 0.110107421875,
+        "40": 0.130615234375
+      },
+      "breach": {
+        "5": {
+          "csi": 0.01652892561983471,
+          "S": -0.006319640434963033
+        },
+        "10": {
+          "csi": 0.06564201088696765,
+          "S": 0.02592763466353258
+        },
+        "20": {
+          "csi": 0.07785016286644951,
+          "S": 0.005757901316393049
+        },
+        "30": {
+          "csi": 0.1109460128776622,
+          "S": 0.0009423508221959904
+        },
+        "40": {
+          "csi": 0.13165680473372782,
+          "S": 0.0011980545322519342
+        }
+      },
+      "harvey": {
+        "5": {
+          "csi": 0.0,
+          "S": -0.023232575568323758
+        },
+        "10": {
+          "csi": 0.031088082901554404,
+          "S": -0.010094989166513912
+        },
+        "20": {
+          "csi": 0.05719392314566577,
+          "S": -0.016513211580772045
+        },
+        "30": {
+          "csi": 0.06598984771573604,
+          "S": -0.04957629183987522
+        },
+        "40": {
+          "csi": 0.09292035398230089,
+          "S": -0.04335811010628912
+        }
+      }
+    },
+    "harvey": {
+      "allwet": {
+        "5": 0.17577353522053982,
+        "10": 0.23554603854389722,
+        "20": 0.22646477946017116,
+        "30": 0.4292297564186965,
+        "40": 0.5662650602409639
+      },
+      "breach": {
+        "5": {
+          "csi": 0.17577353522053982,
+          "S": 0.0
+        },
+        "10": {
+          "csi": 0.23369565217391305,
+          "S": -0.0024205334307635983
+        },
+        "20": {
+          "csi": 0.2259577795152463,
+          "S": -0.0006554322692262769
+        },
+        "30": {
+          "csi": 0.39296187683284456,
+          "S": -0.06354199433784206
+        },
+        "40": {
+          "csi": 0.5141843971631206,
+          "S": -0.12007486209613877
+        }
+      },
+      "harvey": {
+        "5": {
+          "csi": 0.15180722891566265,
+          "S": -0.02907733169098117
+        },
+        "10": {
+          "csi": 0.19726858877086495,
+          "S": -0.0500716219720058
+        },
+        "20": {
+          "csi": 0.23583333333333334,
+          "S": 0.012111347517730516
+        },
+        "30": {
+          "csi": 0.35446685878962536,
+          "S": -0.13098597635358594
+        },
+        "40": {
+          "csi": 0.4928684627575277,
+          "S": -0.16921993308681124
+        }
+      }
+    }
+  },
+  "recount": {
+    "breach->breach_s0": {
+      "n": 19,
+      "raw_rule": 0,
+      "S_rule": 0,
+      "beat_allwet": 15,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "breach->breach_s1": {
+      "n": 19,
+      "raw_rule": 0,
+      "S_rule": 0,
+      "beat_allwet": 17,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "breach->breach_s2": {
+      "n": 19,
+      "raw_rule": 0,
+      "S_rule": 0,
+      "beat_allwet": 19,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "breach->harvey_s0": {
+      "n": 19,
+      "raw_rule": 9,
+      "S_rule": 9,
+      "beat_allwet": 1,
+      "beat_allwet_and_bad_volume": 1
+    },
+    "breach->harvey_s1": {
+      "n": 19,
+      "raw_rule": 9,
+      "S_rule": 9,
+      "beat_allwet": 2,
+      "beat_allwet_and_bad_volume": 2
+    },
+    "breach->harvey_s2": {
+      "n": 19,
+      "raw_rule": 9,
+      "S_rule": 8,
+      "beat_allwet": 1,
+      "beat_allwet_and_bad_volume": 1
+    },
+    "harvey->breach_s0": {
+      "n": 19,
+      "raw_rule": 0,
+      "S_rule": 0,
+      "beat_allwet": 14,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "harvey->breach_s1": {
+      "n": 19,
+      "raw_rule": 9,
+      "S_rule": 9,
+      "beat_allwet": 2,
+      "beat_allwet_and_bad_volume": 2
+    },
+    "harvey->breach_s2": {
+      "n": 19,
+      "raw_rule": 0,
+      "S_rule": 0,
+      "beat_allwet": 0,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "harvey->harvey_s0": {
+      "n": 19,
+      "raw_rule": 8,
+      "S_rule": 8,
+      "beat_allwet": 0,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "harvey->harvey_s1": {
+      "n": 19,
+      "raw_rule": 0,
+      "S_rule": 0,
+      "beat_allwet": 0,
+      "beat_allwet_and_bad_volume": 0
+    },
+    "harvey->harvey_s2": {
+      "n": 19,
+      "raw_rule": 9,
+      "S_rule": 9,
+      "beat_allwet": 5,
+      "beat_allwet_and_bad_volume": 5
+    }
+  },
+  "table16": {
+    "breach_s0_on_breach": {
+      "csi": 0.16493250452698932,
+      "volume_ratio": 2.2856586627272866,
+      "arrival_h": 12.542530125903134
+    },
+    "breach_s0_on_harvey": {
+      "csi": 0.5610972122306153,
+      "volume_ratio": 131.0198507403099,
+      "arrival_h": 15.435771399453337
+    },
+    "breach_s1_on_breach": {
+      "csi": 0.1657394064121489,
+      "volume_ratio": 1.8418609332589317,
+      "arrival_h": 13.324982352327492
+    },
+    "breach_s1_on_harvey": {
+      "csi": 0.5268759802433295,
+      "volume_ratio": 89.36693842626909,
+      "arrival_h": 13.657040912043362
+    },
+    "breach_s2_on_breach": {
+      "csi": 0.19309220937690283,
+      "volume_ratio": 0.804696907885965,
+      "arrival_h": 12.301896330504338
+    },
+    "breach_s2_on_harvey": {
+      "csi": 0.44412529151613517,
+      "volume_ratio": 85.58574066916286,
+      "arrival_h": 15.5495948724945
+    },
+    "harvey_s0_on_breach": {
+      "csi": 0.18530392840693255,
+      "volume_ratio": 0.33017442050077467,
+      "arrival_h": 13.797777817137076
+    },
+    "harvey_s0_on_harvey": {
+      "csi": 0.4886291846123556,
+      "volume_ratio": 12.481719338981213,
+      "arrival_h": 14.238146201060754
+    },
+    "harvey_s1_on_breach": {
+      "csi": 0.09578403992137481,
+      "volume_ratio": 0.02929724737561054,
+      "arrival_h": 15.53921489000654
+    },
+    "harvey_s1_on_harvey": {
+      "csi": 0.25195551754649753,
+      "volume_ratio": 2.2974029580376323,
+      "arrival_h": 13.023151316247501
+    },
+    "harvey_s2_on_breach": {
+      "csi": 0.06914647595669847,
+      "volume_ratio": 1.0425785624729216,
+      "arrival_h": 11.719957924015898
+    },
+    "harvey_s2_on_harvey": {
+      "csi": 0.5125835009108904,
+      "volume_ratio": 14.815928204226566,
+      "arrival_h": 13.012140983506649
+    }
+  }
+}

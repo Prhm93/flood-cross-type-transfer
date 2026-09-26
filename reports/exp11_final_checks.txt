@@ -1,0 +1,152 @@
+======================================================================
+[3] UNVERIFIED v3 numbers
+======================================================================
+    vector model parameters: 42,371   (v3 says vector 42,371; scalar 42,339)
+    scalar model parameters: 42,307   (v3 says vector 42,371; scalar 42,339)
+  result_harvey_scalar_s0.json
+    home_scores.csi_final = 0.5357526648801056
+    home_scores.csi_mean = 0.2794814656974373
+    away_scores.csi_final = 0.15988065354635472
+    away_scores.csi_mean = 0.08253786658673261
+    transfer_gap.retained_pct = 29.842250730033026
+  result_harvey_scalar_s1.json
+    home_scores.csi_final = 0.4462596889377228
+    home_scores.csi_mean = 0.292462742021557
+    away_scores.csi_final = 0.15879566359643044
+    away_scores.csi_mean = 0.08020804450744182
+    transfer_gap.retained_pct = 35.58368984086998
+  result_harvey_scalar_s2.json
+    home_scores.csi_final = 0.4838949136394124
+    home_scores.csi_mean = 0.31616587240035576
+    away_scores.csi_final = 0.10613876571262668
+    away_scores.csi_mean = 0.07465290594176244
+    transfer_gap.retained_pct = 21.934259427186063
+  result_harvey_vector_s0.json
+    home_scores.csi_final = 0.4886291846123556
+    home_scores.csi_mean = 0.29629905697921677
+    away_scores.csi_final = 0.18530392840693255
+    away_scores.csi_mean = 0.11354328487638277
+    transfer_gap.retained_pct = 37.92322158446999
+  result_harvey_vector_s1.json
+    home_scores.csi_final = 0.25195551754649753
+    home_scores.csi_mean = 0.22268489484154483
+    away_scores.csi_final = 0.09578403992137481
+    away_scores.csi_mean = 0.038999449902658044
+    transfer_gap.retained_pct = 38.016250191345065
+  result_harvey_vector_s2.json
+    home_scores.csi_final = 0.5125835009108904
+    home_scores.csi_mean = 0.32114040841210995
+    away_scores.csi_final = 0.06914647595669847
+    away_scores.csi_mean = 0.053050162663895645
+    transfer_gap.retained_pct = 13.489797434724528
+  result_exp2_rainfall_ablation.json
+    [0].home.csi_final = 0.17052870115999313
+    [0].home.csi_mean = 0.10373781464613223
+    [0].home.csi_final_std = 0.07463632036807515
+    [0].away.csi_final = 0.5504136733859696
+    [0].away.csi_mean = 0.32922834457464906
+    [0].away.csi_final_std = 0.22351492232383968
+    [0].retained_pct = 322.76893545888294
+    [1].home.csi_final = 0.18922408927165976
+    [1].home.csi_mean = 0.1195133353673895
+    [1].home.csi_final_std = 0.06893495032065731
+    [1].away.csi_final = 0.5096991341787938
+    [1].away.csi_mean = 0.3288454552090904
+    [1].away.csi_final_std = 0.18913215246124304
+    [1].retained_pct = 269.3627096532322
+    [2].home.csi_final = 0.18821673776285727
+    [2].home.csi_mean = 0.11268446358213073
+    [2].home.csi_final_std = 0.08299170336442006
+    [2].away.csi_final = 0.48597229867942626
+    [2].away.csi_mean = 0.3116917310168046
+    [2].away.csi_final_std = 0.197802750416637
+    [2].retained_pct = 258.19823701956017
+    [3].home.csi_final = 0.48237507736706303
+    [3].home.csi_mean = 0.290399684604936
+    [3].home.csi_final_std = 0.17027843651777483
+    [3].away.csi_final = 0.21156240919400457
+    [3].away.csi_mean = 0.045206110153677675
+    [3].away.csi_final_std = 0.09505788739713504
+    [3].retained_pct = 43.85848670888448
+    [4].home.csi_final = 0.54534170926881
+    [4].home.csi_mean = 0.3372688023624559
+    [4].home.csi_final_std = 0.20464259301678372
+    [4].away.csi_final = 0.20606327666177163
+    [4].away.csi_mean = 0.10480447732261293
+    [4].away.csi_final_std = 0.08854293324868273
+    [4].retained_pct = 37.78608405692271
+    [5].home.csi_final = 0.48009598250419544
+    [5].home.csi_mean = 0.3150567135809574
+    [5].home.csi_final_std = 0.17557530732392476
+    [5].away.csi_final = 0.16232882501719215
+    [5].away.csi_mean = 0.09349311407228253
+    [5].away.csi_final_std = 0.07456322085725425
+    [5].retained_pct = 33.81174409552023
+
+======================================================================
+[1a] exp5 large model: stored values
+======================================================================
+    look for any Harvey HOME CSI above 0.6309 (the all-wet score)
+  checkpoints that look like exp5: ['arch_large_breach_s3.pt', 'arch_large_breach_s2.pt', 'arch_large_breach_s0.pt', 'arch_large_harvey_s4.pt', 'arch_large_breach_s1.pt', 'arch_large_harvey_s1.pt', 'arch_large_breach_s4.pt', 'arch_large_harvey_s0.pt', 'arch_large_harvey_s2.pt', 'arch_large_harvey_s3.pt']
+  train_model signature: (model, train_samples, device, epochs=60, lr=0.001, max_train_samples=200, ckpt_path=None, verbose=True, log_every=15)
+    train.py L281: parser.add_argument('--epochs', type=int, default=30)
+    train.py L331: print(f"  TRAINING — {args.epochs} epochs")
+    train.py L337: for epoch in range(args.epochs):
+    train.py L342: max_samples=args.max_train_samples
+    train.py L361: if epoch % 5 == 0 or epoch == args.epochs - 1:
+    train.py L421: 'epochs': args.epochs,
+
+  loading cache (about a minute) ...
+
+======================================================================
+[1b] CSI by rollout step vs flooding everything (S = skill vs all-wet)
+======================================================================
+
+  test breach (41 frames): all-wet CSI by step s5=0.023  s10=0.041  s20=0.073  s30=0.110  s40=0.131
+    breach-trained:  s5 CSI 0.017 S -0.006  s10 CSI 0.066 S +0.026  s20 CSI 0.078 S +0.006  s30 CSI 0.111 S +0.001  s40 CSI 0.132 S +0.001
+    harvey-trained:  s5 CSI 0.000 S -0.023  s10 CSI 0.031 S -0.010  s20 CSI 0.057 S -0.017  s30 CSI 0.066 S -0.050  s40 CSI 0.093 S -0.043
+
+  test harvey (41 frames): all-wet CSI by step s5=0.176  s10=0.236  s20=0.226  s30=0.429  s40=0.566
+    breach-trained:  s5 CSI 0.176 S +0.000  s10 CSI 0.234 S -0.002  s20 CSI 0.226 S -0.001  s30 CSI 0.393 S -0.064  s40 CSI 0.514 S -0.120
+    harvey-trained:  s5 CSI 0.152 S -0.029  s10 CSI 0.197 S -0.050  s20 CSI 0.236 S +0.012  s30 CSI 0.354 S -0.131  s40 CSI 0.493 S -0.169
+
+======================================================================
+[2] per-event recount (bad volume = above 5x or below 0.2x)
+======================================================================
+    breach->breach s0: raw rule 0/19 | S rule 0 | beat all-wet 15 | beat all-wet AND bad volume 0
+    breach->breach s1: raw rule 0/19 | S rule 0 | beat all-wet 17 | beat all-wet AND bad volume 0
+    breach->breach s2: raw rule 0/19 | S rule 0 | beat all-wet 19 | beat all-wet AND bad volume 0
+    breach->harvey s0: raw rule 9/19 | S rule 9 | beat all-wet 1 | beat all-wet AND bad volume 1
+    breach->harvey s1: raw rule 9/19 | S rule 9 | beat all-wet 2 | beat all-wet AND bad volume 2
+    breach->harvey s2: raw rule 9/19 | S rule 8 | beat all-wet 1 | beat all-wet AND bad volume 1
+    harvey->breach s0: raw rule 0/19 | S rule 0 | beat all-wet 14 | beat all-wet AND bad volume 0
+    harvey->breach s1: raw rule 9/19 | S rule 9 | beat all-wet 2 | beat all-wet AND bad volume 2
+    harvey->breach s2: raw rule 0/19 | S rule 0 | beat all-wet 0 | beat all-wet AND bad volume 0
+    harvey->harvey s0: raw rule 8/19 | S rule 8 | beat all-wet 0 | beat all-wet AND bad volume 0
+    harvey->harvey s1: raw rule 0/19 | S rule 0 | beat all-wet 0 | beat all-wet AND bad volume 0
+    harvey->harvey s2: raw rule 9/19 | S rule 9 | beat all-wet 5 | beat all-wet AND bad volume 5
+    CHECK: breach->harvey s0 raw rule should be 9/19 (v3 Table 15)
+
+======================================================================
+[4] Table 16 for seeds 0-2 (arrival in hours)
+======================================================================
+    breach s0 on breach: CSI 0.165  vol 2.29x  arrival 12.5 h
+    breach s0 on harvey: CSI 0.561  vol 131.02x  arrival 15.4 h
+    breach s1 on breach: CSI 0.166  vol 1.84x  arrival 13.3 h
+    breach s1 on harvey: CSI 0.527  vol 89.37x  arrival 13.7 h
+    breach s2 on breach: CSI 0.193  vol 0.80x  arrival 12.3 h
+    breach s2 on harvey: CSI 0.444  vol 85.59x  arrival 15.5 h
+    harvey s0 on breach: CSI 0.185  vol 0.33x  arrival 13.8 h
+    harvey s0 on harvey: CSI 0.489  vol 12.48x  arrival 14.2 h
+    harvey s1 on breach: CSI 0.096  vol 0.03x  arrival 15.5 h
+    harvey s1 on harvey: CSI 0.252  vol 2.30x  arrival 13.0 h
+    harvey s2 on breach: CSI 0.069  vol 1.04x  arrival 11.7 h
+    harvey s2 on harvey: CSI 0.513  vol 14.82x  arrival 13.0 h
+  medians across seeds, with verdict (away vs own):
+    breach: own CSI 0.166 vol 1.84x arr 12.5 h | other CSI 0.527 vol 89.37x arr 15.4 h
+      CSI flatters: True | volume reports failure: True | arrival reports failure: True
+    harvey: own CSI 0.489 vol 12.48x arr 13.0 h | other CSI 0.096 vol 0.33x arr 13.8 h
+      CSI flatters: False | volume reports failure: False | arrival reports failure: False
+  v3 seed-0: breach own 0.165/2.29x/12.5h, other 0.561/131.0x/15.4h; harvey own 0.489/12.48x/14.2h, other 0.185/0.33x/13.8h
+
+  saved /root/projects/floodtransfer/results/result_exp11_final_checks.json
