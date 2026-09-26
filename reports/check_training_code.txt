@@ -1,0 +1,241 @@
+def train_one_epoch(model, samples, optimizer, device, max_samples=None,
+                    window=20):
+    """One pass. If optimizer is None, computes loss without updating."""
+    model.train() if optimizer is not None else model.eval()
+    total_loss, n_steps = 0.0, 0
+
+    if max_samples and len(samples) > max_samples:
+        indices = np.random.choice(len(samples), max_samples, replace=False)
+    else:
+        indices = np.arange(len(samples))
+
+    for idx in indices:
+        s = samples[idx]
+        dyn = torch.as_tensor(s['nodes_dynamic'], dtype=torch.float32, device=device)
+        sta = torch.as_tensor(s['nodes_static'], dtype=torch.float32, device=device)
+        ei = torch.as_tensor(s['edge_index'], dtype=torch.long, device=device)
+
+        N, T, _ = dyn.shape
+        if T < 3:
+            continue
+
+        w = min(window, T - 1)
+        t0 = np.random.randint(0, T - w)
+
+        loss_sum = 0.0
+        for t in range(t0, t0 + w):
+            cur = dyn[:, t, :]
+            nxt = dyn[:, t + 1, :]
+            target = nxt[:, :3] - cur[:, :3]
+            pred = model(cur, sta, ei)
+            loss_sum = loss_sum + nn.functional.mse_loss(pred, target)
+            n_steps += 1
+
+        if optimizer is not None:
+            optimizer.zero_grad()
+            (loss_sum / w).backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizer.step()
+        else:
+            loss_sum = loss_sum.detach()
+
+        total_loss += float(loss_sum.detach()) if torch.is_tensor(loss_sum) else float(loss_sum)
+
+    return total_loss / max(n_steps, 1)
+
+
+def train_model(model, train_samples, device, epochs=60, lr=1e-3,
+                max_train_samples=200, ckpt_path=None, verbose=True,
+                log_every=15):
+    """Full training loop. Returns the best training loss."""
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    sched = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5,
+                                                        factor=0.5)
+    best, best_ep = float('inf'), 0
+
+    for ep in range(epochs):
+        loss = train_one_epoch(model, train_samples, optimizer, device,
+                                max_samples=max_train_samples)
+        sched.step(loss)
+        if loss < best:
+            best, best_ep = loss, ep
+            if ckpt_path:
+                torch.save(model.state_dict(), ckpt_path)
+        if verbose and (ep % log_every == 0 or ep == epochs - 1):
+            print(f"    epoch {ep:3d}  loss={loss:.6f}  "
+                  f"lr={optimizer.param_groups[0]['lr']:.1e}")
+
+    if ckpt_path and os.path.exists(ckpt_path):
+        model.load_state_dict(torch.load(ckpt_path, map_location=device,
+                                          weights_only=True))
+    if verbose:
+        print(f"    best epoch {best_ep} (loss {best:.6f})")
+    return best
+
+
+# ------------------------------------------------------------------ #
+# EVALUATION
+# ------------------------------------------------------------------ #
+
+@torch.no_grad()
+def rollout_predictions(model, samples, device, max_steps=40, max_samples=19):
+def rollout_predictions(model, samples, device, max_steps=40, max_samples=19):
+    """
+    Run autoregressive rollout and return the raw predicted and true depth
+    sequences, WITHOUT scoring. Scoring is separate so the same rollout can
+    be scored at many thresholds (the threshold-sweep experiment).
+
+    Returns a list of (pred_seq, true_seq), each shaped (steps+1, N).
+    """
+    model.eval()
+    out = []
+
+    for idx in range(min(max_samples, len(samples))):
+        s = samples[idx]
+        dyn = torch.as_tensor(s['nodes_dynamic'], dtype=torch.float32, device=device)
+        sta = torch.as_tensor(s['nodes_static'], dtype=torch.float32, device=device)
+        ei = torch.as_tensor(s['edge_index'], dtype=torch.long, device=device)
+
+        N, T, _ = dyn.shape
+        steps = min(max_steps, T - 1)
+        if steps < 2:
+            continue
+
+        cur = dyn[:, 0, :].clone()
+        preds = [cur[:, 0].cpu().numpy()]
+        trues = [dyn[:, 0, 0].cpu().numpy()]
+
+        for t in range(steps):
+            delta = model(cur, sta, ei)
+            new = cur.clone()
+            new[:, :3] = cur[:, :3] + delta
+            new[:, 0] = torch.clamp(new[:, 0], min=0.0)
+            if t + 1 < T:
+                new[:, 3] = dyn[:, t + 1, 3]   # rainfall is an external driver
+            cur = new
+            preds.append(cur[:, 0].cpu().numpy())
+            trues.append(dyn[:, min(t + 1, T - 1), 0].cpu().numpy())
+
+        out.append((np.stack(preds, 0), np.stack(trues, 0)))
+
+    return out
+
+
+def score_rollouts(rollouts, threshold_mode='auto', threshold_value=None,
+class FloodGNN(nn.Module):
+    """
+    The complete model.
+
+    variant='vector': input has vx and vy separately (5 input features)
+    variant='scalar': input has speed only (4 input features)
+    """
+
+    def __init__(self, variant='vector', hidden=64, num_layers=3):
+        super().__init__()
+        self.variant = variant
+
+        # Input size depends on variant
+        if variant == 'vector':
+            in_channels = 5  # depth + vx + vy + rain + elevation
+        elif variant == 'scalar':
+            in_channels = 4  # depth + speed + rain + elevation
+        else:
+            raise ValueError(f"variant must be 'vector' or 'scalar', got {variant}")
+
+        # Encoder: raw features -> hidden dimension
+        self.encoder = nn.Sequential(
+            nn.Linear(in_channels, hidden),
+            nn.ReLU(),
+        )
+
+        # Message-passing layers
+        self.layers = nn.ModuleList([
+            MessagePassingLayer(hidden, hidden)
+            for _ in range(num_layers)
+        ])
+
+        # Decoder: hidden -> predicted changes
+        # Always predicts 3 channels: delta_depth, delta_vx, delta_vy
+        self.decoder = nn.Sequential(
+            nn.Linear(hidden, hidden),
+            nn.ReLU(),
+            nn.Linear(hidden, 3),
+        )
+
+    def forward(self, dynamic, static, edge_index):
+        """
+        dynamic:    (N, 4) current timestep — [depth, vx, vy, rain]
+        static:     (N, 1) elevation
+        edge_index: (2, E) graph connectivity
+
+        Returns:    (N, 3) predicted change — [delta_depth, delta_vx, delta_vy]
+        """
+        if self.variant == 'vector':
+            # Keep vx and vy as separate channels
+            x = torch.cat([dynamic, static], dim=-1)  # (N, 5)
+        else:
+            # Replace vx, vy with scalar speed = sqrt(vx² + vy²)
+            depth = dynamic[:, :1]
+            vx = dynamic[:, 1:2]
+            vy = dynamic[:, 2:3]
+            speed = torch.sqrt(vx ** 2 + vy ** 2 + 1e-8)  # small number avoids sqrt(0)
+            rain = dynamic[:, 3:]
+            x = torch.cat([depth, speed, rain, static], dim=-1)  # (N, 4)
+
+        # Encode
+        h = self.encoder(x)
+
+        # Message passing
+        for layer in self.layers:
+            h = layer(h, edge_index)
+
+        # Decode to predicted changes
+        delta = self.decoder(h)
+
+        return delta
+
+
+def count_params(model):
+    """Count trainable parameters."""
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+# ------------------------------------------------------------------ #
+# Self-test
+# ------------------------------------------------------------------ #
+
+if __name__ == "__main__":
+    print("Self-testing model.py ...\n")
+
+    N = 16  # nodes
+    E = 48  # edges
+
+    # Fake data
+    dynamic = torch.randn(N, 4)
+    static = torch.randn(N, 1)
+    edge_index = torch.randint(0, N, (2, E))
+
+    # Test vector variant
+    model_v = FloodGNN(variant='vector', hidden=32, num_layers=2)
+    out_v = model_v(dynamic, static, edge_index)
+    assert out_v.shape == (N, 3), f"vector output shape wrong: {out_v.shape}"
+    print(f"  vector variant: {count_params(model_v):,} params, output {out_v.shape}  OK")
+
+    # Test scalar variant
+    model_s = FloodGNN(variant='scalar', hidden=32, num_layers=2)
+    out_s = model_s(dynamic, static, edge_index)
+    assert out_s.shape == (N, 3), f"scalar output shape wrong: {out_s.shape}"
+    print(f"  scalar variant: {count_params(model_s):,} params, output {out_s.shape}  OK")
+
+    # Check gradient flows
+    loss = out_v.sum()
+    loss.backward()
+    grad_ok = all(p.grad is not None for p in model_v.parameters() if p.requires_grad)
+    assert grad_ok, "some parameters got no gradient"
+    print("  gradients flow to all parameters: OK")
+
+    # Default size
+    model_full = FloodGNN(variant='vector', hidden=64, num_layers=3)
+    print(f"\n  Full model (hidden=64, 3 layers): {count_params(model_full):,} parameters")
+
+    print("\nAll self-tests passed.")

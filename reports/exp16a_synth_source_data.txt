@@ -1,0 +1,10 @@
+  point: generated (34s)
+  distributed: generated (68s)
+  inflow: generated (102s)
+
+  source channel after scaling (min / median of non-zero / max), training sets:
+    point       0.000 / 0.954 / 1.000   cells with a source: 0.04%
+    distributed 0.150 / 0.200 / 0.241   cells with a source: 100.00%
+    inflow      0.000 / 0.563 / 0.683   cells with a source: 2.03%
+
+  saved /root/projects/floodtransfer/data/synth_src_cache.pkl and /root/projects/floodtransfer/results/scaler_synth_source.json  (104s)

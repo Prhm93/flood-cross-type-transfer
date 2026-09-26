@@ -1,0 +1,18 @@
+training exp15_breach_allsamples_h64_s0: 60 samples, all per epoch, 100 epochs
+    epoch   0  loss=0.003352  lr=1.0e-03
+    epoch  10  loss=0.000006  lr=1.0e-03
+    epoch  20  loss=0.000004  lr=5.0e-04
+    epoch  30  loss=0.000005  lr=2.5e-04
+    epoch  40  loss=0.000005  lr=1.3e-04
+    epoch  50  loss=0.000004  lr=3.1e-05
+    epoch  60  loss=0.000004  lr=1.6e-05
+    epoch  70  loss=0.000004  lr=3.9e-06
+    epoch  80  loss=0.000004  lr=3.9e-06
+    epoch  90  loss=0.000004  lr=9.8e-07
+    epoch  99  loss=0.000004  lr=4.9e-07
+    best epoch 96 (loss 0.000003)
+  HOME breach  CSI 0.1993 (all-wet 0.1343, S +0.075)  ETS +0.0664  vol 0.91x  arrival 11.8 h
+  away harvey  CSI 0.5600 (all-wet 0.6309, S -0.192)  ETS -0.0008  vol 117.04x  arrival 15.3 h
+
+  GATE (home ETS >= 0.10, S > 0, volume 0.5-2x): FAIL   [training took 5.9 min]
+  saved /root/projects/floodtransfer/results/result_exp15_breach_allsamples_h64_s0.json

@@ -1,0 +1,16 @@
+{
+  "dynamic_min": [
+    0.0,
+    -2.7112412452697754,
+    -5.157858848571777,
+    0.0
+  ],
+  "dynamic_max": [
+    1.3800474405288696,
+    5.410489082336426,
+    4.784086227416992,
+    10.08403205871582
+  ],
+  "source_transform": "log1p(rate/1e-06)",
+  "fitted_on": "training sets of point, distributed, inflow"
+}
