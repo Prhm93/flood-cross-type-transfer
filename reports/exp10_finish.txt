@@ -1,0 +1,20 @@
+[A] loading cache (about a minute) ...
+    breach  truly wet at final step: median 0.134 | all-wet CSI median 0.1343
+    harvey  truly wet at final step: median 0.631 | all-wet CSI median 0.6309
+    breach  s0: on breach CSI 0.1649 vol 2.29x | on harvey CSI 0.5611 vol 131.02x
+    breach  s1: on breach CSI 0.1657 vol 1.84x | on harvey CSI 0.5269 vol 89.37x
+    breach  s2: on breach CSI 0.1931 vol 0.80x | on harvey CSI 0.4441 vol 85.59x
+    harvey  s0: on breach CSI 0.1853 vol 0.33x | on harvey CSI 0.4886 vol 12.48x
+    harvey  s1: on breach CSI 0.0958 vol 0.03x | on harvey CSI 0.2520 vol 2.30x
+    harvey  s2: on breach CSI 0.0691 vol 1.04x | on harvey CSI 0.5126 vol 14.82x
+
+  SUMMARY (medians across seeds)
+    test breach  all-wet CSI 0.1343 | breach-trained CSI 0.1657 | harvey-trained CSI 0.0958
+    test harvey  all-wet CSI 0.6309 | breach-trained CSI 0.5269 | harvey-trained CSI 0.4886
+  saved /root/projects/floodtransfer/results/result_exp10_saturation_real.json
+
+  house colours found: {'INK': '#1A2332', 'MUTED': '#6B7A8F', 'BREACH': '#1F6FB2', 'HARVEY': '#C9522A', 'GOOD': '#2E7D5B', 'WARN': '#B8860B', 'DANGER': '#A62B2B', 'PAPER': '#FBFAF7', 'DIST': '#1F6FB2', 'POINT': '#C9522A'}
+  saved /root/projects/floodtransfer/results/figures/figJ_synthetic_three_mechanisms.pdf
+  saved /root/projects/floodtransfer/results/figures/figJ_synthetic_three_mechanisms.png
+  saved /root/projects/floodtransfer/results/figures/figK_csi_saturation.pdf
+  saved /root/projects/floodtransfer/results/figures/figK_csi_saturation.png

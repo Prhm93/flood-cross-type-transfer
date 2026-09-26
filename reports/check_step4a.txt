@@ -1,0 +1,142 @@
+]633;E;echo "=== function list and threshold/arrival lines ===";5b0792aa-1aac-44fd-a8d4-cf9b873b565f]633;C=== function list and threshold/arrival lines ===
+src/experiment_lib.py:30:from src.metrics import score, auto_threshold
+src/experiment_lib.py:42:def set_seed(seed):
+src/experiment_lib.py:53:def build_cache(breach_dir='data/breach/raw_datasets',
+src/experiment_lib.py:100:def load_cache(cache_path=CACHE_PATH):
+src/experiment_lib.py:110:def strip_rainfall(samples):
+src/experiment_lib.py:132:def train_one_epoch(model, samples, optimizer, device, max_samples=None,
+src/experiment_lib.py:178:def train_model(model, train_samples, device, epochs=60, lr=1e-3,
+src/experiment_lib.py:212:def rollout_predictions(model, samples, device, max_steps=40, max_samples=19):
+src/experiment_lib.py:216:    be scored at many thresholds (the threshold-sweep experiment).
+src/experiment_lib.py:254:def score_rollouts(rollouts, threshold_mode='auto', threshold_value=None,
+src/experiment_lib.py:259:    threshold_mode:
+src/experiment_lib.py:261:      'relative' — threshold_value as a FRACTION of max true depth
+src/experiment_lib.py:262:      'fixed'    — threshold_value used directly as an absolute depth
+src/experiment_lib.py:271:        if threshold_mode == 'auto':
+src/experiment_lib.py:273:        elif threshold_mode == 'relative':
+src/experiment_lib.py:275:            thr = max(mx * threshold_value, 1e-9)
+src/experiment_lib.py:276:        elif threshold_mode == 'fixed':
+src/experiment_lib.py:277:            thr = threshold_value
+src/experiment_lib.py:279:            raise ValueError(threshold_mode)
+src/experiment_lib.py:281:        scores.append(score(p3, t3, dt_seconds=dt_seconds, threshold=thr))
+src/experiment_lib.py:285:                'arrival_mae_s': np.nan, 'mass_error': np.nan, 'n': 0}
+src/experiment_lib.py:290:        'arrival_mae_s': float(np.nanmean([s['arrival_mae_s'] for s in scores])),
+src/experiment_lib.py:297:def volume_ratio(rollouts):
+src/experiment_lib.py:316:def evaluate(model, samples, device, max_steps=40, max_samples=19):
+src/experiment_lib.py:317:    """Convenience: rollout + score with the default auto threshold."""
+src/experiment_lib.py:324:def build_model(variant='vector', hidden=64, layers=3, device='cpu'):
+src/experiment_lib.py:329:def get_device():
+src/experiment_lib.py:332:def score_per_event(rollouts):
+src/experiment_lib.py:347:        s = score(p3, t3, dt_seconds=3600.0, threshold=None)
+src/experiment_lib.py:358:            'arrival_mae_s': s['arrival_mae_s'],
+src/metrics.py:18:    arrival_error()  did we get the TIMING right?
+src/metrics.py:30:def auto_threshold(true_sequence):
+src/metrics.py:32:    Pick a sensible wet/dry threshold from the data itself.
+src/metrics.py:45:def csi(pred, true, threshold=WET):
+src/metrics.py:53:    p = np.asarray(pred) > threshold      # cells we SAID were wet
+src/metrics.py:54:    t = np.asarray(true) > threshold      # cells that ARE wet
+src/metrics.py:66:def csi_per_step(pred, true, threshold=WET):
+src/metrics.py:68:    return np.array([csi(pred[t], true[t], threshold)
+src/metrics.py:75:def arrival_index(depth, threshold=WET):
+src/metrics.py:80:    wet = np.asarray(depth) > threshold          # (T, H, W) True/False
+src/metrics.py:86:def arrival_error(pred, true, dt_seconds=3600.0, threshold=WET):
+src/metrics.py:88:    Compare predicted arrival time with true arrival time, in seconds.
+src/metrics.py:96:    a_pred = arrival_index(pred, threshold)
+src/metrics.py:97:    a_true = arrival_index(true, threshold)
+src/metrics.py:112:def mass_error(pred, true):
+src/metrics.py:129:def persistence_depth(depth_sequence):
+src/metrics.py:141:def score(pred, true, dt_seconds=3600.0, threshold=None):
+src/metrics.py:143:    If threshold is None, it adapts to the data scale automatically."""
+src/metrics.py:149:    if threshold is None:
+src/metrics.py:150:        threshold = auto_threshold(true)
+src/metrics.py:151:    arr = arrival_error(pred, true, dt_seconds, threshold)
+src/metrics.py:152:    per_step = csi_per_step(pred, true, threshold)
+src/metrics.py:155:        "csi_final": csi(pred[-1], true[-1], threshold),
+src/metrics.py:158:        "arrival_mae_s": arr["mae"],
+src/metrics.py:159:        "arrival_bias_s": arr["bias"],
+src/metrics.py:160:        "arrival_n": arr["n"],
+src/metrics.py:162:        "threshold_used": float(threshold),
+src/metrics.py:169:def transfer_gap(home_score, away_score, key="csi_final"):
+src/metrics.py:204:    # --- arrival: build a front that the model reports exactly 1 step late
+src/metrics.py:213:    a = arrival_error(late, truth, dt_seconds=3600.0)
+src/metrics.py:215:    print(f"  arrival bias on a 1-step-late front: +{a['bias']:.0f} s  OK")
+
+=== evaluate() ===
+def evaluate(model, samples, device, max_steps=40, max_samples=19):
+    """Convenience: rollout + score with the default auto threshold."""
+    rollouts = rollout_predictions(model, samples, device, max_steps, max_samples)
+    res = score_rollouts(rollouts, 'auto')
+    res['volume_ratio'] = volume_ratio(rollouts)
+    return res
+
+
+def build_model(variant='vector', hidden=64, layers=3, device='cpu'):
+
+=== score_per_event() ===
+def score_per_event(rollouts):
+    """
+    Score each rollout ONE AT A TIME instead of averaging them.
+
+    Why: the scatter plot needs one point per flood event. An average
+    hides the case we care about - a single event with good CSI and a
+    badly wrong water volume at the same time.
+
+    Returns a list of dicts, one per event.
+    """
+    out = []
+    for i, (pred, true) in enumerate(rollouts):
+        # the scorer wants a 3-D array, so add a middle axis of size 1
+        p3 = pred[:, np.newaxis, :]
+        t3 = true[:, np.newaxis, :]
+        s = score(p3, t3, dt_seconds=3600.0, threshold=None)
+
+        # total water, float64 so rounding does not eat the signal
+        vt = float(np.sum(true, dtype=np.float64))
+        vp = float(np.sum(pred, dtype=np.float64))
+        vr = vp / vt if vt > 0 else np.nan
+
+        out.append({
+            'event_index': i,
+            'csi_final': s['csi_final'],
+            'csi_mean': s['csi_mean'],
+            'arrival_mae_s': s['arrival_mae_s'],
+            'volume_ratio': vr,
+            'true_volume': vt,
+            'pred_volume': vp,
+        })
+    return out
+
+=== exp1b and exp6 scripts ===
+exp1b_arrival_time.py
+exp6_metric_disagreement.py
+scripts/exp1b_arrival_time.py:2:exp1b_arrival_time.py
+scripts/exp1b_arrival_time.py:12:    arrival time -> should ALSO say it is wrong, if the flood timing
+scripts/exp1b_arrival_time.py:15:If arrival time confirms the mass-error story, the paper gets a much
+scripts/exp1b_arrival_time.py:16:stronger three-way case: not just "one metric disagrees with another" but
+scripts/exp1b_arrival_time.py:22:    python3 scripts/exp1b_arrival_time.py
+scripts/exp1b_arrival_time.py:41:def main():
+scripts/exp1b_arrival_time.py:88:        arr_verdict = "AWAY IS WRONG" if a['arrival_mae_s'] > h['arrival_mae_s'] * 1.2 else "comparable"
+scripts/exp1b_arrival_time.py:90:              f"{h['arrival_mae_s']/3600:<18.2f} {a['arrival_mae_s']/3600:<18.2f} "
+scripts/exp1b_arrival_time.py:96:                            (a['arrival_mae_s'] > h['arrival_mae_s'] * 1.2)
+scripts/exp1b_arrival_time.py:102:            print(f"  >>> CONFIRMED: CSI disagrees with BOTH physical checks. "
+scripts/exp1b_arrival_time.py:108:            'home_arrival_hours': h['arrival_mae_s'] / 3600,
+scripts/exp1b_arrival_time.py:109:            'away_arrival_hours': a['arrival_mae_s'] / 3600,
+scripts/exp1b_arrival_time.py:115:    with open(os.path.join(OUT, 'result_exp1b_arrival_time.json'), 'w') as f:
+scripts/exp1b_arrival_time.py:117:    print(f"\nSaved {OUT}/result_exp1b_arrival_time.json")
+scripts/exp6_metric_disagreement.py:2:exp6_metric_disagreement.py
+scripts/exp6_metric_disagreement.py:9:much stronger than "the two averages disagree".
+scripts/exp6_metric_disagreement.py:18:    python3 scripts/exp6_metric_disagreement.py
+scripts/exp6_metric_disagreement.py:31:                                rollout_predictions, score_per_event, CACHE_PATH)
+scripts/exp6_metric_disagreement.py:36:def spearman(x, y):
+scripts/exp6_metric_disagreement.py:49:def main():
+scripts/exp6_metric_disagreement.py:75:            events = score_per_event(roll)
+scripts/exp6_metric_disagreement.py:115:                'n_bad_disagreements': len(bad),
+scripts/exp6_metric_disagreement.py:119:    with open(os.path.join(OUT, 'result_exp6_metric_disagreement.json'), 'w') as f:
+scripts/exp6_metric_disagreement.py:121:    print(f"\nSaved {OUT}/result_exp6_metric_disagreement.json")
+pairwise_disagreement.py:3:with open('results/result_exp6_metric_disagreement.json') as f:
+pairwise_disagreement.py:6:def pairwise_disagreement(events):
+pairwise_disagreement.py:7:    total_pairs, disagreements = 0, 0
+pairwise_disagreement.py:20:            disagreements += 1
+pairwise_disagreement.py:21:    pct = 100.0 * disagreements / total_pairs if total_pairs else float('nan')
+pairwise_disagreement.py:22:    return disagreements, total_pairs, pct
+pairwise_disagreement.py:32:    d, t, pct = pairwise_disagreement(events)
