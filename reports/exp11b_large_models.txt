@@ -1,0 +1,11 @@
+harvey s0 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.527 S -0.281 vol 7.74x | on breach CSI 0.159 S +0.028 vol 0.75x
+harvey s1 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.475 S -0.423 vol 8.40x | on breach CSI 0.136 S +0.002 vol 0.62x
+harvey s2 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.561 S -0.189 vol 9.12x | on breach CSI 0.039 S -0.110 vol 1.13x
+harvey s3 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.503 S -0.345 vol 2.01x | on breach CSI 0.035 S -0.115 vol 0.14x
+harvey s4 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.563 S -0.183 vol 43.37x | on breach CSI 0.164 S +0.035 vol 4.52x
+breach s0 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.565 S -0.179 vol 19.56x | on breach CSI 0.232 S +0.113 vol 0.55x
+breach s1 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.561 S -0.189 vol 26.42x | on breach CSI 0.202 S +0.079 vol 0.81x
+breach s2 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.565 S -0.178 vol 21.96x | on breach CSI 0.207 S +0.084 vol 0.87x
+breach s3 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.561 S -0.188 vol 21.99x | on breach CSI 0.178 S +0.051 vol 0.97x
+breach s4 (hidden 160, 6 layers, 491,843 params) | on harvey CSI 0.558 S -0.198 vol 13.48x | on breach CSI 0.165 S +0.036 vol 0.90x
+saved /root/projects/floodtransfer/results/result_exp11b_large_models.json
