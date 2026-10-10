@@ -1,105 +1,62 @@
-# floodtransfer — cross-type flood transfer study
+# Cross-type transfer in machine-learning flood surrogates
 
-Clean folder. Nothing from the old project is carried over.
+Parham Imanzadeh Charandabi, University of Salford. **Status: paper in preparation.**
 
-## The question
+## Question
 
-Train a flood model on ONE flood type, test it on a DIFFERENT flood type,
-and measure how badly it breaks.
+Graph neural network flood surrogates are usually trained and tested on one flood type. Do they still work when the way water enters changes, and do standard flood-map metrics report the result honestly?
 
-- Type A: **dike breach** — water enters at one edge (SWE-GNN data, already held)
-- Type B: **rainfall** — water falls on every cell (Hurricane Harvey data, to download)
+## Results
 
-Then: does keeping flow direction as a **vector** help the model survive the jump?
+Equitable threat score (ETS) with bootstrap 95% intervals, 3 seeds per model. Source: `reports/exp23_stats.md`, built from `results/result_exp22_*.json`.
 
-## Why this is worth doing
+| Transfer | Threshold | Result |
+|---|---|---|
+| Rain-trained to localised floods (point and upstream inflow), 3 encodings, 6 cases | 10% of true maximum | ETS down 0.20 to 0.30, every interval below zero |
+| Same 6 cases | 0.1 m | ETS down 0.16 to 0.21, every interval below zero |
+| Dike-breach to Hurricane Harvey | 10% of true maximum | ETS 0.103 [0.082, 0.126] at home, -0.001 [-0.009, 0.006] on Harvey |
+| Dike-breach to Hurricane Harvey | volume | median 64 times the true water volume (63.7) |
+| All-wet prediction | 1% of true maximum | CSI 0.13 on dike-breach, 0.63 on Harvey |
 
-The mSWE-GNN authors say in their own 2025 NHESS paper that their framework
-works for dike-breach floods but they **did not evaluate it for other flood
-types**. Every published transfer study moves across *regions of the same
-flood type*. Nobody has moved across *types*. That is the gap.
+- Rain-trained models predict far too little water on localised floods (frequency bias 0.01 to 0.68 at 10%).
+- Whether localised-flood models transfer to rain depends on the input encoding. Under the log encoding, the point-trained model predicts 16.5 times the true volume on rain floods; under the linear and global encodings, the same model reaches ETS 0.25 to 0.28 on them.
+- Raw CSI can reverse the apparent direction of a transfer result. Earlier dike-breach models (3 seeds, single-step training) scored CSI 0.16 to 0.19 at home but 0.44 to 0.56 on Harvey (`results/result_exp10_saturation_real.json`), because far more of Harvey is wet. CSI was therefore replaced with ETS, frequency bias and volume ratio.
 
-## The claim the paper will make
+## Data
 
-> Flood models that score well on their own data fail to transfer across flood
-> types, and keeping flow direction as a vector is what most helps them survive.
+- **Dike-breach:** SWE-GNN data, Zenodo DOI 10.5281/zenodo.7764418. 64 x 64 grid. Simulations 1-60 train, 61-80 validation, 501-519 test.
+- **Hurricane Harvey (rain-driven):** FloodGNN-GRU data, Zenodo DOI 10.5281/zenodo.10787632. The first 19 of 228 test chunks are used.
+- **Synthetic:** own generator using the local inertial shallow-water scheme of Bates et al. (2010) (`scripts/exp3_controlled_synthetic.py`). 48 x 48 grid, 50 m cells, Manning n 0.05, 60 training and 15 test runs per mechanism. Terrain seeds, grid, solver and inflow rate range (20 to 60 m3/s) are shared; only the source changes: a single cell, rain on every cell, or upstream edge inflow.
 
-## Folder layout
+## Method
 
-```
-floodtransfer/
-  scripts/   things you run
-  src/       reusable code
-  data/      datasets go here (not in git)
-  results/   json + figures come out here
-```
-
-## Order of work
-
-| # | Step | GPU? | Status |
-|---|------|------|--------|
-| 1 | Inspect the Harvey data — confirm depth, vx, vy, rainfall | No | **DO THIS FIRST** |
-| 2 | Put both datasets on the same grid and time step | No | after step 1 |
-| 3 | Transfer test: train on A, test on B, and reverse | Light | after step 2 |
-| 4 | Vector vs scalar direction comparison | Light | after step 3 |
-| 5 | Optional second section: image-based depth transfer | Light | only if 1-4 are solid |
-
-Step 1 decides everything. Do not build steps 2+ until it passes.
-
-## Step 1 — run this
-
-Download the FloodGNN-GRU Harvey dataset from Zenodo, unzip it into
-`data/harvey/`, then:
-
-```bash
-cd floodtransfer
-python3 scripts/inspect_dataset.py data/harvey
-```
-
-Read the **SUMMARY** block at the bottom. It prints GO or NO-GO.
-
-Sanity-check the script against data you already know, first:
-
-```bash
-python3 scripts/inspect_dataset.py /path/to/swegnn/data/raw
-```
-
-It should report depth, vx, vy and terrain for the breach data. If it does,
-you know the inspector is reading things correctly.
-
-## What GO / NO-GO means
-
-- **GO** — depth + both velocity components present. Full paper is possible.
-- **PARTIAL (speed only)** — velocity shipped as magnitude without direction.
-  The transfer test still runs; the direction half does not.
-- **PARTIAL (no velocity)** — depth-only transfer test. Weaker but still novel.
-- **NO-GO** — no depth field. Check the unzip, or raise `--max-files`.
-
-Report the summary block back and step 2 gets written to match the real format.
-
-## Missing libraries
-
-The inspector says which one to install if it meets a format it cannot open:
-
-```bash
-pip install netCDF4     # for .nc files
-pip install rasterio    # for .tif files
-pip install h5py        # for .h5 files
-```
+Vector FloodGNN (64 hidden units, 3 message-passing layers), trained for 100 epochs with a multi-step rollout loss (horizon up to 8 steps). Scaling is fitted on the training mechanism only. The source is given in three encodings: log, linear (rate per cell) and global (total inflow, no location).
 
 ## Metrics
 
-`src/metrics.py` scores everything, the same way on both datasets:
+ETS, frequency bias and volume ratio (summed over the rollout). Thresholds: 1, 5, 10 and 20% of the true maximum (applied to truth and prediction), plus 0.01, 0.05, 0.1 and 0.3 m where depths are in metres. Bootstrap: 2,000 resamples of seeds, then events within seeds. Every model and threshold is in one table.
 
-- `csi()` — flood map accuracy
-- `arrival_error()` — timing, in seconds
-- `mass_error()` — did water appear from nowhere
-- `transfer_gap()` — **the paper's number**: how much skill is kept away from home
+## How to reproduce
 
-Self-test it any time:
+Install PyTorch, then `pip install -r requirements.txt`. Put the Zenodo files in `data/breach/raw_datasets/` and `data/harvey/` (`train.npz`, `val.npz`, `test.npz`).
 
 ```bash
-python3 src/metrics.py
+python -c "from src.experiment_lib import build_cache; build_cache()"   # real-data cache
+python scripts/exp16a_synth_source_data.py                              # synthetic data
+python scripts/exp22_rerun.py --data distributed --enc log --seed 0     # one model
+python scripts/exp23_stats.py                                           # statistics table
 ```
 
-All five checks should print OK.
+`--data`: `point`, `distributed`, `inflow` or `breach`. `--enc`: `log`, `linear` or `global`. Checkpoints are in `results/exp15_exp22_*.pt`; a script stops if its result file already exists.
+
+## Limitations
+
+- Three seeds per model. Harvey is one storm, cut into adjacent chunks with open edges.
+- Harvey depths are stored scaled by 0.1. The dike-breach model was tested without converting them to metres, so part of the Harvey failure may come from this mismatch.
+- Real data were tested under the log encoding only, and the synthetic solver is not yet validated against a benchmark.
+- ETS also depends on base rate: under the linear and global encodings, localised-flood models score higher ETS on rain floods than at home.
+- The source channel supplies the inflow, so a home volume ratio near 1 is partly given.
+
+## Ongoing work
+
+Rerunning the Harvey test in metres, and a source-blind model designed to transfer across flood types.
