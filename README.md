@@ -19,7 +19,7 @@ Equitable threat score (ETS) with bootstrap 95% intervals, 3 seeds per model. So
 | All-wet prediction | 1% of true maximum | CSI 0.13 on dike-breach, 0.63 on Harvey |
 
 - Rain-trained models predict far too little water on localised floods (frequency bias 0.01 to 0.68 at 10%).
-- Whether localised-flood models transfer to rain depends on the input encoding. Under the log encoding, the point-trained model predicts 16.5 times the true volume on rain floods; under the linear and global encodings, the same model reaches ETS 0.25 to 0.28 on them.
+- Whether localised-flood models transfer to rain depends on the input encoding. Under the log encoding, the point-trained model predicts 16.5 times the true volume on rain floods; under the linear and global encodings, the same model reaches ETS 0.25 to 0.28 on them. This is not proof of transfer. With the global format, a point flood and a rain flood give the model exactly the same input. With the linear format, the rain in each cell is about 2,300 times smaller than the point source, so the model sees almost no source.
 - Raw CSI can reverse the apparent direction of a transfer result. Earlier dike-breach models (3 seeds, single-step training) scored CSI 0.16 to 0.19 at home but 0.44 to 0.56 on Harvey (`results/result_exp10_saturation_real.json`), because far more of Harvey is wet. CSI was therefore replaced with ETS, frequency bias and volume ratio.
 
 ## Data
@@ -52,7 +52,7 @@ python scripts/exp23_stats.py                                           # statis
 ## Limitations
 
 - Three seeds per model. Harvey is one storm, cut into adjacent chunks with open edges.
-- Harvey depths are stored scaled by 0.1. The dike-breach model was tested without converting them to metres, so part of the Harvey failure may come from this mismatch.
+- Harvey depths are stored multiplied by 0.1. The dike-breach model was tested without fixing this. A check with the right size cut the water error from 67.7 to 20.8 times, and skill stayed at zero. The Harvey test will be rerun in metres.
 - Real data were tested under the log encoding only, and the synthetic solver is not yet validated against a benchmark.
 - ETS also depends on base rate: under the linear and global encodings, localised-flood models score higher ETS on rain floods than at home.
 - The source channel supplies the inflow, so a home volume ratio near 1 is partly given.
