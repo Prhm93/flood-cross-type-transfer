@@ -15,7 +15,7 @@ Equitable threat score (ETS) with bootstrap 95% intervals, 3 seeds per model. So
 | Rain-trained to localised floods (point and upstream inflow), 3 encodings, 6 cases | 10% of true maximum | ETS down 0.20 to 0.30, every interval below zero |
 | Same 6 cases | 0.1 m | ETS down 0.16 to 0.21, every interval below zero |
 | Dike-breach to Hurricane Harvey | 10% of true maximum | ETS 0.103 [0.082, 0.126] at home, -0.001 [-0.009, 0.006] on Harvey |
-| Dike-breach to Hurricane Harvey | volume | median 64 times the true water volume (63.7) |
+| Dike-breach to Hurricane Harvey | volume |Not final. Harvey depths were fed in 10 times too small. A quick check with the right size cut the water error to about 21 times (Exp 19). A full rerun in metres is next. |
 | All-wet prediction | 1% of true maximum | CSI 0.13 on dike-breach, 0.63 on Harvey |
 
 - Rain-trained models predict far too little water on localised floods (frequency bias 0.01 to 0.68 at 10%).
